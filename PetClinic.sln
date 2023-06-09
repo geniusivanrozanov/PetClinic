@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.API", "PetClinic.API\PetClinic.API.csproj", "{20748DB2-AD1C-40C2-B71A-C2B8372B470F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.BLL", "PetClinic.BLL\PetClinic.BLL.csproj", "{E1FB5865-6F48-47EE-BEDC-73AF76C8017F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{20748DB2-AD1C-40C2-B71A-C2B8372B470F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20748DB2-AD1C-40C2-B71A-C2B8372B470F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20748DB2-AD1C-40C2-B71A-C2B8372B470F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1FB5865-6F48-47EE-BEDC-73AF76C8017F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1FB5865-6F48-47EE-BEDC-73AF76C8017F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1FB5865-6F48-47EE-BEDC-73AF76C8017F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1FB5865-6F48-47EE-BEDC-73AF76C8017F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
