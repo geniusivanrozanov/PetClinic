@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetClinic.DAL.Interfaces.Repositories;
+using PetClinic.DAL.Repositories;
 
 namespace PetClinic.DAL
 {
@@ -20,7 +22,8 @@ namespace PetClinic.DAL
 
         private static void AddRepositories(this IServiceCollection services)
         {
-
+            services.AddTransient<IRepository, Repository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
     }
 }
