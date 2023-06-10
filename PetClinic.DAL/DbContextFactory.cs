@@ -9,7 +9,7 @@ namespace PetClinic.DAL
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             
-            string connectionString = "User ID =admin;Password=admin;Server=localhost;Port=5432;Database=books; Integrated Security=true;Pooling=true;";
+            string connectionString = "User ID =admin;Password=admin;Host=localhost;Port=5432;Database=petClinic; Integrated Security=true;Pooling=true;";
             optionsBuilder.UseNpgsql(connectionString, opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds));
             return new AppDbContext(optionsBuilder.Options);
         }
