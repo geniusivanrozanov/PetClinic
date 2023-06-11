@@ -84,12 +84,6 @@ public static class ModelBuilderExtension
             .WithMany(s => s.Appointments)
             .HasForeignKey(a => a.ServiceId)
             .IsRequired();
-
-        modelBuilder.Entity<UserEntity>()
-            .HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId)
-            .IsRequired();
     }
 
     private static void SetPropertiesSettingsInEntities(this ModelBuilder modelBuilder)
