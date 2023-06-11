@@ -1,4 +1,4 @@
-using PetClinic.DAL;
+using PetClinic.DAL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

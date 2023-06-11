@@ -2,13 +2,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PetClinic.DAL.Entities;
 
-public class UserEntity : BaseEntity // : IdentityUser
+public class UserEntity : IdentityUser<Guid>
 {
-    public string Login { get; set; } = default!;
-    public string PasswordHash { get; set; } = default!;
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
-    public string PhoneNumber { get; set; } = default!;
+    public bool IsDeleted { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public Guid RoleId { get; set; }
     public RoleEntity Role { get; set; } = default!;
