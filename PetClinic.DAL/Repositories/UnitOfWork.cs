@@ -1,9 +1,5 @@
-﻿using PetClinic.DAL.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PetClinic.DAL.DbContext;
+using PetClinic.DAL.Interfaces.Repositories;
 
 namespace PetClinic.DAL.Repositories
 {

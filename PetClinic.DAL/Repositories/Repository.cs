@@ -1,4 +1,5 @@
-﻿using PetClinic.DAL.Entities;
+﻿using PetClinic.DAL.DbContext;
+using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 using System.Linq.Expressions;
 
@@ -6,10 +7,9 @@ namespace PetClinic.DAL.Repositories
 {
     public class Repository : IRepository
     {
-
         protected readonly AppDbContext Context;
 
-       public Repository(AppDbContext context)
+        public Repository(AppDbContext context)
         {
             Context = context;
         }
