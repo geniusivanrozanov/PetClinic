@@ -14,19 +14,19 @@ namespace PetClinic.DAL.Repositories
             Context = context;
         }
 
-        public TEntity? Get<TEntity>(int id) where TEntity : BaseEntity
+        public TEntity? Get<TEntity>(Guid id) where TEntity : BaseEntity
         {
 
             return Context.Set<TEntity>().Find(id);
         }
 
-        public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : BaseEntity
+        public IQueryable<TEntity> GetAll<TEntity>() where TEntity : BaseEntity
         {
 
-            return Context.Set<TEntity>().ToList();
+            return Context.Set<TEntity>().AsQueryable<TEntity>();
         }
 
-        public IEnumerable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
+        public IQueryable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity
         {
             return Context.Set<TEntity>().Where(predicate);
         }

@@ -10,9 +10,9 @@ namespace PetClinic.DAL.Interfaces.Repositories
 {
     public interface IRepository
     {
-        TEntity? Get<TEntity>(int id) where TEntity : BaseEntity;
-        IEnumerable<TEntity> GetAll<TEntity>() where TEntity : BaseEntity;
-        IEnumerable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity;
+        TEntity? Get<TEntity>(Guid id) where TEntity : BaseEntity;
+        IQueryable<TEntity> GetAll<TEntity>() where TEntity : BaseEntity;
+        IQueryable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : BaseEntity;
 
         void Add<TEntity>(TEntity entity) where TEntity : BaseEntity;
         void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : BaseEntity;
