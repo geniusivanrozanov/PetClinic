@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PetClinic.DAL.Configuration;
 using PetClinic.DAL.Entities;
 
 namespace PetClinic.DAL
@@ -10,12 +11,15 @@ namespace PetClinic.DAL
         {
             modelBuilder.AddConfiguration();
             modelBuilder.SetEntitiesRelations();
-            modelBuilder.SetRequiredFieldsInEntities();
+            modelBuilder.SetPropertiesSettingsInEntities();
         }
 
         private static void AddConfiguration(this ModelBuilder modelBuilder)
-        {
-
+        { 
+            modelBuilder.ApplyConfiguration(new DepartmentEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new PetTypeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusEntityConfiguration());
         }
 
         private static void SetEntitiesRelations(this ModelBuilder modelBuilder)
@@ -89,8 +93,21 @@ namespace PetClinic.DAL
                 .IsRequired();
         }
 
-        private static void SetRequiredFieldsInEntities(this ModelBuilder modelBuilder)
+        private static void SetPropertiesSettingsInEntities(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<RoleEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<AppointmentEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<DepartmentEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<OrderCallEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<PetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<PetTypeEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<ReviewEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<RoleEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<ServiceEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<ServiceVetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<StatusEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<UserEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<VetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();            
         }
     }
 }
