@@ -17,7 +17,6 @@ public static class ModelBuilderExtension
     { 
         modelBuilder.ApplyConfiguration(new DepartmentEntityConfiguration());
         modelBuilder.ApplyConfiguration(new PetTypeEntityConfiguration());
-        // modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
         modelBuilder.ApplyConfiguration(new StatusEntityConfiguration());
     }
 
@@ -106,6 +105,20 @@ public static class ModelBuilderExtension
         modelBuilder.Entity<ServiceVetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<StatusEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<UserEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
-        modelBuilder.Entity<VetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();          
+        modelBuilder.Entity<VetEntity>().Property(r => r.Id).ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<DepartmentEntity>().Property(d => d.Address).HasMaxLength(50);
+        modelBuilder.Entity<DepartmentEntity>().Property(d => d.Name).HasMaxLength(30);
+        modelBuilder.Entity<OrderCallEntity>().Property(oc => oc.PhoneNumber).HasMaxLength(15);
+        modelBuilder.Entity<PetEntity>().Property(p => p.Name).HasMaxLength(20);
+        modelBuilder.Entity<PetTypeEntity>().Property(p => p.Name).HasMaxLength(20);
+        modelBuilder.Entity<ReviewEntity>().Property(p => p.Diagnosis).HasMaxLength(300);
+        modelBuilder.Entity<ReviewEntity>().Property(p => p.VetComments).HasMaxLength(300);
+        modelBuilder.Entity<ServiceEntity>().Property(p => p.Name).HasMaxLength(30);
+        modelBuilder.Entity<StatusEntity>().Property(p => p.Name).HasMaxLength(20);
+        modelBuilder.Entity<UserEntity>().Property(u => u.Email).HasMaxLength(30);
+        modelBuilder.Entity<UserEntity>().Property(u => u.FirstName).HasMaxLength(30);
+        modelBuilder.Entity<UserEntity>().Property(u => u.LastName).HasMaxLength(30);
+        modelBuilder.Entity<UserEntity>().Property(u => u.PhoneNumber).HasMaxLength(15);
     }
 }
