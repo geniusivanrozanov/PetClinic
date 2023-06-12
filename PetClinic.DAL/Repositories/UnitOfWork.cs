@@ -5,43 +5,35 @@ namespace PetClinic.DAL.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    public IRepository<AppointmentEntity, Guid> AppointmentRepository { get; }
-    public IRepository<DepartmentEntity, Guid> DepartmentRepository { get; }
-    public IRepository<OrderCallEntity, Guid> OrderCallRepository { get; }
-    public IRepository<PetEntity, Guid> PetRepository { get; }
-    public IRepository<PetTypeEntity, Guid> PetTypeRepository { get; }
-    public IRepository<ReviewEntity, Guid> ReviewRepository { get; }
-    public IRepository<ServiceEntity, Guid> ServiceRepository { get; }
-    public IRepository<ServiceVetEntity, Guid> ServiceVetRepository { get; }
-    public IRepository<VetEntity, Guid> VetRepository { get; }
+    private readonly AppDbContext _context = null!;
+    private AppointmentRepository _appointmentRepository = null!;
+    private DepartmentRepository _departmentRepository = null!;
+    private OrderCallRepository _orderCallRepository = null!;
+    private PetRepository _petRepository = null!;
+    private PetTypeRepository _petTypeRepository = null!;
+    private ReviewRepository _reviewRepository = null!;
+    private ServiceRepository _serviceRepository = null!;
+    private ServiceVetRepository _serviceVetRepository = null!;
+    private VetRepository _vetRepository = null!;
 
-
-    private readonly AppDbContext _context;
+    public IRepository<AppointmentEntity, Guid> AppointmentRepository => _appointmentRepository ??= new AppointmentRepository(_context);
+    public IRepository<DepartmentEntity, Guid> DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
+    public IRepository<OrderCallEntity, Guid> OrderCallRepository => _orderCallRepository ??= new OrderCallRepository(_context);
+    public IRepository<PetEntity, Guid> PetRepository => _petRepository ??= new PetRepository(_context);
+    public IRepository<PetTypeEntity, Guid> PetTypeRepository => _petTypeRepository ??= new PetTypeRepository(_context);
+    public IRepository<ReviewEntity, Guid> ReviewRepository => _reviewRepository ??= new ReviewRepository(_context);
+    public IRepository<ServiceEntity, Guid> ServiceRepository => _serviceRepository ??= new ServiceRepository(_context);
+    public IRepository<ServiceVetEntity, Guid> ServiceVetRepository => _serviceVetRepository ??= new ServiceVetRepository(_context);
+    public IRepository<VetEntity, Guid> VetRepository => _vetRepository ??= new VetRepository(_context);
 
     public UnitOfWork(AppDbContext context)
     {
-        _context = context;
-        AppointmentRepository = new AppointmentRepository(_context);
-        DepartmentRepository = new DepartmentRepository(_context);
-        OrderCallRepository = new OrderCallRepository(_context);
-        PetRepository = new PetRepository(_context);
-        PetTypeRepository = new PetTypeRepository(_context);
-        ReviewRepository = new ReviewRepository(_context);
-        ServiceRepository = new ServiceRepository(_context);
-        ServiceVetRepository = new ServiceVetRepository(_context);
-        VetRepository = new VetRepository(_context);
+        _context = context;       
     }
 
+    public int Complete() => _context.SaveChanges();
 
-    public int Complete()
-    {
-        return _context.SaveChanges();
-    }
+    public void Dispose() => _context.Dispose();
 
-    public void Dispose()
-    {
-        _context.Dispose();   
-    }
-
-  
+    public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
 }

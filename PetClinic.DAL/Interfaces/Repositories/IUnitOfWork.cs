@@ -13,5 +13,6 @@ public interface IUnitOfWork : IDisposable
     public IRepository<ServiceEntity, Guid> ServiceRepository { get; }
     public IRepository<ServiceVetEntity, Guid> ServiceVetRepository { get; }
     public IRepository<VetEntity, Guid> VetRepository { get; }
-    int Complete();       
+    int Complete();
+    Task<int> CompleteAsync();
 }
