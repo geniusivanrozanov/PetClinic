@@ -26,6 +26,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.AddExtentions();
+        modelBuilder.AddExtensions();
     }
 }
