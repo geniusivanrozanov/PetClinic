@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Extensions;
 
-namespace PetClinic.DAL.DbContext;
+namespace PetClinic.DAL;
 
 public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 {

@@ -1,5 +1,4 @@
-﻿using PetClinic.DAL.DbContext;
-using PetClinic.DAL.Interfaces.Repositories;
+﻿using PetClinic.DAL.Interfaces.Repositories;
 
 namespace PetClinic.DAL.Repositories
 {

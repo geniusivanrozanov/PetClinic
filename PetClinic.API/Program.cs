@@ -1,3 +1,4 @@
+using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,5 +29,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Services.MigrateDatabase<AppDbContext>();
 
 app.Run();
