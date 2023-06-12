@@ -9,10 +9,7 @@ public class UserEntity : IdentityUser<Guid>
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-
-    public Guid RoleId { get; set; }
-    public RoleEntity Role { get; set; } = default!;
-
+    
     public VetEntity Vet { get; set; } = default!;
 
     public List<PetEntity>? Pets { get; set; }
