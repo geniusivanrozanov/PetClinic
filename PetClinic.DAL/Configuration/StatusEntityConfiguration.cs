@@ -22,7 +22,7 @@ public class StatusEntityConfiguration : IEntityTypeConfiguration<StatusEntity>
             new StatusEntity
             {
                 Id = new Guid("fb29bcb5-4493-4b03-b18e-11c50c650621"),
-                Name = "Our operator will call you soon",
+                Name = "Accepted",
                 CreatedAt = GetCurrentTime(),
                 UpdatedAt = GetCurrentTime(),
                 IsDeleted = false,
