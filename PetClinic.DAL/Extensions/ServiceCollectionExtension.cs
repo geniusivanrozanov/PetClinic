@@ -17,8 +17,8 @@ public static class ServiceCollectionExtension
 
     private static void AddRepositories(this IServiceCollection services)
     {
-        services.AddTransient<IRepository, Repository>();
-        services.AddTransient<IUnitOfWork, UnitOfWork>();
+        
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     /// <summary>

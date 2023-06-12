@@ -9,16 +9,16 @@ using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL.Interfaces.Repositories
 {
-    public interface IRepository
+    public interface IRepository<TEntity, TId> where TEntity : IEntity<TId>
     {
-        TEntity? Get<TEntity>(Guid id)  where TEntity : class, IEntity<Guid>;
-        IQueryable<TEntity> GetAll<TEntity>()  where TEntity : class, IEntity<Guid>;
-        IQueryable<TEntity> Find<TEntity>(Expression<Func<TEntity, bool>> predicate)  where TEntity : class, IEntity<Guid>;
+        TEntity? Get(TId id);
+        IQueryable<TEntity> GetAll();
+        IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
-        void Add<TEntity>(TEntity entity)  where TEntity : class, IEntity<Guid>;
-        void AddRange<TEntity>(IEnumerable<TEntity> entities)  where TEntity : class, IEntity<Guid>;
-        void Remove<TEntity>(TEntity entity)  where TEntity : class, IEntity<Guid>;
-        void RemoveRange<TEntity>(IEnumerable<TEntity> entities)  where TEntity : class, IEntity<Guid>;
+        void Add(TEntity entity);
+        void AddRange(IEnumerable<TEntity> entities);
+        void Remove(TEntity entity);
+        void RemoveRange(IEnumerable<TEntity> entities);
 
     }
 }
