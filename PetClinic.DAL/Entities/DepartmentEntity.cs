@@ -8,7 +8,7 @@ public class DepartmentEntity : IEntity<Guid>
     public string Address { get; set; } = default!;
     public string Name { get; set; } = default!;
 
-    public List<VetEntity>? Vets { get; set; }
+    public virtual List<VetEntity>? Vets { get; set; }
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

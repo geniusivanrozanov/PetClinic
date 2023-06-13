@@ -161,7 +161,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.DepartmentEntity", b =>
@@ -191,7 +191,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
 
                     b.HasData(
                         new
@@ -250,7 +250,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("OrderCalls");
+                    b.ToTable("OrderCalls", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.PetEntity", b =>
@@ -285,7 +285,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasIndex("PetTypeId");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pets", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.PetTypeEntity", b =>
@@ -310,7 +310,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PetTypes");
+                    b.ToTable("PetTypes", (string)null);
 
                     b.HasData(
                         new
@@ -382,7 +382,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.RoleEntity", b =>
@@ -450,7 +450,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.ServiceVetEntity", b =>
@@ -480,7 +480,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasIndex("VetId");
 
-                    b.ToTable("ServiceVets");
+                    b.ToTable("ServiceVets", (string)null);
                 });
 
             modelBuilder.Entity("PetClinic.DAL.Entities.StatusEntity", b =>
@@ -505,7 +505,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Statuses");
+                    b.ToTable("Statuses", (string)null);
 
                     b.HasData(
                         new
@@ -667,7 +667,7 @@ namespace PetClinic.DAL.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Vets");
+                    b.ToTable("Vets", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

@@ -6,12 +6,12 @@ namespace PetClinic.DAL.Entities
     {
         public Guid Id { get; set; }
         public Guid ServiceId { get; set; }
-        public ServiceEntity Service { get; set; } = default!;
+        public virtual ServiceEntity Service { get; set; } = default!;
 
         public Guid VetId { get; set; }
-        public VetEntity Vet { get; set; } = default!;
+        public virtual VetEntity Vet { get; set; } = default!;
 
-        public List<AppointmentEntity> Appointments { get; set; } = default!;
+        public virtual List<AppointmentEntity> Appointments { get; set; } = default!;
         
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

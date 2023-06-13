@@ -11,7 +11,7 @@ public class UserEntity : IdentityUser<Guid>, IEntity<Guid>
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     
-    public VetEntity Vet { get; set; } = default!;
+    public virtual VetEntity Vet { get; set; } = default!;
 
-    public List<PetEntity>? Pets { get; set; }
+    public virtual List<PetEntity>? Pets { get; set; }
 }

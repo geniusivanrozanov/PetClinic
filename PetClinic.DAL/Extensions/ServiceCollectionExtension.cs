@@ -16,8 +16,7 @@ public static class ServiceCollectionExtension
     }
 
     private static void AddRepositories(this IServiceCollection services)
-    {
-        
+    {   
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
@@ -33,7 +32,8 @@ public static class ServiceCollectionExtension
         ArgumentNullException.ThrowIfNull(connectionString, nameof(connectionString));
         services.AddDbContext<AppDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString)
+                   .UseLazyLoadingProxies();
         });
     }
     

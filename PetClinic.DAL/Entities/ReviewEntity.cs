@@ -8,7 +8,7 @@ public class ReviewEntity : IEntity<Guid>
     public string Diagnosis { get; set; } = default!;
     public string VetComments { get; set; } = default!;
 
-    public AppointmentEntity Appointment { get; set; } = default!;
+    public virtual AppointmentEntity Appointment { get; set; } = default!;
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
