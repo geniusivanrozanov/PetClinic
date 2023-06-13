@@ -8,7 +8,7 @@ public class AppointmentEntity : IEntity<Guid>
 
     public DateTime DateTime { get; set; }
 
-    public Guid ReviewId { get; set; }
+    public Guid? ReviewId { get; set; }
     public ReviewEntity? Review { get; set; }
 
     public Guid PetId { get; set; }
