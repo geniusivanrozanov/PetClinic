@@ -12,12 +12,12 @@ public class VetEntity : IEntity<Guid>
     public string Bio { get; set; } = default!;
 
     public Guid DepartmentId { get; set; }
-    public DepartmentEntity Department { get; set; } = default!;
+    public virtual DepartmentEntity Department { get; set; } = default!;
     
     public Guid ClientId { get; set; }
-    public UserEntity User { get; set; } = default!;
+    public virtual UserEntity User { get; set; } = default!;
 
-    public List<ServiceVetEntity>? ServiceVets { get; set; }
+    public virtual List<ServiceVetEntity>? ServiceVets { get; set; }
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

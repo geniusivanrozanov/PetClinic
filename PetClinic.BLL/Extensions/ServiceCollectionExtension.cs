@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using PetClinic.BLL.Interfaces;
+using PetClinic.BLL.Services;
 
 namespace PetClinic.BLL.Extensions;
 
@@ -12,6 +14,7 @@ public static class ServiceCollectionExtension
 
     private static void AddServices(this IServiceCollection services)
     {
-
+        services.AddScoped<IServicesService, ServicesService>();
+        services.AddScoped<IDepartmentService, DepartmentService>();
     }
 }

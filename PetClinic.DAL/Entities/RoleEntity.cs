@@ -11,5 +11,5 @@ public class RoleEntity : IdentityRole<Guid>, IEntity<Guid>
     
     public DateTime UpdatedAt { get; set; }
     
-    public List<UserEntity>? Users { get; set; }
+    public virtual List<UserEntity>? Users { get; set; }
 }

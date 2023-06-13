@@ -8,12 +8,12 @@ public class PetEntity : IEntity<Guid>
     public string Name { get; set; } = default!;
 
     public Guid ClientId { get; set; }
-    public UserEntity User { get; set; } = default!;
+    public virtual UserEntity User { get; set; } = default!;
 
     public Guid PetTypeId { get; set; }
-    public PetTypeEntity PetType { get; set; } = default!;
+    public virtual PetTypeEntity PetType { get; set; } = default!;
 
-    public List<AppointmentEntity>? Appointments { get; set; }
+    public virtual List<AppointmentEntity>? Appointments { get; set; }
     
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
