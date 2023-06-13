@@ -1,4 +1,3 @@
-using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetClinic.DAL.Entities;
@@ -9,6 +8,8 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEntity>
 {
     public void Configure(EntityTypeBuilder<RoleEntity> builder)
     {
+        builder.Property(r => r.Id).ValueGeneratedOnAdd();
+
         builder.HasData
         (
             new RoleEntity
