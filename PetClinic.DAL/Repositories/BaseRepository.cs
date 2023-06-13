@@ -12,6 +12,7 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         _context = context;
     }
+    
     public void Add(TEntity entity) => _context.Set<TEntity>().Add(entity);
 
     public void AddRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().AddRange(entities);
