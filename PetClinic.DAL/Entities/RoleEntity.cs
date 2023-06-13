@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL.Entities;
 
-public class RoleEntity : IdentityRole<Guid>
+public class RoleEntity : IdentityRole<Guid>, IEntity<Guid>
 {
     public bool IsDeleted { get; set; }
     

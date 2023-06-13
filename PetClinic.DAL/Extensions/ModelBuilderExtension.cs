@@ -6,7 +6,7 @@ namespace PetClinic.DAL.Extensions;
 
 public static class ModelBuilderExtension
 {
-    public static void AddExtentions(this ModelBuilder modelBuilder)
+    public static void AddExtensions(this ModelBuilder modelBuilder)
     {
         modelBuilder.AddConfiguration();
         modelBuilder.SetEntitiesRelations();
