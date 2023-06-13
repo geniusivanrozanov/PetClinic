@@ -28,3 +28,4 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
 
     public void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
 }
+  
