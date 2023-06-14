@@ -7,6 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.0.1" />
     </ItemGroup>
@@ -17,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PetClinic.DAL\PetClinic.DAL.csproj" />
+      <ProjectReference Include="..\PetClinic.BLL\PetClinic.BLL.csproj" />
     </ItemGroup>
 
 </Project>
