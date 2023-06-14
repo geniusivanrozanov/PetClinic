@@ -1,7 +1,7 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PetClinic.DAL.Entities;
-using PetClinic.DAL.Extensions;
 using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL;
@@ -56,12 +56,12 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.AddExtensions();
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
     private void UpdateExtendedFields()
     {
-        var currentTime = DateTime.Now;
+        var currentTime = DateTime.Now.ToUniversalTime();
         
         foreach (var entityEntry in ChangeTracker.Entries()
                      .Where(entry => entry.State == EntityState.Added))

@@ -6,7 +6,6 @@ using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 using System.Linq.Expressions;
 
-
 namespace PetClinic.BLL.Services;
 
 public class VetService : IVetService

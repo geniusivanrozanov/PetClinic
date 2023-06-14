@@ -30,13 +30,13 @@ public class ClientAccountService : IClientAccountService
         _mapper = mapper;
     }
 
-    public async Task<string> RegisterUser(UserRegistrationRequestDto userData)
+    public async Task<string> RegisterUserAsync(UserRegistrationRequestDto userData)
     {
         var userIsExist = await _userManager.FindByEmailAsync(userData.Email);
 
         if (userIsExist is not null)
         {
-            throw Exceptions.Exceptions.UserAlreadyExists;
+            throw Exceptions.Exceptions.UserAlreadyExistsException;
         }
 
         var newUser = _mapper.Map<UserEntity>(userData);
@@ -51,6 +51,27 @@ public class ClientAccountService : IClientAccountService
         var token = GenerateJwtToken(newUser);
 
         return token;
+    }
+
+    public async Task<string> LoginUserAsync(LoginUserDto userData)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(userData.Email);
+
+        if (existingUser is null)
+        {
+            throw Exceptions.Exceptions.UserDoesNotExistException;
+        }
+
+        var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
+
+        if (!passwordIsCorrect)
+        {
+            throw Exceptions.Exceptions.InvalidPasswordException;
+        }
+
+        var jwtToken = GenerateJwtToken(existingUser);
+
+        return jwtToken;
     }
 
     private string GenerateJwtToken(UserEntity user)

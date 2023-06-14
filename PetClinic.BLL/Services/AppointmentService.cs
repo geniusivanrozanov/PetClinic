@@ -45,7 +45,7 @@ public class AppointmentService : IAppointmentService
             throw Exceptions.Exceptions.AppointmentNotFound;
         }
 
-      return mapper.Map<GetAppointmentDto>(appointment);
+        return mapper.Map<GetAppointmentDto>(appointment);
     }
 
     public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()
