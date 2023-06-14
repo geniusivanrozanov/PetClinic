@@ -11,7 +11,7 @@ namespace PetClinic.DAL.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Roles",
+                name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -24,7 +24,7 @@ namespace PetClinic.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,11 +32,11 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Address = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,10 +48,10 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,11 +63,11 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Diagnosis = table.Column<string>(type: "text", nullable: false),
-                    VetComments = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Diagnosis = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
+                    VetComments = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,12 +79,12 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Duration = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,9 +97,9 @@ namespace PetClinic.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,7 @@ namespace PetClinic.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoleClaims",
+                name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -118,35 +118,35 @@ namespace PetClinic.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoleClaims_Roles_RoleId",
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Roles",
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     SecurityStamp = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -155,13 +155,12 @@ namespace PetClinic.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_AspNetUsers_AspNetRoles_RoleEntityId",
+                        column: x => x.RoleEntityId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -169,11 +168,11 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     StatusId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,7 +186,7 @@ namespace PetClinic.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserClaims",
+                name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -198,37 +197,37 @@ namespace PetClinic.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserClaims", x => x.Id);
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserClaims_Users_UserId",
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserLogins",
+                name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_UserLogins_Users_UserId",
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRoles",
+                name: "AspNetUserRoles",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -236,37 +235,37 @@ namespace PetClinic.DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Roles_RoleId",
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Roles",
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRoles_Users_UserId",
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTokens",
+                name: "AspNetUserTokens",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_UserTokens_Users_UserId",
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -276,20 +275,20 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     ClientId = table.Column<Guid>(type: "uuid", nullable: false),
                     PetTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pets_Users_ClientId",
+                        name: "FK_Pets_AspNetUsers_ClientId",
                         column: x => x.ClientId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -311,17 +310,17 @@ namespace PetClinic.DAL.Migrations
                     Bio = table.Column<string>(type: "text", nullable: false),
                     DepartmentId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClientId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Vets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vets_Users_ClientId",
+                        name: "FK_Vets_AspNetUsers_ClientId",
                         column: x => x.ClientId,
-                        principalTable: "Users",
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -339,9 +338,9 @@ namespace PetClinic.DAL.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
                     VetId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -366,12 +365,12 @@ namespace PetClinic.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ReviewId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReviewId = table.Column<Guid>(type: "uuid", nullable: true),
                     PetId = table.Column<Guid>(type: "uuid", nullable: false),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -386,8 +385,7 @@ namespace PetClinic.DAL.Migrations
                         name: "FK_Appointments_Reviews_ReviewId",
                         column: x => x.ReviewId,
                         principalTable: "Reviews",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Appointments_ServiceVets_ServiceId",
                         column: x => x.ServiceId,
@@ -397,13 +395,22 @@ namespace PetClinic.DAL.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "CreatedAt", "IsDeleted", "Name", "NormalizedName", "UpdatedAt" },
+                values: new object[,]
+                {
+                    { new Guid("396f1365-f763-4f2a-a873-fdbef1c12ba3"), "d77f6137-75ba-4934-b67a-4530309333ac", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Admin", null, new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("85300f9e-e1e5-423f-a759-059e4a6a7f3a"), "d20a0d98-9282-4b4f-be79-c1a596aede7e", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Client", null, new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Departments",
                 columns: new[] { "Id", "Address", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("328b1872-1141-47f5-8f67-62c50562ad39"), "ул. Академическая, 26", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 2", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"), "пр. Независимости, 177", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 1", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"), "ул. Карастояновой, 2", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 3", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) }
+                    { new Guid("328b1872-1141-47f5-8f67-62c50562ad39"), "ул. Академическая, 26", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 2", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"), "пр. Независимости, 177", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 1", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"), "ул. Карастояновой, 2", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 3", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -411,11 +418,11 @@ namespace PetClinic.DAL.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("0605974a-977c-4739-aa55-7e26e4eb2422"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Cat", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("13109317-ea78-4274-ad6e-e9a159f7f2f1"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Rabbit", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("a160449b-fb70-4991-9ddb-918b707829a8"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Parrot", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("c9a68d44-b5b8-4b96-9558-b4e52e750987"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Dog", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("f4dc2dab-9477-4ebe-8fb2-40306e739dee"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Hamster", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) }
+                    { new Guid("0605974a-977c-4739-aa55-7e26e4eb2422"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Cat", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("13109317-ea78-4274-ad6e-e9a159f7f2f1"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Rabbit", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("a160449b-fb70-4991-9ddb-918b707829a8"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Parrot", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("c9a68d44-b5b8-4b96-9558-b4e52e750987"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Dog", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("f4dc2dab-9477-4ebe-8fb2-40306e739dee"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Hamster", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -423,9 +430,9 @@ namespace PetClinic.DAL.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("01b2b3b3-0f43-49c1-a138-dd39d76bb65a"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Closed", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("2b513574-cabc-41ce-9fbc-e67255b84431"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Received", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) },
-                    { new Guid("fb29bcb5-4493-4b03-b18e-11c50c650621"), new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc), false, "Our operator will call you soon", new DateTime(2023, 6, 11, 1, 53, 5, 0, DateTimeKind.Utc) }
+                    { new Guid("01b2b3b3-0f43-49c1-a138-dd39d76bb65a"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Closed", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("2b513574-cabc-41ce-9fbc-e67255b84431"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Received", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
+                    { new Guid("fb29bcb5-4493-4b03-b18e-11c50c650621"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Accepted", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -445,44 +452,44 @@ namespace PetClinic.DAL.Migrations
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleClaims_RoleId",
-                table: "RoleClaims",
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                table: "Roles",
+                table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserClaims_UserId",
-                table: "UserClaims",
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLogins_UserId",
-                table: "UserLogins",
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRoles_RoleId",
-                table: "UserRoles",
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "Users",
+                table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
-                column: "RoleId");
+                name: "IX_AspNetUsers_RoleEntityId",
+                table: "AspNetUsers",
+                column: "RoleEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "Users",
+                table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
 
@@ -529,19 +536,19 @@ namespace PetClinic.DAL.Migrations
                 name: "Appointments");
 
             migrationBuilder.DropTable(
-                name: "RoleClaims");
+                name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "UserClaims");
+                name: "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "UserLogins");
+                name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "UserRoles");
+                name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "UserTokens");
+                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
                 name: "OrderCalls");
@@ -568,13 +575,13 @@ namespace PetClinic.DAL.Migrations
                 name: "Vets");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                name: "AspNetRoles");
         }
     }
 }

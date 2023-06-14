@@ -4,12 +4,7 @@ using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetClinic.BLL.Services;
 
@@ -23,11 +18,11 @@ public class VetService : IVetService
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
     }
+
     public async Task AddReviewAsync(AddReviewDto review)
     {
-      var result =  mapper.Map<ReviewEntity>(review);
+       var result =  mapper.Map<ReviewEntity>(review);
        await unitOfWork.ReviewRepository.AddAsync(result);
-
     }
 
     public async Task<IEnumerable<GetVetDto>> GetVetsAsync()
@@ -49,6 +44,7 @@ public class VetService : IVetService
         {
             throw Exceptions.Exceptions.VetNotFound;
         }
+
         return mapper.Map<GetVetDto>(vet);
     }
 
@@ -56,8 +52,4 @@ public class VetService : IVetService
     {
         throw new NotImplementedException();
     }
-
-  
-
-
 }

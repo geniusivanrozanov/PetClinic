@@ -13,6 +13,7 @@ public class MapperProfile : Profile
         CreateMapsForAddMethodDtos();
         CreateMapsForDeleteMethodDtos();
         CreateMapsForUpdateMethodDtos();
+        CreateMapsForAuthDtos();
     }
 
     private void CreateMapsForGetMethodDtos()

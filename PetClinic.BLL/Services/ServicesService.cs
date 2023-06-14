@@ -18,7 +18,7 @@ public class ServicesService : IServicesService
 
     public IEnumerable<GetServiceDto> GetServices()
     {
-        var services = unitOfWork.ServiceRepository.GetAll();
+        var services = unitOfWork.ServiceRepository.GetAllAsync();
 
         if (services is null)
         {
@@ -30,7 +30,7 @@ public class ServicesService : IServicesService
 
     public GetServiceDto GetServiceById(Guid serviceId)
     {
-        var service = unitOfWork.ServiceRepository.Get(serviceId);
+        var service = unitOfWork.ServiceRepository.GetAsync(serviceId);
 
         if (service is null)
         {

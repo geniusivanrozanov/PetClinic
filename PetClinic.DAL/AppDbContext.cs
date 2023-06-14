@@ -61,7 +61,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 
     private void UpdateExtendedFields()
     {
-        var currentTime = DateTime.Now;
+        var currentTime = DateTime.Now.ToUniversalTime();
         
         foreach (var entityEntry in ChangeTracker.Entries()
                      .Where(entry => entry.State == EntityState.Added))
