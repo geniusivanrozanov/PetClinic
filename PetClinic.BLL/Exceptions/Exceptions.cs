@@ -8,4 +8,9 @@ public class Exceptions
     public static NotFoundException ServiceNotFound = new ("Service with the given id does not exist");
     public static UserAlreadyExists UserAlreadyExists = new ("User with th same email was registered");
     public static RegistrationFailedException RegistrationFailedException = new ("Registration is failed");
+    public static NotFoundException VetsNotFound = new("Vets are not found");
+    public static NotFoundException VetNotFound = new("Vet with the given id does not exist");
+    public static NotFoundException AppointmentNotFound = new("Appointment with the given id does not exist");
+    public static NotFoundException AppointmentsNotFound = new("Appointments are not found");
+
 }
