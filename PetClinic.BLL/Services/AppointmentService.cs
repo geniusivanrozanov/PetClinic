@@ -39,13 +39,12 @@ public class AppointmentService : IAppointmentService
     public async Task<GetAppointmentDto> GetAppointmentByIdAsync(Guid id)
     {
         var appointment = await unitOfWork.AppointmentRepository.GetAsync(id);
-
         if (appointment is null)
         {
             throw Exceptions.Exceptions.AppointmentNotFound;
         }
 
-        return mapper.Map<GetAppointmentDto>(appointment);
+      return mapper.Map<GetAppointmentDto>(appointment);
     }
 
     public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()
@@ -56,13 +55,16 @@ public class AppointmentService : IAppointmentService
         {
             throw Exceptions.Exceptions.AppointmentsNotFound;
         }
-        
+
         return mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
     }
 
-    public void UpdateAppointment(AddAppointmentDto appointment)
+    public GetAppointmentDto UpdateAppointment(AddAppointmentDto appointment)
     {
-        var result = mapper.Map<AppointmentEntity>(appointment);
-        unitOfWork.AppointmentRepository.Update(result);
+        var mappedItem = mapper.Map<AppointmentEntity>(appointment);
+        var result =  unitOfWork.AppointmentRepository.Update(mappedItem);
+
+        return mapper.Map<GetAppointmentDto>(result);
+
     }
 }

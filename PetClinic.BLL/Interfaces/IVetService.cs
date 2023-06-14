@@ -12,7 +12,7 @@ namespace PetClinic.BLL.Interfaces;
 public interface IVetService
 {
     Task AddReviewAsync(AddReviewDto review);
-    Task<IEnumerable<GetAppointmentDto>> GetScheduleAsync(Expression<Func<GetAppointmentDto, bool>> predicate);
+    Task<IEnumerable<GetAppointmentDto>> GetScheduleAsync(GetScheduleDto schedule);
     Task<GetVetDto> GetVetByIdAsync(Guid id);
     Task<IEnumerable<GetVetDto>> GetVetsAsync();
 }

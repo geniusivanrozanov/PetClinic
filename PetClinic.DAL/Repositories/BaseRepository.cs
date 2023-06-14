@@ -13,7 +13,11 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         _context = context;
     }
-    public async Task AddAsync(TEntity entity) => await _context.Set<TEntity>().AddAsync(entity);
+    public async Task<TEntity> AddAsync(TEntity entity)
+    {
+        await _context.Set<TEntity>().AddAsync(entity);
+        return entity;
+    }
 
     public async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _context.Set<TEntity>().AddRangeAsync(entities);
 
@@ -27,6 +31,10 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
 
     public void RemoveRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().RemoveRange(entities);
 
-    public void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
+    public TEntity Update(TEntity entity)
+    {
+        return _context.Set<TEntity>().Update(entity).Entity;
+    }
+   
 }
   

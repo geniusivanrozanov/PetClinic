@@ -9,10 +9,10 @@ public interface IRepository<TEntity, TId>  where TEntity : IEntity<TId>
     Task<IEnumerable<TEntity>> GetAllAsync();
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 
-    Task AddAsync(TEntity entity);
+    Task<TEntity> AddAsync(TEntity entity);
     Task AddRangeAsync(IEnumerable<TEntity> entities);
     void Remove(TEntity entity);
     void RemoveRange(IEnumerable<TEntity> entities);
-    void Update(TEntity entity);
+    TEntity Update(TEntity entity);
 
 }
