@@ -9,7 +9,10 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.16" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.16" />
+<<<<<<< HEAD
         <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+=======
+>>>>>>> 477e7d9a35b33a364d53deb6466ac9415c59bf9a
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="6.0.1" />
     </ItemGroup>

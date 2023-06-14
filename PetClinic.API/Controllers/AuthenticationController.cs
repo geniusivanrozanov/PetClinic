@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authorization;
+=======
+>>>>>>> 477e7d9a35b33a364d53deb6466ac9415c59bf9a
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;

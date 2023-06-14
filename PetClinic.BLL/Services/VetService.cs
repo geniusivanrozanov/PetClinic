@@ -36,6 +36,7 @@ public class VetService : IVetService
      
         return mapper.Map<IEnumerable<GetVetDto>>(vets);
     }
+    
     public async Task<GetVetDto> GetVetByIdAsync(Guid id)
     {
         var vet = await unitOfWork.VetRepository.GetAsync(id);
