@@ -1,5 +1,6 @@
 using AutoMapper;
 using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.DAL.Entities;
 
 namespace PetClinic.BLL.Utilites.Mapper;
@@ -9,9 +10,9 @@ public class MapperProfile : Profile
     public MapperProfile()
     {
         CreateMapsForGetMethodDtos();
-        CreateMappsForAddMethodDtos();
-        CreateMappsForDeleteMethodDtos();
-        CreateMappsForUpdateMethodDtos();
+        CreateMapsForAddMethodDtos();
+        CreateMapsForDeleteMethodDtos();
+        CreateMapsForUpdateMethodDtos();
     }
 
     private void CreateMapsForGetMethodDtos()
@@ -25,7 +26,7 @@ public class MapperProfile : Profile
         CreateMap<UserEntity, GetUserDto>();
     }
 
-    private void CreateMappsForAddMethodDtos()
+    private void CreateMapsForAddMethodDtos()
     {
         CreateMap<AddAppointmentDto, AppointmentEntity>()
             .ForMember(a => a.DateTime, 
@@ -40,13 +41,18 @@ public class MapperProfile : Profile
         CreateMap<AddVetDto, VetEntity>();
     }
 
-    private void CreateMappsForDeleteMethodDtos()
+    private void CreateMapsForDeleteMethodDtos()
     {
 
     }
 
-    private void CreateMappsForUpdateMethodDtos()
+    private void CreateMapsForUpdateMethodDtos()
     {
 
+    }
+
+    private void CreateMapsForAuthDtos()
+    {
+        CreateMap<UserRegistrationRequestDto, UserEntity>();
     }
 }
