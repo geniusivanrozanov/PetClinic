@@ -18,7 +18,7 @@ public class DepartmentService : IDepartmentService
 
     public IEnumerable<GetDepartmentDto> GetDepartments()
     {
-        var departments = unitOfWork.DepartmentRepository.GetAll();
+        var departments = unitOfWork.DepartmentRepository.GetAllAsync();
 
         if (departments is null)
         {
@@ -30,7 +30,7 @@ public class DepartmentService : IDepartmentService
 
     public GetDepartmentDto GetDepatmentById(Guid departmentId)
     {
-        var department = unitOfWork.DepartmentRepository.Get(departmentId);
+        var department = unitOfWork.DepartmentRepository.GetAsync(departmentId);
 
         if (department is null)
         {

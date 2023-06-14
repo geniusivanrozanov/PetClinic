@@ -1,4 +1,5 @@
-﻿using PetClinic.DAL.Interfaces.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PetClinic.DAL.Interfaces.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 using System.Linq.Expressions;
 
@@ -12,17 +13,17 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         _context = context;
     }
-    public void Add(TEntity entity) => _context.Set<TEntity>().Add(entity);
+    public async Task AddAsync(TEntity entity) => await _context.Set<TEntity>().AddAsync(entity);
 
-    public void AddRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().AddRange(entities);
+    public async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _context.Set<TEntity>().AddRangeAsync(entities);
 
-    public IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => _context.Set<TEntity>().Where(predicate);
+    public async  Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().Where(predicate).ToListAsync();
 
-    public TEntity? Get(TId id) => _context.Set<TEntity>().Find(id);
+    public async Task<TEntity?> GetAsync(TId id) => await _context.Set<TEntity>().FindAsync(id);
 
-    public IQueryable<TEntity> GetAll() => _context.Set<TEntity>().AsQueryable<TEntity>();
+    public async Task<IEnumerable<TEntity>> GetAllAsync() => await _context.Set<TEntity>().ToListAsync();
 
-    public void Remove(TEntity entity) => _context.Set<TEntity>().Remove(entity);
+    public void Remove(TEntity entity) =>  _context.Set<TEntity>().Remove(entity);
 
     public void RemoveRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().RemoveRange(entities);
 

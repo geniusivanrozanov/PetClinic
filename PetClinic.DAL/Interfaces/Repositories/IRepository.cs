@@ -5,12 +5,12 @@ namespace PetClinic.DAL.Interfaces.Repositories;
 
 public interface IRepository<TEntity, TId>  where TEntity : IEntity<TId>
 {
-    TEntity? Get(TId id);
-    IQueryable<TEntity> GetAll();
-    IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+    Task<TEntity?> GetAsync(TId id);
+    Task<IEnumerable<TEntity>> GetAllAsync();
+    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 
-    void Add(TEntity entity);
-    void AddRange(IEnumerable<TEntity> entities);
+    Task AddAsync(TEntity entity);
+    Task AddRangeAsync(IEnumerable<TEntity> entities);
     void Remove(TEntity entity);
     void RemoveRange(IEnumerable<TEntity> entities);
     void Update(TEntity entity);
