@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.BLL", "PetClinic.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.DAL", "PetClinic.DAL\PetClinic.DAL.csproj", "{5ECEA617-5C99-4329-A266-77AA63A18A1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetClinic.DAL.Tests", "PetClinic.DAL.Tests\PetClinic.DAL.Tests.csproj", "{4F3B5147-044E-46F6-A0CE-EF5B9E0F6B2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{5ECEA617-5C99-4329-A266-77AA63A18A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ECEA617-5C99-4329-A266-77AA63A18A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ECEA617-5C99-4329-A266-77AA63A18A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F3B5147-044E-46F6-A0CE-EF5B9E0F6B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F3B5147-044E-46F6-A0CE-EF5B9E0F6B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F3B5147-044E-46F6-A0CE-EF5B9E0F6B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F3B5147-044E-46F6-A0CE-EF5B9E0F6B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
