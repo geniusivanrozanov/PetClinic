@@ -12,6 +12,7 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         _context = context;
     }
+    
     public void Add(TEntity entity) => _context.Set<TEntity>().Add(entity);
 
     public void AddRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().AddRange(entities);
@@ -25,4 +26,7 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     public void Remove(TEntity entity) => _context.Set<TEntity>().Remove(entity);
 
     public void RemoveRange(IEnumerable<TEntity> entities) => _context.Set<TEntity>().RemoveRange(entities);
+
+    public void Update(TEntity entity) => _context.Set<TEntity>().Update(entity);
 }
+  

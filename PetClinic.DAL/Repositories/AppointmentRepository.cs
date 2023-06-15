@@ -1,7 +1,4 @@
 ﻿using PetClinic.DAL.Entities;
-using PetClinic.DAL.Interfaces.Repositories;
-using System.Linq.Expressions;
-
 
 namespace PetClinic.DAL.Repositories;
 
