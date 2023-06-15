@@ -49,11 +49,12 @@ public class MapperProfile : Profile
 
     private void CreateMapsForUpdateMethodDtos()
     {
-
+        
     }
 
     private void CreateMapsForAuthDtos()
     {
         CreateMap<UserRegistrationRequestDto, UserEntity>();
+        CreateMap<UpdateUserAccountDto, UserEntity>();
     }
 }

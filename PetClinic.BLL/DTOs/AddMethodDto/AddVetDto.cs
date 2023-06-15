@@ -7,5 +7,4 @@ public class AddVetDto
     public int Experience { get; set; }
     public string Bio { get; set; } = default!;
     public Guid DepartmentId { get; set; }
-    public Guid? ClientId { get; set; }
 }
