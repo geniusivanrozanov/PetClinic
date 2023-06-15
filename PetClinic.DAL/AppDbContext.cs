@@ -24,25 +24,11 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     public DbSet<OrderCallEntity> OrderCalls { get; set; } = default!;
     public DbSet<ServiceVetEntity> ServiceVets { get; set; } = default!;
 
-    public override int SaveChanges()
-    {
-        UpdateExtendedFields();
-        
-        return base.SaveChanges();
-    }
-
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         UpdateExtendedFields();
         
         return base.SaveChanges(acceptAllChangesOnSuccess);
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-    {
-        UpdateExtendedFields();
-        
-        return base.SaveChangesAsync(cancellationToken);
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
@@ -61,7 +47,7 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 
     private void UpdateExtendedFields()
     {
-        var currentTime = DateTime.Now;
+        var currentTime = DateTime.UtcNow;
         
         foreach (var entityEntry in ChangeTracker.Entries()
                      .Where(entry => entry.State == EntityState.Added))
