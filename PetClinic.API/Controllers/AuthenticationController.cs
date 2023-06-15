@@ -9,9 +9,9 @@ namespace PetClinic.API.Controllers;
 [Route("api/Identity/Account")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IClientAccountService clientAccountService;
+    private readonly IUserAccountService clientAccountService;
 
-    public AuthenticationController(IClientAccountService clientAccountService)
+    public AuthenticationController(IUserAccountService clientAccountService)
     {
         this.clientAccountService = clientAccountService;
     }
@@ -20,7 +20,7 @@ public class AuthenticationController : ControllerBase
     [AllowAnonymous]
     public async Task<string> RegisterUser([FromBody] UserRegistrationRequestDto userData)
     {
-        return await clientAccountService.RegisterUserAsync(userData);
+        return await clientAccountService.RegisterClientAsync(userData);
     }
 
     [HttpPost("Login")]
