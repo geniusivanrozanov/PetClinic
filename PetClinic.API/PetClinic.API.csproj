@@ -15,10 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Controllers" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\PetClinic.DAL\PetClinic.DAL.csproj" />
       <ProjectReference Include="..\PetClinic.BLL\PetClinic.BLL.csproj" />
     </ItemGroup>
