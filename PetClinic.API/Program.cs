@@ -9,8 +9,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
-using Microsoft.AspNetCore.Identity.UI;
-using PetClinic.DAL.Entities;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

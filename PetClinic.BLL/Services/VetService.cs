@@ -4,7 +4,6 @@ using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
-using System.Linq.Expressions;
 
 namespace PetClinic.BLL.Services;
 
@@ -49,8 +48,14 @@ public class VetService : IVetService
         return mapper.Map<GetVetDto>(vet);
     }
 
-    public Task<IEnumerable<GetAppointmentDto>> GetScheduleAsync(Expression<Func<GetAppointmentDto, bool>> predicate)
+    public async Task<IEnumerable<GetAppointmentDto>> GetScheduleAsync(GetScheduleDto schedule)
     {
-        throw new NotImplementedException();
+        var serviceVet =  await unitOfWork.ServiceVetRepository.FindAsync(x => x.VetId == schedule.VetId);
+        var vets = serviceVet.Select(x => x.Id);
+        var result = await unitOfWork.AppointmentRepository.FindAsync(x => DateOnly.FromDateTime(x.DateTime) == schedule.AppointmentDate && vets.Contains(x.ServiceId));
+
+        return mapper.Map<IEnumerable<GetAppointmentDto>>(result);
     }
+
+
 }
