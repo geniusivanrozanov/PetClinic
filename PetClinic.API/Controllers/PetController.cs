@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 

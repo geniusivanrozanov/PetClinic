@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 
@@ -34,7 +34,6 @@ public class VetController
     {
         return await vetService.GetVetsAsync();
     }
-
 
     [HttpGet]
     public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(GetScheduleDto getScheduleDto)

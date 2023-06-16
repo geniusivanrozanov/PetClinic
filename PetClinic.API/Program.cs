@@ -1,61 +1,29 @@
 using PetClinic.BLL.Extensions;
 using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using PetClinic.DAL.Entities;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
-
+using PetClinic.DAL.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
-                .CreateLogger();
 
 var configuration = builder.Configuration;
 
 // Add services to the container.
 
+builder.Logging.AddSerilog();
+
 builder.Services.AddControllers();
 
-builder.Logging.AddSerilog(logger);
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
 
-builder.Services.AddAuthentication(options => 
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(jwt => 
-{
-    var key = Encoding.ASCII.GetBytes(configuration.GetSection("JwtConfig:Secret").Value!);
+builder.Services.AddAuthentication();
 
-    jwt.SaveToken = true;
-    jwt.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidIssuer = configuration.GetSection("JwtConfig:Issuer").Value,
-        ValidateAudience = true,
-        ValidAudience = configuration.GetSection("JwtConfig:Audience").Value,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        RequireExpirationTime = true,
-    };
-});
-
-builder.Services.AddDefaultIdentity<UserEntity>(options => 
-    options.SignIn.RequireConfirmedEmail = false)
-    .AddRoles<RoleEntity>()
-    .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddIdentity<UserEntity, RoleEntity>(options => 
+            options.SignIn.RequireConfirmedEmail = false)
+            .AddEntityFrameworkStores<AppDbContext>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
