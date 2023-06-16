@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using PetClinic.BLL.Configurations;
 using PetClinic.BLL.DTOs;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
@@ -18,21 +17,19 @@ namespace PetClinic.BLL.Services;
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
-    private readonly JwtConfig _jwtConfig;
+    private readonly RoleManager<RoleEntity> _roleManager;
     private readonly IMapper _mapper;
     private readonly IConfiguration _config;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UserAccountService(UserManager<UserEntity> userManager, IMapper mapper, IConfiguration config, IUnitOfWork unitOfWork)
+    public UserAccountService(UserManager<UserEntity> userManager, 
+        IMapper mapper, IConfiguration config, IUnitOfWork unitOfWork, RoleManager<RoleEntity> roleManager)
     {
         _userManager = userManager;
         _config = config;
-        _jwtConfig = new JwtConfig
-        {
-            Secret = _config!["JwtConfig:Secret"]
-        };
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        _roleManager = roleManager;
     }
 
     public async Task<IEnumerable<GetUserDto>> GetAllAccounts()
@@ -47,7 +44,7 @@ public class UserAccountService : IUserAccountService
     public async Task<string> RegisterClientAsync(UserRegistrationRequestDto userData)
     {
         var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.ClientRole);
-        var token = GenerateJwtToken(newUser);
+        var token = await GenerateJwtTokenAsync(newUser);
 
         return token;
     }
@@ -61,11 +58,11 @@ public class UserAccountService : IUserAccountService
         
         await _unitOfWork.VetRepository.AddAsync(newVet);
         
-        var token = GenerateJwtToken(newUser);
+        var token = await GenerateJwtTokenAsync(newUser);
 
         return token;
     }
-
+    
     public async Task<string> LoginUserAsync(LoginUserDto userData)
     {
         var existingUser = await _userManager.FindByEmailAsync(userData.Email);
@@ -82,7 +79,7 @@ public class UserAccountService : IUserAccountService
             throw Exceptions.Exceptions.InvalidPasswordException;
         }
 
-        var jwtToken = GenerateJwtToken(existingUser);
+        var jwtToken = await GenerateJwtTokenAsync(existingUser);
 
         return jwtToken;
     }
@@ -111,29 +108,31 @@ public class UserAccountService : IUserAccountService
         var newUser = _mapper.Map<UserEntity>(userData);
 
         var isCreated = await _userManager.CreateAsync(newUser, userData.Password);
-    
+
         if (!isCreated.Succeeded)
         {
             throw Exceptions.Exceptions.RegistrationFailedException;
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
-        
+
         return newUser;
     }
 
-    private string GenerateJwtToken(UserEntity user)
+    private async Task<string> GenerateJwtTokenAsync(UserEntity user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
+        var key = Encoding.UTF8.GetBytes(_config!["JwtConfig:Secret"]);
+        
+        var role = "";
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new []
             {
                 new Claim("Id", $"{user.Id}"),
-                new Claim("Role", $"{user.Role}"),
+                new Claim("Role", $"{role}"),
             }),
             Expires = DateTime.Now.AddMinutes(5),
             SigningCredentials = new SigningCredentials(

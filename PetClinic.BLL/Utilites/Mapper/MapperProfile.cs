@@ -38,7 +38,6 @@ public class MapperProfile : Profile
         CreateMap<AddPetDto, PetEntity>();
         CreateMap<AddReviewDto, ReviewEntity>();
         CreateMap<AddServiceDto, ServiceEntity>();
-        CreateMap<AddUserDto, UserEntity>();
         CreateMap<AddVetDto, VetEntity>();
     }
 

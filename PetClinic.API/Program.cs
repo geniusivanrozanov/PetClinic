@@ -9,8 +9,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Swashbuckle.AspNetCore.Filters;
-using Microsoft.AspNetCore.Identity.UI;
-using PetClinic.DAL.Entities;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +28,6 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
 
-// builder.Services.Configure<JwtConfig>(configuration.GetSection("JwtConfig"));
 builder.Services.AddAuthentication(options => 
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

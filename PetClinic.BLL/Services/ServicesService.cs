@@ -16,9 +16,9 @@ public class ServicesService : IServicesService
         this.mapper = mapper;
     }
 
-    public IEnumerable<GetServiceDto> GetServices()
+    public async Task<IEnumerable<GetServiceDto>> GetServicesAsync()
     {
-        var services = unitOfWork.ServiceRepository.GetAllAsync();
+        var services = await unitOfWork.ServiceRepository.GetAllAsync();
 
         if (services is null)
         {
@@ -28,9 +28,9 @@ public class ServicesService : IServicesService
         return mapper.Map<IEnumerable<GetServiceDto>>(services); 
     }
 
-    public GetServiceDto GetServiceById(Guid serviceId)
+    public async Task<GetServiceDto> GetServiceByIdAsync(Guid serviceId)
     {
-        var service = unitOfWork.ServiceRepository.GetAsync(serviceId);
+        var service = await unitOfWork.ServiceRepository.GetAsync(serviceId);
 
         if (service is null)
         {

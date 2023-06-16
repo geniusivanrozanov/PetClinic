@@ -27,7 +27,7 @@ public class AppointmentService : IAppointmentService
     {
         var appointment = unitOfWork.AppointmentRepository.GetAsync(id);
 
-        if(appointment is null)
+        if (appointment is null)
         {
             throw Exceptions.Exceptions.AppointmentNotFound;
         }

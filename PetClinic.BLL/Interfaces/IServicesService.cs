@@ -4,6 +4,6 @@ namespace PetClinic.BLL.Interfaces;
 
 public interface IServicesService
 {
-    IEnumerable<GetServiceDto> GetServices();
-    GetServiceDto GetServiceById(Guid serviceId);
+    Task<IEnumerable<GetServiceDto>> GetServicesAsync();
+    Task<GetServiceDto> GetServiceByIdAsync(Guid serviceId);
 }

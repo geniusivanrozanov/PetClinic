@@ -16,9 +16,9 @@ public class DepartmentService : IDepartmentService
         this.mapper = mapper;
     }
 
-    public IEnumerable<GetDepartmentDto> GetDepartments()
+    public async Task<IEnumerable<GetDepartmentDto>> GetDepartmentsAsync()
     {
-        var departments = unitOfWork.DepartmentRepository.GetAllAsync();
+        var departments = await unitOfWork.DepartmentRepository.GetAllAsync();
 
         if (departments is null)
         {
@@ -28,9 +28,9 @@ public class DepartmentService : IDepartmentService
         return mapper.Map<IEnumerable<GetDepartmentDto>>(departments);
     }
 
-    public GetDepartmentDto GetDepatmentById(Guid departmentId)
+    public async Task<GetDepartmentDto> GetDepatmentByIdAsync(Guid departmentId)
     {
-        var department = unitOfWork.DepartmentRepository.GetAsync(departmentId);
+        var department = await unitOfWork.DepartmentRepository.GetAsync(departmentId);
 
         if (department is null)
         {
