@@ -44,7 +44,7 @@ public class AppointmentService : IAppointmentService
             throw Exceptions.Exceptions.AppointmentNotFound;
         }
 
-      return mapper.Map<GetAppointmentDto>(appointment);
+       return mapper.Map<GetAppointmentDto>(appointment);
     }
 
     public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()
@@ -66,6 +66,5 @@ public class AppointmentService : IAppointmentService
         var result =  unitOfWork.AppointmentRepository.Update(mappedItem);
 
         return mapper.Map<GetAppointmentDto>(result);
-
     }
 }

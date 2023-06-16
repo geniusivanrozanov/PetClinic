@@ -21,7 +21,7 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
 
     public async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _context.Set<TEntity>().AddRangeAsync(entities);
 
-    public async  Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().Where(predicate).ToListAsync();
+    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().Where(predicate).ToListAsync();
 
     public async Task<TEntity?> GetAsync(TId id) => await _context.Set<TEntity>().FindAsync(id);
 
@@ -35,6 +35,4 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         return _context.Set<TEntity>().Update(entity).Entity;
     }
-   
 }
-  

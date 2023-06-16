@@ -30,7 +30,7 @@ public class PetService : IPetService
 
         if (pet is null)
         {
-            throw Exceptions.Exceptions.PetNotFound;
+            throw new ArgumentNullException(); // Exceptions.Exceptions.PetNotFound;
         }
 
         var result = mapper.Map<PetEntity>(pet);
@@ -44,7 +44,7 @@ public class PetService : IPetService
        
         if (pet is null)
         {
-            throw Exceptions.Exceptions.PetNotFound;
+            throw new ArgumentNullException(); // Exceptions.Exceptions.PetNotFound;
         }
 
         return mapper.Map<GetPetDto>(pet);
@@ -56,7 +56,7 @@ public class PetService : IPetService
 
         if (pets is null)
         {
-            throw Exceptions.Exceptions.PetsNotFound;
+             throw new ArgumentNullException(); // Exceptions.Exceptions.PetsNotFound;
         }
 
         return mapper.Map<IEnumerable<GetPetDto>>(pets);
