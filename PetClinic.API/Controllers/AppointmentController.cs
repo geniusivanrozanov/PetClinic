@@ -3,6 +3,7 @@ using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 
+
 namespace PetClinic.API.Controllers;
 
 [ApiController]
@@ -24,9 +25,11 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpDelete("id")]
-    public void Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        appointmentService.DeleteAppointment(id);
+        await appointmentService.DeleteAppointmentAsync(id);
+
+        return Ok(id);
     }
 
     [HttpGet("id")]
@@ -44,8 +47,10 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPut("id")]
-    public IActionResult Update(UpdateAppointmentDto appointment)
+    public async Task<IActionResult> Update(UpdateAppointmentDto appointment)
     {
-        return Ok(appointmentService.UpdateAppointment(appointment));
+        await appointmentService.UpdateAppointmentAsync(appointment);
+
+        return Ok(appointment);
     }
 }

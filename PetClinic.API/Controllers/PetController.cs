@@ -4,11 +4,12 @@ using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 
+
 namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/Pet")]
-public class PetController
+public class PetController : ControllerBase
 {
     private readonly IPetService petService;
 
@@ -36,14 +37,18 @@ public class PetController
     }
 
     [HttpDelete("id")]
-    public void Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        petService.DeletePet(id);
+        await petService.DeletePetAsync(id);
+
+        return Ok(id);
     }
 
     [HttpPut("id")]
-    public GetPetDto Update(UpdatePetDto appointment)
+    public async Task<IActionResult> Update(UpdatePetDto appointment)
     {
-        return petService.UpdatePet(appointment);
+        await petService.UpdatePetAsync(appointment);
+
+        return Ok(appointment);
     }
 }
