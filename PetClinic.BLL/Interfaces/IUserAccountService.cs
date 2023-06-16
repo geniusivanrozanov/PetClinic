@@ -1,5 +1,6 @@
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
 
 namespace PetClinic.BLL.Interfaces;
 

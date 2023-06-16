@@ -1,4 +1,4 @@
-namespace PetClinic.BLL.DTOs;
+namespace PetClinic.BLL.DTOs.AddMethodDto;
 
 public class AddVetDto
 {

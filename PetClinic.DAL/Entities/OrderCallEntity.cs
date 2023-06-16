@@ -14,4 +14,3 @@ public class OrderCallEntity : IEntity<Guid>
     public DateTime UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
 }
-

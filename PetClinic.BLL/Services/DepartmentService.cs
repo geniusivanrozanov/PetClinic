@@ -1,5 +1,5 @@
 using AutoMapper;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Interfaces.Repositories;
 

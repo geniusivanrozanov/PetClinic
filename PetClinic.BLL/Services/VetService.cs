@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
@@ -20,8 +20,8 @@ public class VetService : IVetService
 
     public async Task AddReviewAsync(AddReviewDto review)
     {
-       var result =  mapper.Map<ReviewEntity>(review);
-       await unitOfWork.ReviewRepository.AddAsync(result);
+        var result =  mapper.Map<ReviewEntity>(review);
+        await unitOfWork.ReviewRepository.AddAsync(result);
     }
 
     public async Task<IEnumerable<GetVetDto>> GetVetsAsync()
@@ -56,6 +56,4 @@ public class VetService : IVetService
 
         return mapper.Map<IEnumerable<GetAppointmentDto>>(result);
     }
-
-
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
+using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -17,6 +19,7 @@ public class PetService : IPetService
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
     }
+    
     public async Task AddPetAsync(AddPetDto pet)
     {
         var result = mapper.Map<PetEntity>(pet);
@@ -62,12 +65,11 @@ public class PetService : IPetService
         return mapper.Map<IEnumerable<GetPetDto>>(pets);
     }
 
-    public GetPetDto UpdatePet(AddPetDto pet, Guid id)
+    public GetPetDto UpdatePet(UpdatePetDto pet)
     {
         var mappedItem = mapper.Map<PetEntity>(pet);
-        mappedItem.Id = id;
         var result = unitOfWork.PetRepository.Update(mappedItem);
-         unitOfWork.Complete();
+        unitOfWork.Complete();
 
         return mapper.Map<GetPetDto>(result);
     }

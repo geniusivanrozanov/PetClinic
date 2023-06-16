@@ -17,5 +17,9 @@ public static class ServiceCollectionExtension
         services.AddScoped<IServicesService, ServicesService>();
         services.AddScoped<IDepartmentService, DepartmentService>();
         services.AddScoped<IUserAccountService, UserAccountService>();
+        services.AddScoped<IOrderCallService, OrderCallService>();
+        services.AddScoped<IAppointmentService, AppointmentService>();
+        services.AddScoped<IVetService, VetService>();
+        services.AddScoped<IPetService, PetService>();
     }
 }

@@ -12,7 +12,7 @@ public class Exceptions
     public static NotFoundException VetNotFound = new("Vet with the given id does not exist");
     public static NotFoundException AppointmentNotFound = new("Appointment with the given id does not exist");
     public static NotFoundException AppointmentsNotFound = new("Appointments are not found");
-    public static UserAlreadyExistsException UserAlreadyExistsException = new ("User with th same email was registered");
+    public static UserAlreadyExistsException UserAlreadyExistsException = new ("User with the same email was registered");
     public static UserDoesNotExistException UserDoesNotExistException = new ("User with the given email wasn't registered");
     public static InvalidDataException InvalidPasswordException = new ("Password is invalid");
 }

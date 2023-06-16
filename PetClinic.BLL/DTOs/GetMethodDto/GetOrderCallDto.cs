@@ -1,4 +1,4 @@
-namespace PetClinic.BLL.DTOs;
+namespace PetClinic.BLL.DTOs.GetMethodDto;
 
 public class GetOrderCallDto
 {

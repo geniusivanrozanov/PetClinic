@@ -1,4 +1,4 @@
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.GetMethodDto;
 
 namespace PetClinic.BLL.Interfaces;
 

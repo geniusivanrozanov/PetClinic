@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
+using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -59,10 +61,9 @@ public class AppointmentService : IAppointmentService
         return mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
     }
 
-    public GetAppointmentDto UpdateAppointment(AddAppointmentDto appointment, Guid id)
+    public GetAppointmentDto UpdateAppointment(UpdateAppointmentDto appointment)
     {
         var mappedItem = mapper.Map<AppointmentEntity>(appointment);
-        mappedItem.Id = id;
         var result =  unitOfWork.AppointmentRepository.Update(mappedItem);
 
         return mapper.Map<GetAppointmentDto>(result);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
@@ -16,7 +17,6 @@ public class AppointmentController : ControllerBase
         this.appointmentService = appointmentService;
     }
 
-
     [HttpPost]
     public async Task Add(AddAppointmentDto appointment)
     {
@@ -30,20 +30,22 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet("id")]
-    public async Task<GetAppointmentDto> GetById(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
-        return await appointmentService.GetAppointmentByIdAsync(id);
+        var appointment = await appointmentService.GetAppointmentByIdAsync(id);
+        return Ok(appointment);
     }
 
     [HttpGet]
-    public  async Task<IEnumerable<GetAppointmentDto>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return await appointmentService.GetAppointmentsAsync();
+        var appointments = await appointmentService.GetAppointmentsAsync();
+        return Ok(appointments);
     }
 
     [HttpPut("id")]
-    public GetAppointmentDto Update(AddAppointmentDto appointment, Guid id)
+    public IActionResult Update(UpdateAppointmentDto appointment)
     {
-        return appointmentService.UpdateAppointment(appointment, id);
+        return Ok(appointmentService.UpdateAppointment(appointment));
     }
 }

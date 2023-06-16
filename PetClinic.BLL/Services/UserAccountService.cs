@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
+using PetClinic.BLL.DTOs.DeleteMethodDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -90,9 +92,9 @@ public class UserAccountService : IUserAccountService
         await _userManager.UpdateAsync(user);
     }
 
-    public async Task DeleteUserAccount(Guid accountId)
+    public async Task DeleteUserAccount(DeleteUserAccountDto account)
     {
-        var userToDelete = await _userManager.FindByIdAsync($"{accountId}");
+        var userToDelete = await _userManager.FindByIdAsync($"{account.AccountId}");
         await _userManager.DeleteAsync(userToDelete);
     }
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PetClinic.BLL.DTOs.GetMethodDto
+﻿namespace PetClinic.BLL.DTOs.GetMethodDto
 {
     public class GetVetDto
     {
@@ -15,7 +9,5 @@ namespace PetClinic.BLL.DTOs.GetMethodDto
         public string Bio { get; set; } = default!;
         public Guid DepartmentId { get; set; }
         public Guid? ClientId { get; set; }
-
-
     }
 }

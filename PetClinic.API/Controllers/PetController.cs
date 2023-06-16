@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs;
+using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
@@ -14,7 +15,6 @@ public class PetController
     {
         this.petService = petService;
     }
-
 
     [HttpPost]
     public async Task Add(AddPetDto pet)
@@ -41,8 +41,8 @@ public class PetController
     }
 
     [HttpPut("id")]
-    public GetPetDto Update(AddPetDto appointment, Guid id)
+    public GetPetDto Update(UpdatePetDto appointment)
     {
-        return petService.UpdatePet(appointment, id);
+        return petService.UpdatePet(appointment);
     }
 }
