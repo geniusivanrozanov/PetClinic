@@ -1,7 +1,11 @@
 using AutoMapper;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
+using PetClinic.BLL.Exceptions;
 using PetClinic.DAL.Interfaces.Repositories;
+
+
+using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
 
 namespace PetClinic.BLL.Services;
 
@@ -22,7 +26,7 @@ public class DepartmentService : IDepartmentService
 
         if (departments is null)
         {
-            throw Exceptions.Exceptions.DepartmentsNotFound;
+            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
         }
 
         return mapper.Map<IEnumerable<GetDepartmentDto>>(departments);
@@ -34,7 +38,7 @@ public class DepartmentService : IDepartmentService
 
         if (department is null)
         {
-            throw Exceptions.Exceptions.DepartmentNotFound;
+            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
         }
 
         return mapper.Map<GetDepartmentDto>(department);

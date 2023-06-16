@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
+using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
+
+using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
+
 
 namespace PetClinic.BLL.Services;
 
@@ -30,7 +34,7 @@ public class VetService : IVetService
 
         if (vets is null)
         {
-            throw Exceptions.Exceptions.VetsNotFound;
+            throw new NotFoundException(ExceptionMessages.VetsNotFound);
         }
      
         return mapper.Map<IEnumerable<GetVetDto>>(vets);
@@ -42,7 +46,7 @@ public class VetService : IVetService
 
         if (vet is null)
         {
-            throw Exceptions.Exceptions.VetNotFound;
+            throw new NotFoundException(ExceptionMessages.VetsNotFound);
         }
 
         return mapper.Map<GetVetDto>(vet);

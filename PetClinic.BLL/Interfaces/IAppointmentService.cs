@@ -9,6 +9,6 @@ public interface IAppointmentService
     Task AddAppointmentAsync(AddAppointmentDto appointment);
     Task<GetAppointmentDto> GetAppointmentByIdAsync(Guid id);
     Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync();
-    GetAppointmentDto UpdateAppointment(UpdateAppointmentDto appointment);
-    void DeleteAppointment(Guid id);
+    Task<GetAppointmentDto> UpdateAppointmentAsync(UpdateAppointmentDto appointment);
+    Task DeleteAppointmentAsync(Guid id);
 }

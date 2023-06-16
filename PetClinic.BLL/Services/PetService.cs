@@ -3,8 +3,11 @@ using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
+using PetClinic.BLL.Exceptions;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
+
+using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
 
 
 namespace PetClinic.BLL.Services;
@@ -27,18 +30,18 @@ public class PetService : IPetService
         await unitOfWork.CompleteAsync();
     }
 
-    public void DeletePet(Guid id)
+    public async Task DeletePetAsync(Guid id)
     {
         var pet = unitOfWork.PetRepository.GetAsync(id);
 
         if (pet is null)
         {
-            throw new ArgumentNullException(); // Exceptions.Exceptions.PetNotFound;
+            throw new NotFoundException();
         }
 
         var result = mapper.Map<PetEntity>(pet);
         unitOfWork.PetRepository.Remove(result);
-        unitOfWork.Complete();
+        await unitOfWork.CompleteAsync();
     }
 
     public async Task<GetPetDto> GetPetByIdAsync(Guid id)
@@ -47,7 +50,7 @@ public class PetService : IPetService
        
         if (pet is null)
         {
-            throw new ArgumentNullException(); // Exceptions.Exceptions.PetNotFound;
+            throw new NotFoundException(ExceptionMessages.PetNotFound);
         }
 
         return mapper.Map<GetPetDto>(pet);
@@ -59,17 +62,18 @@ public class PetService : IPetService
 
         if (pets is null)
         {
-             throw new ArgumentNullException(); // Exceptions.Exceptions.PetsNotFound;
+            throw new NotFoundException(ExceptionMessages.PetNotFound);
         }
 
         return mapper.Map<IEnumerable<GetPetDto>>(pets);
     }
 
-    public GetPetDto UpdatePet(UpdatePetDto pet)
+    public async Task<GetPetDto> UpdatePetAsync(UpdatePetDto pet)
     {
         var mappedItem = mapper.Map<PetEntity>(pet);
         var result = unitOfWork.PetRepository.Update(mappedItem);
-        unitOfWork.Complete();
+
+        await unitOfWork.CompleteAsync();
 
         return mapper.Map<GetPetDto>(result);
     }

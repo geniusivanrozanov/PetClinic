@@ -4,6 +4,7 @@ using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
+
 namespace PetClinic.BLL.Services;
 
 public class OrderCallService : IOrderCallService
@@ -17,7 +18,7 @@ public class OrderCallService : IOrderCallService
         _mapper = mapper;
     }
 
-    public async Task CreateOrder(AddOrderCallDto callData)
+    public async Task CreateOrderAsync(AddOrderCallDto callData)
     {
         var orderCallData = _mapper.Map<OrderCallEntity>(callData);
 

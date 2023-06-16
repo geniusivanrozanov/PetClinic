@@ -10,28 +10,32 @@ using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.DTOs.DeleteMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
+using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
+
+using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
+
 
 namespace PetClinic.BLL.Services;
 
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
-    private readonly RoleManager<RoleEntity> _roleManager;
     private readonly IMapper _mapper;
     private readonly IConfiguration _config;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly string _secretCode;
 
     public UserAccountService(UserManager<UserEntity> userManager, 
-        IMapper mapper, IConfiguration config, IUnitOfWork unitOfWork, RoleManager<RoleEntity> roleManager)
+        IMapper mapper, IConfiguration config, IUnitOfWork unitOfWork)
     {
         _userManager = userManager;
         _config = config;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        _roleManager = roleManager;
+        _secretCode = _config!["JwtConfig:Secret"];
     }
 
     public async Task<IEnumerable<GetUserDto>> GetAllAccounts()
@@ -46,6 +50,9 @@ public class UserAccountService : IUserAccountService
     public async Task<string> RegisterClientAsync(UserRegistrationRequestDto userData)
     {
         var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.ClientRole);
+
+        await _unitOfWork.CompleteAsync();
+
         var token = await GenerateJwtTokenAsync(newUser);
 
         return token;
@@ -59,7 +66,8 @@ public class UserAccountService : IUserAccountService
         newVet.ClientId = newUser.Id;
         
         await _unitOfWork.VetRepository.AddAsync(newVet);
-        
+        await _unitOfWork.CompleteAsync();
+
         var token = await GenerateJwtTokenAsync(newUser);
 
         return token;
@@ -71,14 +79,14 @@ public class UserAccountService : IUserAccountService
 
         if (existingUser is null)
         {
-            throw Exceptions.Exceptions.UserDoesNotExistException;
+            throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
         }
 
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
         if (!passwordIsCorrect)
         {
-            throw Exceptions.Exceptions.InvalidPasswordException;
+            throw new Exceptions.InvalidDataException(ExceptionMessages.InvalidPassword);
         }
 
         var jwtToken = await GenerateJwtTokenAsync(existingUser);
@@ -89,13 +97,17 @@ public class UserAccountService : IUserAccountService
     public async Task UpdateUserAccount(UpdateUserAccountDto userData)
     {
         var user = _mapper.Map<UserEntity>(userData);
+
         await _userManager.UpdateAsync(user);
+        await _unitOfWork.CompleteAsync();
     }
 
     public async Task DeleteUserAccount(DeleteUserAccountDto account)
     {
         var userToDelete = await _userManager.FindByIdAsync($"{account.AccountId}");
+
         await _userManager.DeleteAsync(userToDelete);
+        await _unitOfWork.CompleteAsync();
     }
 
     private async Task<UserEntity> RegisterUserAccount(UserRegistrationRequestDto userData, string role)
@@ -104,7 +116,7 @@ public class UserAccountService : IUserAccountService
 
         if (userIsExist is not null)
         {
-            throw Exceptions.Exceptions.UserAlreadyExistsException;
+            throw new UserAlreadyExistsException(ExceptionMessages.UserAlreadyExists);
         }
 
         var newUser = _mapper.Map<UserEntity>(userData);
@@ -113,10 +125,11 @@ public class UserAccountService : IUserAccountService
 
         if (!isCreated.Succeeded)
         {
-            throw Exceptions.Exceptions.RegistrationFailedException;
+            throw new RegistrationFailedException(ExceptionMessages.RegistrationFailed);
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
+        await _unitOfWork.CompleteAsync();
 
         return newUser;
     }
@@ -125,16 +138,16 @@ public class UserAccountService : IUserAccountService
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.UTF8.GetBytes(_config!["JwtConfig:Secret"]);
+        var key = Encoding.UTF8.GetBytes(_secretCode);
         
-        var role = "";
+        var roles = await _userManager.GetRolesAsync(user);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new []
             {
                 new Claim("Id", $"{user.Id}"),
-                new Claim("Role", $"{role}"),
+                new Claim("Role", $"{roles[0]}"),
             }),
             Expires = DateTime.Now.AddMinutes(5),
             SigningCredentials = new SigningCredentials(
