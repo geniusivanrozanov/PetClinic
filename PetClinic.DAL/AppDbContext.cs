@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PetClinic.DAL.Entities;
+using PetClinic.DAL.Extensions;
 using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL;
@@ -24,30 +25,16 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     public DbSet<OrderCallEntity> OrderCalls { get; set; } = default!;
     public DbSet<ServiceVetEntity> ServiceVets { get; set; } = default!;
 
-    public override int SaveChanges()
-    {
-        UpdateExtendedFields();
-        
-        return base.SaveChanges();
-    }
-
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        UpdateExtendedFields();
-        
-        return base.SaveChanges(acceptAllChangesOnSuccess);
-    }
+        ChangeTracker.SetAuditProperties();
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-    {
-        UpdateExtendedFields();
-        
-        return base.SaveChangesAsync(cancellationToken);
+        return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
     {
-        UpdateExtendedFields();
+        ChangeTracker.SetAuditProperties();
         
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
@@ -57,48 +44,5 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
-
-    private void UpdateExtendedFields()
-    {
-        var currentTime = DateTime.Now.ToUniversalTime();
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Added))
-        {
-            if (entityEntry.Entity is ICreatedAt createdEntity)
-            {
-                createdEntity.CreatedAt = currentTime;
-            }
-            
-            if (entityEntry.Entity is IUpdatedAt updatedEntity)
-            {
-                updatedEntity.UpdatedAt = currentTime;
-            }
-            
-            if (entityEntry.Entity is IDeletable deletableEntity)
-            {
-                deletableEntity.IsDeleted = false;
-            }
-        }
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Modified))
-        {
-            if (entityEntry.Entity is IUpdatedAt updatedEntity)
-            {
-                updatedEntity.UpdatedAt = currentTime;
-            }
-        }
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Deleted))
-        {
-            if (entityEntry.Entity is IDeletable deletedEntity)
-            {
-                entityEntry.State = EntityState.Modified;
-                deletedEntity.IsDeleted = true;
-            }
-        }
     }
 }
