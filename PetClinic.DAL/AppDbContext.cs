@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PetClinic.DAL.Entities;
+using PetClinic.DAL.Extensions;
 using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL;
@@ -26,14 +27,14 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
-        UpdateExtendedFields();
-        
+        ChangeTracker.SetAuditProperties();
+
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
     {
-        UpdateExtendedFields();
+        ChangeTracker.SetAuditProperties();
         
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
@@ -43,48 +44,5 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-    }
-
-    private void UpdateExtendedFields()
-    {
-        var currentTime = DateTime.UtcNow;
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Added))
-        {
-            if (entityEntry.Entity is ICreatedAt createdEntity)
-            {
-                createdEntity.CreatedAt = currentTime;
-            }
-            
-            if (entityEntry.Entity is IUpdatedAt updatedEntity)
-            {
-                updatedEntity.UpdatedAt = currentTime;
-            }
-            
-            if (entityEntry.Entity is IDeletable deletableEntity)
-            {
-                deletableEntity.IsDeleted = false;
-            }
-        }
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Modified))
-        {
-            if (entityEntry.Entity is IUpdatedAt updatedEntity)
-            {
-                updatedEntity.UpdatedAt = currentTime;
-            }
-        }
-        
-        foreach (var entityEntry in ChangeTracker.Entries()
-                     .Where(entry => entry.State == EntityState.Deleted))
-        {
-            if (entityEntry.Entity is IDeletable deletedEntity)
-            {
-                entityEntry.State = EntityState.Modified;
-                deletedEntity.IsDeleted = true;
-            }
-        }
     }
 }
