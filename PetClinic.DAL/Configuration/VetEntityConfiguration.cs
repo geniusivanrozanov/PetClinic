@@ -19,5 +19,9 @@ public class VetEntityConfiguration : IEntityTypeConfiguration<VetEntity>
                .HasForeignKey<VetEntity>(v => v.ClientId);
         
         builder.Property(r => r.Id).ValueGeneratedOnAdd();
+        builder.Property(u => u.FirstName).HasMaxLength(30);
+        builder.Property(u => u.LastName).HasMaxLength(30);
+        builder.Property(u => u.Experience).HasMaxLength(200);
+        builder.Property(u => u.Bio).HasMaxLength(500);
     }
 }

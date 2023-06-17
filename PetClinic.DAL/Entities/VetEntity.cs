@@ -8,7 +8,7 @@ public class VetEntity : IEntity<Guid>
 
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
-    public int Experience { get; set; }    
+    public string Experience { get; set; } = default!;
     public string Bio { get; set; } = default!;
 
     public Guid DepartmentId { get; set; }

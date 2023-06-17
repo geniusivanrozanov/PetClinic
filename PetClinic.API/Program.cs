@@ -14,7 +14,8 @@ var configuration = builder.Configuration;
 
 builder.Logging.AddSerilog();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddFluentValidation();
 
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
