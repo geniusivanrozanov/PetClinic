@@ -25,7 +25,17 @@ public class VetService : IVetService
     public async Task AddReviewAsync(AddReviewDto review)
     {
         var result =  mapper.Map<ReviewEntity>(review);
-        await unitOfWork.ReviewRepository.AddAsync(result);
+
+        var appointment = await unitOfWork.AppointmentRepository.FindAsync(a => a.Id == review.AppointmentId);
+        
+        if (appointment is null)
+        {
+            throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
+        }
+
+        var createdReview = await unitOfWork.ReviewRepository.AddAsync(result);
+        
+        appointment.FirstOrDefault()!.ReviewId = createdReview.Id;
     }
 
     public async Task<IEnumerable<GetVetDto>> GetVetsAsync()
