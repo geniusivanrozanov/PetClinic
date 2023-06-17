@@ -66,7 +66,9 @@ public class VetService : IVetService
     {
         var serviceVet =  await unitOfWork.ServiceVetRepository.FindAsync(x => x.VetId == schedule.VetId);
         var vets = serviceVet.Select(x => x.Id);
-        var result = await unitOfWork.AppointmentRepository.FindAsync(x => DateOnly.FromDateTime(x.DateTime) == schedule.AppointmentDate && vets.Contains(x.ServiceId));
+        var result = await unitOfWork.AppointmentRepository
+            .FindAsync(x => DateOnly.FromDateTime(x.DateTime) == schedule.AppointmentDate && 
+                       vets.Contains(x.ServiceId));
 
         return mapper.Map<IEnumerable<GetAppointmentDto>>(result);
     }
