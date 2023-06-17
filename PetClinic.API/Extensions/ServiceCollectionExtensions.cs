@@ -10,7 +10,7 @@ namespace PetClinic.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options => 
         {
@@ -39,11 +39,6 @@ public static class ServiceCollectionExtensions
 
     public static void AddSerilog(this ILoggingBuilder loggingBuilder)
     {
-        var logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)
-                .CreateLogger();
-
-        loggingBuilder.AddSerilog(logger);
+        
     }
 }

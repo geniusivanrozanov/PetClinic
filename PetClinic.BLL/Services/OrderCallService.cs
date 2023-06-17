@@ -1,5 +1,6 @@
 using AutoMapper;
 using PetClinic.BLL.DTOs.AddMethodDto;
+using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -16,6 +17,13 @@ public class OrderCallService : IOrderCallService
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+    }
+
+    public async Task<GetOrderCallDto> GetOrderCallsAsync()
+    {
+        var orderCalls = await _unitOfWork.OrderCallRepository.GetAllAsync();
+
+        return _mapper.Map<GetOrderCallDto>(orderCalls);
     }
 
     public async Task CreateOrderAsync(AddOrderCallDto callData)

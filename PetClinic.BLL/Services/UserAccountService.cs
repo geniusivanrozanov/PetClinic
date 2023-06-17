@@ -81,6 +81,8 @@ public class UserAccountService : IUserAccountService
         {
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
         }
+        
+        var tr = _userManager.IsInRoleAsync(existingUser, "Client");
 
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
@@ -113,7 +115,7 @@ public class UserAccountService : IUserAccountService
     private async Task<UserEntity> RegisterUserAccount(UserRegistrationRequestDto userData, string role)
     {
         var userIsExist = await _userManager.FindByEmailAsync(userData.Email);
-
+    
         if (userIsExist is not null)
         {
             throw new UserAlreadyExistsException(ExceptionMessages.UserAlreadyExists);
@@ -129,6 +131,9 @@ public class UserAccountService : IUserAccountService
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
+
+        var tr = _userManager.IsInRoleAsync(newUser, role);
+
         await _unitOfWork.CompleteAsync();
 
         return newUser;
@@ -149,7 +154,7 @@ public class UserAccountService : IUserAccountService
                 new Claim("Id", $"{user.Id}"),
                 new Claim("Role", $"{roles[0]}"),
             }),
-            Expires = DateTime.Now.AddMinutes(5),
+            Expires = DateTime.Now.AddMinutes(30),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha256
