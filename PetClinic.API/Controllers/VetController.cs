@@ -36,7 +36,7 @@ public class VetController
         return await vetService.GetVetsAsync();
     }
 
-    [HttpGet]
+    [HttpGet("shedule")]
     public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(GetScheduleDto getScheduleDto)
     {
         return await vetService.GetScheduleAsync(getScheduleDto);
