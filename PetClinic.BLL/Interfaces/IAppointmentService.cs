@@ -6,7 +6,7 @@ namespace PetClinic.BLL.Interfaces;
 
 public interface IAppointmentService
 {
-    Task AddAppointmentAsync(AddAppointmentDto appointment);
+    Task<Guid> AddAppointmentAsync(AddAppointmentDto appointment);
     Task<GetAppointmentDto> GetAppointmentByIdAsync(Guid id);
     Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync();
     Task<GetAppointmentDto> UpdateAppointmentAsync(UpdateAppointmentDto appointment);

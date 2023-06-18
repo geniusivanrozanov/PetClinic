@@ -23,10 +23,11 @@ public class AppointmentService : IAppointmentService
         this.mapper = mapper;
     }
     
-    public async Task AddAppointmentAsync(AddAppointmentDto appointment)
+    public async Task<Guid> AddAppointmentAsync(AddAppointmentDto appointment)
     {
         var result = mapper.Map<AppointmentEntity>(appointment);
-        await unitOfWork.AppointmentRepository.AddAsync(result);
+        var createdAppointment = await unitOfWork.AppointmentRepository.AddAsync(result);
+        return createdAppointment.Id;
     }
 
     public async Task DeleteAppointmentAsync(Guid id)
