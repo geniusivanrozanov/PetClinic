@@ -29,6 +29,15 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEntity>
                 CreatedAt = GetCurrentTime(),
                 UpdatedAt = GetCurrentTime(),
                 IsDeleted = false,
+            },
+            new RoleEntity
+            {
+                Id = new Guid("07b430db-d517-44e0-8bd6-20e8a6a7215a"),
+                Name = "Vet",
+                NormalizedName = "VET",
+                CreatedAt = GetCurrentTime(),
+                UpdatedAt = GetCurrentTime(),
+                IsDeleted = false,
             }
         );
     }

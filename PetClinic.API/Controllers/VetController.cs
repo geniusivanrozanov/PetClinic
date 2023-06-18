@@ -7,7 +7,7 @@ using PetClinic.BLL.Interfaces;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/Vet")]
+[Route("api/vets")]
 public class VetController
 {
     private readonly IVetService vetService;
@@ -18,14 +18,14 @@ public class VetController
     }
 
 
-    [HttpPost("add-review")]
-    public async Task Add(AddReviewDto review)
+    [HttpPost("review")]
+    public async Task Add([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
     }
 
-    [HttpGet("id")]
-    public async Task<GetVetDto> GetById(Guid id)
+    [HttpGet("{id}")]
+    public async Task<GetVetDto> GetById([FromRoute] Guid id)
     {
         return await vetService.GetVetByIdAsync(id);
     }
@@ -36,9 +36,15 @@ public class VetController
         return await vetService.GetVetsAsync();
     }
 
-    [HttpGet("shedule")]
-    public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(GetScheduleDto getScheduleDto)
+    [HttpGet("{vetId}/shedule/{appointmentDate}")]
+    public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
     {
+        var getScheduleDto = new GetScheduleDto
+        {
+            AppointmentDate = appointmentDate,
+            VetId = vetId,
+        };
+
         return await vetService.GetScheduleAsync(getScheduleDto);
     }
 }

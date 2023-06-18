@@ -58,8 +58,13 @@ public class UserAccountService : IUserAccountService
         return token;
     }
 
-    public async Task<string> RegisterVetAccount(UserRegistrationRequestDto userData, AddVetDto vetData)
+    public async Task<string> RegisterVetAccount(VetRegistrationRequestDto vetRegisterData)
     {
+        var userData = _mapper.Map<UserRegistrationRequestDto>(vetRegisterData.AccountData);
+        var vetData = _mapper.Map<AddVetDto>(vetRegisterData.VetInfo);
+        vetData.FirstName = vetRegisterData.AccountData.FirstName;
+        vetData.LastName = vetRegisterData.AccountData.LastName;
+
         var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.VetRole);
         
         var newVet = _mapper.Map<VetEntity>(vetData);

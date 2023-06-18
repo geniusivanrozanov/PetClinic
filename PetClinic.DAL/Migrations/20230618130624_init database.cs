@@ -79,7 +79,7 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Duration = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -210,8 +210,8 @@ namespace PetClinic.DAL.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
@@ -255,8 +255,8 @@ namespace PetClinic.DAL.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -306,7 +306,7 @@ namespace PetClinic.DAL.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    Experience = table.Column<int>(type: "integer", nullable: false),
+                    Experience = table.Column<string>(type: "text", nullable: false),
                     Bio = table.Column<string>(type: "text", nullable: false),
                     DepartmentId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClientId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -399,8 +399,9 @@ namespace PetClinic.DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "CreatedAt", "IsDeleted", "Name", "NormalizedName", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("396f1365-f763-4f2a-a873-fdbef1c12ba3"), "d77f6137-75ba-4934-b67a-4530309333ac", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Admin", null, new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("85300f9e-e1e5-423f-a759-059e4a6a7f3a"), "d20a0d98-9282-4b4f-be79-c1a596aede7e", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Client", null, new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
+                    { new Guid("07b430db-d517-44e0-8bd6-20e8a6a7215a"), "5195282c-5b4c-4162-b1a4-22ee4b06ac63", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Vet", "VET", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("396f1365-f763-4f2a-a873-fdbef1c12ba3"), "17c57e1c-6daf-4257-870d-1a3787fa56ca", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Admin", "ADMIN", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("85300f9e-e1e5-423f-a759-059e4a6a7f3a"), "973f5bd6-de00-4a23-b2d9-74db2a35e050", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Client", "CLIENT", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -408,9 +409,9 @@ namespace PetClinic.DAL.Migrations
                 columns: new[] { "Id", "Address", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("328b1872-1141-47f5-8f67-62c50562ad39"), "ул. Академическая, 26", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 2", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"), "пр. Независимости, 177", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 1", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"), "ул. Карастояновой, 2", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 3", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
+                    { new Guid("328b1872-1141-47f5-8f67-62c50562ad39"), "ул. Академическая, 26", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 2", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"), "пр. Независимости, 177", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 1", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"), "ул. Карастояновой, 2", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Вет-клиника филиал 3", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.InsertData(
@@ -418,21 +419,26 @@ namespace PetClinic.DAL.Migrations
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("0605974a-977c-4739-aa55-7e26e4eb2422"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Cat", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("13109317-ea78-4274-ad6e-e9a159f7f2f1"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Rabbit", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("a160449b-fb70-4991-9ddb-918b707829a8"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Parrot", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("c9a68d44-b5b8-4b96-9558-b4e52e750987"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Dog", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("f4dc2dab-9477-4ebe-8fb2-40306e739dee"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Hamster", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
+                    { new Guid("0605974a-977c-4739-aa55-7e26e4eb2422"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Cat", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("13109317-ea78-4274-ad6e-e9a159f7f2f1"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Rabbit", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("a160449b-fb70-4991-9ddb-918b707829a8"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Parrot", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("c9a68d44-b5b8-4b96-9558-b4e52e750987"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Dog", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("f4dc2dab-9477-4ebe-8fb2-40306e739dee"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Hamster", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "CreatedAt", "Duration", "IsDeleted", "Name", "Price", "UpdatedAt" },
+                values: new object[] { new Guid("afc747bf-2c6f-4c6a-88e9-1385cef793d6"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), "40", false, "Intestinal Parasite Screening", 25m, new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) });
 
             migrationBuilder.InsertData(
                 table: "Statuses",
                 columns: new[] { "Id", "CreatedAt", "IsDeleted", "Name", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("01b2b3b3-0f43-49c1-a138-dd39d76bb65a"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Closed", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("2b513574-cabc-41ce-9fbc-e67255b84431"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Received", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) },
-                    { new Guid("fb29bcb5-4493-4b03-b18e-11c50c650621"), new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc), false, "Accepted", new DateTime(2023, 6, 14, 3, 52, 29, 0, DateTimeKind.Utc) }
+                    { new Guid("01b2b3b3-0f43-49c1-a138-dd39d76bb65a"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Closed", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("2b513574-cabc-41ce-9fbc-e67255b84431"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Received", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) },
+                    { new Guid("fb29bcb5-4493-4b03-b18e-11c50c650621"), new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc), false, "Accepted", new DateTime(2023, 6, 18, 1, 6, 23, 0, DateTimeKind.Utc) }
                 });
 
             migrationBuilder.CreateIndex(

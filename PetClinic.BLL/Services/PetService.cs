@@ -32,15 +32,14 @@ public class PetService : IPetService
 
     public async Task DeletePetAsync(Guid id)
     {
-        var pet = unitOfWork.PetRepository.GetAsync(id);
+        var pet = await unitOfWork.PetRepository.GetAsync(id);
 
         if (pet is null)
         {
             throw new NotFoundException();
         }
 
-        var result = mapper.Map<PetEntity>(pet);
-        unitOfWork.PetRepository.Remove(result);
+        unitOfWork.PetRepository.Remove(pet);
         await unitOfWork.CompleteAsync();
     }
 

@@ -13,13 +13,13 @@ public class MapperProfile : Profile
     {
         CreateMapsForGetMethodDtos();
         CreateMapsForAddMethodDtos();
-        CreateMapsForDeleteMethodDtos();
         CreateMapsForUpdateMethodDtos();
         CreateMapsForAuthDtos();
     }
 
     private void CreateMapsForGetMethodDtos()
     {
+        CreateMap<VetEntity, GetVetDto>();
         CreateMap<DepartmentEntity, GetDepartmentDto>();
         CreateMap<OrderCallEntity, GetOrderCallDto>();
         CreateMap<PetEntity, GetPetDto>();
@@ -33,18 +33,18 @@ public class MapperProfile : Profile
     {
         CreateMap<AddAppointmentDto, AppointmentEntity>()
             .ForMember(a => a.DateTime, 
-                d => d
-                    .MapFrom(aa => DateTime.Parse(aa.AppointmentDateAndTime)
-                        .ToUniversalTime()));
+                d => d.MapFrom(aa => DateTime.Parse(aa.AppointmentDateAndTime)
+                    .ToUniversalTime()));
 
-        CreateMap<AddPetDto, PetEntity>();
+        CreateMap<AddPetDto, PetEntity>()
+            .ForMember(p => p.ClientId,
+                k => k.MapFrom(v => new Guid(v.ClientId)))
+            .ForMember(d => d.PetTypeId, 
+                p => p.MapFrom(f => new Guid(f.PetTypeId)));
+
         CreateMap<AddReviewDto, ReviewEntity>();
         CreateMap<AddServiceDto, ServiceEntity>();
         CreateMap<AddVetDto, VetEntity>();
-    }
-
-    private void CreateMapsForDeleteMethodDtos()
-    {
     }
 
     private void CreateMapsForUpdateMethodDtos()
@@ -57,5 +57,9 @@ public class MapperProfile : Profile
     {
         CreateMap<UserRegistrationRequestDto, UserEntity>();
         CreateMap<UpdateUserAccountDto, UserEntity>();
+        CreateMap<VetRegistrationRequestDto, UserRegistrationRequestDto>();
+        CreateMap<VetInfoDto, AddVetDto>()
+            .ForMember(v => v.DepartmentId,
+                 av => av.MapFrom(v => new Guid(v.DepatmentId)));
     }
 }

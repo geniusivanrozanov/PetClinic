@@ -8,7 +8,7 @@ using PetClinic.BLL.Interfaces;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/Pet")]
+[Route("api/pets")]
 public class PetController : ControllerBase
 {
     private readonly IPetService petService;
@@ -24,8 +24,8 @@ public class PetController : ControllerBase
         await petService.AddPetAsync(pet);
     }
 
-    [HttpGet("id")]
-    public async Task<GetPetDto> GetById(Guid id)
+    [HttpGet("{id}")]
+    public async Task<GetPetDto> GetById([FromRoute] Guid id)
     {
         return await petService.GetPetByIdAsync(id);
     }
@@ -36,16 +36,16 @@ public class PetController : ControllerBase
         return await petService.GetPetsAsync();
     }
 
-    [HttpDelete("id")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await petService.DeletePetAsync(id);
 
         return Ok(id);
     }
 
-    [HttpPut("id")]
-    public async Task<IActionResult> Update(UpdatePetDto appointment)
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdatePetDto appointment)
     {
         await petService.UpdatePetAsync(appointment);
 

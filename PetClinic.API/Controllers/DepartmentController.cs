@@ -4,7 +4,7 @@ using PetClinic.BLL.Interfaces;
 namespace PetClinic.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/departments")]
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;

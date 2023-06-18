@@ -7,6 +7,7 @@ public static class Exceptions
     public const string VetsNotFound = "Vets are not found";
     public const string AppointmentsNotFound = "Appointments are not found";
     public const string PetNotFound = "Pets are not found";
+    public const string PetTypeNotFound = "No pet types available";
 
     public const string UserAlreadyExists = "User with th same email was registered";
     public const string UserDoesNotExist = "User with the given email wasn't registered";
