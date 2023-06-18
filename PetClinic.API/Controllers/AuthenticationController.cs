@@ -7,11 +7,7 @@ using PetClinic.DAL.Entities;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-<<<<<<< HEAD
 [Route("api/accounts")]
-=======
-[Route("api/account")]
->>>>>>> refs/remotes/origin/feature-api-layer
 public class AuthenticationController : ControllerBase
 {
     private readonly IUserAccountService clientAccountService;

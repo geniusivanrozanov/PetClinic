@@ -24,11 +24,7 @@ public class OrderCallController : ControllerBase
     }
 
     [HttpPost]
-<<<<<<< HEAD
     public async Task<IActionResult> CreateOrderCallAsync([FromBody] AddOrderCallDto orderCallDto)
-=======
-    public async Task<IActionResult> CreateOrderCallAsync(AddOrderCallDto orderCallDto)
->>>>>>> refs/remotes/origin/feature-api-layer
     {
         await _orderCallService.CreateOrderAsync(orderCallDto);
 
