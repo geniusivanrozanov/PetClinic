@@ -5,6 +5,8 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using PetClinic.DAL.Entities;
+using PetClinic.API.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +50,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 
