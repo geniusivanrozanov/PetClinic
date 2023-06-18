@@ -7,7 +7,6 @@ using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
-
 using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
 
 
@@ -23,6 +22,7 @@ public class AppointmentService : IAppointmentService
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
     }
+    
     public async Task AddAppointmentAsync(AddAppointmentDto appointment)
     {
         var result = mapper.Map<AppointmentEntity>(appointment);
@@ -52,7 +52,7 @@ public class AppointmentService : IAppointmentService
             throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
         }
 
-       return mapper.Map<GetAppointmentDto>(appointment);
+        return mapper.Map<GetAppointmentDto>(appointment);
     }
 
     public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()

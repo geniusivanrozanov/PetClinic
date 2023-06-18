@@ -3,7 +3,6 @@ using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Swashbuckle.AspNetCore.Filters;
 using PetClinic.DAL.Entities;
 using Serilog.Events;
 using PetClinic.API.Extensions;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,7 +27,8 @@ builder.Logging.AddSerilog(logger);
 
 // builder.Logging.AddSerilog();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddFluentValidation();
 
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
@@ -104,6 +105,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 
