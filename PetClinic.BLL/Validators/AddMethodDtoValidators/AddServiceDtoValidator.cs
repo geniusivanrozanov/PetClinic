@@ -10,7 +10,7 @@ public class AddServiceDtoValidator : AbstractValidator<AddServiceDto>
         RuleFor(s => s.Name)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(20)
+            .MaximumLength(100)
             .WithMessage("More than 20 characters or empty.");
 
         RuleFor(s => s.Duration)
