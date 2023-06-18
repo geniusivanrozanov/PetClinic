@@ -3,12 +3,9 @@ using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Swashbuckle.AspNetCore.Filters;
 using PetClinic.DAL.Entities;
 using PetClinic.API.Extensions;
-
 using Serilog.Events;
-using PetClinic.API.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
