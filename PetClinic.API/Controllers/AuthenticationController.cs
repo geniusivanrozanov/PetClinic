@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
-using PetClinic.DAL.Entities;
 
 namespace PetClinic.API.Controllers;
 
@@ -39,7 +38,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = Roles.ClientRole)]
+    [Authorize(Policy="Client")]
     public IActionResult TestMethod()
     {
         return Ok("Hello");
