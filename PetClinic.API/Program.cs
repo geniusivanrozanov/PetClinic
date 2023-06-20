@@ -34,6 +34,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    await app.SeedDataToDbAsync();
 }
 
 app.ConfigureCustomExceptionMiddleware();

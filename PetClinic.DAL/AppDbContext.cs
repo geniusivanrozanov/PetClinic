@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PetClinic.DAL.Configuration;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Extensions;
 
@@ -10,7 +11,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-
     }
 
     public DbSet<ServiceEntity> Services { get; set; } = default!;
