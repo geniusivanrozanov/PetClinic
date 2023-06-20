@@ -17,8 +17,8 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEntity>
                 Id = new Guid("396f1365-f763-4f2a-a873-fdbef1c12ba3"),
                 Name = "Admin",
                 NormalizedName = "ADMIN",
-                CreatedAt = GetCurrentTime(),
-                UpdatedAt = GetCurrentTime(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
             },
             new RoleEntity
@@ -26,15 +26,10 @@ public class RoleEntityConfiguration : IEntityTypeConfiguration<RoleEntity>
                 Id = new Guid("85300f9e-e1e5-423f-a759-059e4a6a7f3a"),
                 Name = "Client",
                 NormalizedName = "CLIENT",
-                CreatedAt = GetCurrentTime(),
-                UpdatedAt = GetCurrentTime(),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
             }
         );
-    }
-    
-    private DateTime GetCurrentTime()
-    {
-        return DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")).ToUniversalTime();
     }
 }
