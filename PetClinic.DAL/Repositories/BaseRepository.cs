@@ -13,6 +13,7 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     {
         _context = context;
     }
+    
     public async Task<TEntity> AddAsync(TEntity entity)
     {
         await _context.Set<TEntity>().AddAsync(entity);
