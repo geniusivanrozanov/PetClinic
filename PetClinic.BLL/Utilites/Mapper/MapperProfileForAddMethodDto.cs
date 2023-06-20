@@ -18,5 +18,6 @@ public class MapperProfileForAddMethodDto : Profile
         CreateMap<AddReviewDto, ReviewEntity>();
         CreateMap<AddServiceDto, ServiceEntity>();
         CreateMap<AddVetDto, VetEntity>();
+        CreateMap<AddOrderCallDto, OrderCallEntity>();
     }
 }

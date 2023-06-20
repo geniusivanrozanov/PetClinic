@@ -13,7 +13,6 @@ public class MapperProfileForGetMethodDto : Profile
         CreateMap<PetEntity, GetPetDto>();
         CreateMap<PetTypeEntity, GetPetTypeDto>();
         CreateMap<ServiceEntity, GetServiceDto>();
-        CreateMap<StatusEntity, GetStatusDto>();
         CreateMap<UserEntity, GetUserDto>();
     }
 }
