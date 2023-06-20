@@ -5,7 +5,7 @@ using PetClinic.BLL.Interfaces;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/order-call")]
 public class OrderCallController : ControllerBase
 {
     private readonly IOrderCallService _orderCallService;
@@ -24,7 +24,7 @@ public class OrderCallController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrderCallAsync(AddOrderCallDto orderCallDto)
+    public async Task<IActionResult> CreateOrderCallAsync([FromBody] AddOrderCallDto orderCallDto)
     {
         await _orderCallService.CreateOrderAsync(orderCallDto);
 

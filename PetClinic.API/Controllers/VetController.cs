@@ -7,8 +7,8 @@ using PetClinic.BLL.Interfaces;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/Vet")]
-public class VetController
+[Route("api/vets")]
+public class VetController : ControllerBase
 {
     private readonly IVetService vetService;
 
@@ -17,28 +17,33 @@ public class VetController
         this.vetService = vetService;
     }
 
-
-    [HttpPost("add-review")]
-    public async Task Add(AddReviewDto review)
+    [HttpPost("review")]
+    public async Task Add([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
     }
 
-    [HttpGet("id")]
-    public async Task<GetVetDto> GetById(Guid id)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        return await vetService.GetVetByIdAsync(id);
+        return Ok(await vetService.GetVetByIdAsync(id));
     }
 
     [HttpGet]
-    public async Task<IEnumerable<GetVetDto>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return await vetService.GetVetsAsync();
+        return Ok(await vetService.GetVetsAsync());
     }
 
-    [HttpGet("shedule")]
-    public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(GetScheduleDto getScheduleDto)
+    [HttpGet("{vetId}/shedule/{appointmentDate}")]
+    public async Task<IActionResult> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
     {
-        return await vetService.GetScheduleAsync(getScheduleDto);
+        var getScheduleDto = new GetScheduleDto
+        {
+            AppointmentDate = appointmentDate,
+            VetId = vetId,
+        };
+
+        return Ok(await vetService.GetScheduleAsync(getScheduleDto));
     }
 }

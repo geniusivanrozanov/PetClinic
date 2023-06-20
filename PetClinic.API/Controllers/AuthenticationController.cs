@@ -7,7 +7,7 @@ using PetClinic.DAL.Entities;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/account")]
+[Route("api/accounts")]
 public class AuthenticationController : ControllerBase
 {
     private readonly IUserAccountService clientAccountService;
@@ -17,18 +17,25 @@ public class AuthenticationController : ControllerBase
         this.clientAccountService = clientAccountService;
     }
 
-    [HttpPost("sign-up")]
+    [HttpPost("client/sign-up")]
     [AllowAnonymous]
-    public async Task<string> RegisterUser([FromBody] UserRegistrationRequestDto userData)
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequestDto userData)
     {
-        return await clientAccountService.RegisterClientAsync(userData);
+        return Ok(await clientAccountService.RegisterClientAsync(userData));
+    }
+
+    [HttpPost("vet/sign-up")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RegisterVet([FromBody] VetRegistrationRequestDto userData)
+    {        
+        return Ok(await clientAccountService.RegisterVetAccount(userData));
     }
 
     [HttpPost("sign-in")]
-    [AllowAnonymous] // string123SDFG!!
-    public async Task<string> LoginUser([FromBody] LoginUserDto userData)
+    [AllowAnonymous]
+    public async Task<IActionResult> LoginUser([FromBody] LoginUserDto userData)
     {
-        return await clientAccountService.LoginUserAsync(userData);
+        return Ok(await clientAccountService.LoginUserAsync(userData));
     }
 
     [HttpGet]

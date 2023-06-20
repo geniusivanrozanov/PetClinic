@@ -10,11 +10,6 @@ public class OrderCallEntityConfiguration : IEntityTypeConfiguration<OrderCallEn
     {
         builder.HasKey(oc => oc.Id);
         
-        builder.HasOne(oc => oc.Status)
-               .WithMany(s => s.OrderCalls)
-               .HasForeignKey(oc => oc.StatusId)
-               .IsRequired();
-
         builder.Property(r => r.Id).ValueGeneratedOnAdd();
         builder.Property(oc => oc.PhoneNumber).HasMaxLength(15);
     }

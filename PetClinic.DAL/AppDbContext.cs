@@ -10,7 +10,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-
     }
 
     public DbSet<ServiceEntity> Services { get; set; } = default!;
@@ -20,7 +19,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     public DbSet<DepartmentEntity> Departments { get; set; } = default!;
     public DbSet<PetTypeEntity> PetTypes { get; set; } = default!;
     public DbSet<ReviewEntity> Reviews { get; set; } = default!;
-    public DbSet<StatusEntity> Statuses { get; set; } = default!;
     public DbSet<OrderCallEntity> OrderCalls { get; set; } = default!;
     public DbSet<ServiceVetEntity> ServiceVets { get; set; } = default!;
 

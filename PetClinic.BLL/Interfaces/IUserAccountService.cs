@@ -7,7 +7,7 @@ namespace PetClinic.BLL.Interfaces;
 public interface IUserAccountService
 {
     Task<string> RegisterClientAsync(UserRegistrationRequestDto userData);
-    Task<string> RegisterVetAccount(UserRegistrationRequestDto userData, AddVetDto vetData);
+    Task<string> RegisterVetAccount(VetRegistrationRequestDto vetData);
     Task<string> LoginUserAsync(LoginUserDto userData);
     Task<IEnumerable<GetUserDto>> GetAllAccounts();
     Task UpdateUserAccount(UpdateUserAccountDto userData);

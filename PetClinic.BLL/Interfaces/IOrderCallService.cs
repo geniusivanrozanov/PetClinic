@@ -5,6 +5,6 @@ namespace PetClinic.BLL.Interfaces;
 
 public interface IOrderCallService
 {
-    Task<GetOrderCallDto> GetOrderCallsAsync();
+    Task<IEnumerable<GetOrderCallDto>> GetOrderCallsAsync();
     Task CreateOrderAsync(AddOrderCallDto callData);
 }

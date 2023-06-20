@@ -19,11 +19,11 @@ public class OrderCallService : IOrderCallService
         _mapper = mapper;
     }
 
-    public async Task<GetOrderCallDto> GetOrderCallsAsync()
+    public async Task<IEnumerable<GetOrderCallDto>> GetOrderCallsAsync()
     {
         var orderCalls = await _unitOfWork.OrderCallRepository.GetAllAsync();
 
-        return _mapper.Map<GetOrderCallDto>(orderCalls);
+        return _mapper.Map<IEnumerable<GetOrderCallDto>>(orderCalls);
     }
 
     public async Task CreateOrderAsync(AddOrderCallDto callData)
@@ -31,5 +31,6 @@ public class OrderCallService : IOrderCallService
         var orderCallData = _mapper.Map<OrderCallEntity>(callData);
 
         await _unitOfWork.OrderCallRepository.AddAsync(orderCallData);
+        await _unitOfWork.CompleteAsync();
     }
 }

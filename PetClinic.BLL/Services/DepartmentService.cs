@@ -5,7 +5,7 @@ using PetClinic.BLL.Exceptions;
 using PetClinic.DAL.Interfaces.Repositories;
 
 
-using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
+using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
 namespace PetClinic.BLL.Services;
 
@@ -23,13 +23,21 @@ public class DepartmentService : IDepartmentService
     public async Task<IEnumerable<GetDepartmentDto>> GetDepartmentsAsync()
     {
         var departments = await unitOfWork.DepartmentRepository.GetAllAsync();
-
+        
         if (departments is null)
         {
             throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
         }
 
-        return mapper.Map<IEnumerable<GetDepartmentDto>>(departments);
+        var departmentsDto = departments.Select(department => new GetDepartmentDto
+        {
+            Id = department.Id,
+            Address = department.Address,
+            Name = department.Name,
+            Vets = mapper.Map<List<GetVetDto>>(department.Vets),
+        });
+
+        return departmentsDto;
     }
 
     public async Task<GetDepartmentDto> GetDepatmentByIdAsync(Guid departmentId)
@@ -41,6 +49,9 @@ public class DepartmentService : IDepartmentService
             throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
         }
 
-        return mapper.Map<GetDepartmentDto>(department);
+        var departmentDto = mapper.Map<GetDepartmentDto>(department);
+        departmentDto.Vets = mapper.Map<List<GetVetDto>>(department.Vets);
+
+        return departmentDto;
     }
 }

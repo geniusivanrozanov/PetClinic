@@ -24,9 +24,9 @@ public class ExceptionHandlerMiddleware
         {
             ErrorDetails? errorDetails = null;
 
-            var statusCodeAndMessage = _exceptionsService.GetStatusCodeAndMessageOnException(ex);
-            var statusCode = statusCodeAndMessage.statusCode;
-            var message = statusCodeAndMessage.message;
+            // var statusCodeAndMessage = // _exceptionsService.GetStatusCodeAndMessageOnException(ex);
+            var statusCode = 500; // statusCodeAndMessage.statusCode;
+            var message = ex.Message; // statusCodeAndMessage.message;
 
             errorDetails = SetStatusCodeAndMessage(statusCode, message);
 
