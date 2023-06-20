@@ -1,6 +1,6 @@
 namespace PetClinic.BLL.Exceptions;
 
-public static class Exceptions
+public static class ExceptionConstants
 {
     public const string DepartmentsNotFound = "Departments are not found";
     public const string ServicesNotFound = "Services are not found";

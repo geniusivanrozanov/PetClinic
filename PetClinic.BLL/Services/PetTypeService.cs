@@ -4,7 +4,7 @@ using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Interfaces.Repositories;
 
-using ExceptionMessages = PetClinic.BLL.Exceptions.Exceptions;
+using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
 
 namespace PetClinic.BLL.Services;
