@@ -1,5 +1,4 @@
 using PetClinic.DAL.Entities;
-using PetClinic.DAL.Interfaces;
 
 namespace PetClinic.DAL.Configuration;
 
@@ -102,6 +101,15 @@ public class DbInitializer
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
+            },
+            new RoleEntity
+            {
+                Id = new Guid("4a2eb2b2-b4a9-4a34-9dff-b688f9643cad"),
+                Name = "Vet",
+                NormalizedName = "VET",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
             }
         );
 
@@ -130,6 +138,20 @@ public class DbInitializer
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false,
+            }
+        );
+
+        await dbContext.Services.AddRangeAsync
+        (
+            new ServiceEntity
+            {
+                Id = new Guid("afc747bf-2c6f-4c6a-88e9-1385cef793d6"),
+                Name = "Intestinal Parasite Screening",
+                Price = 25,
+                Duration = "40",
+                IsDeleted = false,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
             }
         );
 
