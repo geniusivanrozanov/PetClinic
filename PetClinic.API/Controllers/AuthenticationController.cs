@@ -19,23 +19,23 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost("client/sign-up")]
     [AllowAnonymous]
-    public async Task<string> RegisterUser([FromBody] UserRegistrationRequestDto userData)
+    public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationRequestDto userData)
     {
-        return await clientAccountService.RegisterClientAsync(userData);
+        return Ok(await clientAccountService.RegisterClientAsync(userData));
     }
 
     [HttpPost("vet/sign-up")]
     [AllowAnonymous]
-    public async Task<string> RegisterVet([FromBody] VetRegistrationRequestDto userData)
+    public async Task<IActionResult> RegisterVet([FromBody] VetRegistrationRequestDto userData)
     {        
-        return await clientAccountService.RegisterVetAccount(userData);
+        return Ok(await clientAccountService.RegisterVetAccount(userData));
     }
 
     [HttpPost("sign-in")]
     [AllowAnonymous]
-    public async Task<string> LoginUser([FromBody] LoginUserDto userData)
+    public async Task<IActionResult> LoginUser([FromBody] LoginUserDto userData)
     {
-        return await clientAccountService.LoginUserAsync(userData);
+        return Ok(await clientAccountService.LoginUserAsync(userData));
     }
 
     [HttpGet]

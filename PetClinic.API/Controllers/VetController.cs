@@ -8,7 +8,7 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/vets")]
-public class VetController
+public class VetController : ControllerBase
 {
     private readonly IVetService vetService;
 
@@ -17,7 +17,6 @@ public class VetController
         this.vetService = vetService;
     }
 
-
     [HttpPost("review")]
     public async Task Add([FromBody] AddReviewDto review)
     {
@@ -25,19 +24,19 @@ public class VetController
     }
 
     [HttpGet("{id}")]
-    public async Task<GetVetDto> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        return await vetService.GetVetByIdAsync(id);
+        return Ok(await vetService.GetVetByIdAsync(id));
     }
 
     [HttpGet]
-    public async Task<IEnumerable<GetVetDto>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return await vetService.GetVetsAsync();
+        return Ok(await vetService.GetVetsAsync());
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
-    public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
+    public async Task<IActionResult> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
     {
         var getScheduleDto = new GetScheduleDto
         {
@@ -45,6 +44,6 @@ public class VetController
             VetId = vetId,
         };
 
-        return await vetService.GetScheduleAsync(getScheduleDto);
+        return Ok(await vetService.GetScheduleAsync(getScheduleDto));
     }
 }
