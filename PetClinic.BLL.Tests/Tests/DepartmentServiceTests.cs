@@ -24,7 +24,7 @@ public class DepartmentServiceTests
     }
 
     [Fact]
-    public async Task GetDepartments_DepartmentsExist_ShouldReturnDepartments()
+    public async Task GetDepartmentsAsync_DepartmentsExist_ShouldReturnDepartments()
     {
         // Arrange
 
@@ -72,7 +72,7 @@ public class DepartmentServiceTests
     }
 
     [Fact]
-    public async Task GetDepartments_DepartmentsIsEmpty_ShouldReturnEmptyList()
+    public async Task GetDepartmentsAsync_DepartmentsIsEmpty_ShouldReturnEmptyList()
     {
         // Arrange
 
@@ -91,7 +91,7 @@ public class DepartmentServiceTests
     }
 
     [Fact]
-    public async Task GetDepartmentById_ValidData_ShouldReturnDepartment()
+    public async Task GetDepartmentByIdAsync_ValidData_ShouldReturnDepartment()
     {
         // Arrange
 
@@ -125,5 +125,30 @@ public class DepartmentServiceTests
         // Assert
 
         Assert.Equal(departmentId, department.Id);
+    }
+
+    [Fact]
+    public async Task GetDepartmentByIdAsync_DepartmentWithIdNothFound_ShouldReturnEmpty()
+    {
+        // Arrange
+
+        var departmentId = new Guid("c1e33d9b-1b7f-4cbd-95b0-644008a706e0");
+        var expectedResult = new DepartmentEntity();
+        var mapperResult = new GetDepartmentDto();
+
+        _unitOfWorkMock.Setup(x => x.DepartmentRepository.GetAsync(departmentId))
+            .ReturnsAsync(expectedResult);
+            // .Throws(new Exceptions.NotFoundException()); // я в выбросе исключений не уверена
+
+         _mapperMock.Setup(x => x.Map<GetDepartmentDto>(expectedResult))
+            .Returns(mapperResult);
+
+        // Act
+
+        var department = await _departmentService.GetDepatmentByIdAsync(departmentId);
+
+        // Assert
+
+        Assert.NotNull(department);
     }
 }
