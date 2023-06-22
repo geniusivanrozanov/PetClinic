@@ -1,4 +1,3 @@
-using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using PetClinic.BLL.Interfaces;
@@ -10,7 +9,7 @@ public class CacheService : ICacheService
 {
     private readonly IDatabase _cacheDb;
     private readonly IConfiguration _config;
-     
+
     public CacheService(IConfiguration config)
     {
         _config = config;
@@ -18,7 +17,7 @@ public class CacheService : ICacheService
         _cacheDb = redis.GetDatabase();
     }
 
-    public async Task<T?> GetData<T>(string key)
+    public async Task<T?> GetDataAsync<T>(string key)
     {
         var value = await _cacheDb.StringGetAsync(key);
 
@@ -29,15 +28,15 @@ public class CacheService : ICacheService
  
         return JsonSerializer.Deserialize<T>(value!);
     }
-
-    public async Task<bool> SetData<T>(string key, T value, DateTimeOffset expirationTime)
+    
+    public async Task<bool> SetDataAsync<T>(string key, T value, DateTimeOffset expirationTime)
     {
         var expiryTime = expirationTime.DateTime.Subtract(DateTime.Now);
         
         return await _cacheDb.StringSetAsync(key, JsonSerializer.Serialize(value), expiryTime);
     }
 
-    public async Task<object> RemoveData(string key)
+    public async Task<object> RemoveDataAsync(string key)
     {
         var isExist = await _cacheDb.KeyExistsAsync(key);
 

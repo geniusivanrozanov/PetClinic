@@ -13,34 +13,47 @@ public class ServicesService : IServicesService
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
+    private readonly ICacheService cacheService;
 
-    public ServicesService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ServicesService(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.cacheService = cacheService;
     }
 
     public async Task<IEnumerable<GetServiceDto>> GetServicesAsync()
     {
-        var services = await unitOfWork.ServiceRepository.GetAllAsync();
-
-        if (services is null)
+        var cachedServices = await cacheService.GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.servicesKey);
+    
+        if (cachedServices is null)
         {
-            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
+            var services = await unitOfWork.ServiceRepository.GetAllAsync() ??
+                throw new NotFoundException(ExceptionMessages.ServicesNotFound);
+            
+            await cacheService.SetDataAsync(CacheKeys.servicesKey, services, DateTimeOffset.Now.AddMinutes(1));
+            return mapper.Map<IEnumerable<GetServiceDto>>(services);
         }
 
-        return mapper.Map<IEnumerable<GetServiceDto>>(services); 
+        return cachedServices;
     }
 
     public async Task<GetServiceDto> GetServiceByIdAsync(Guid serviceId)
     {
-        var service = await unitOfWork.ServiceRepository.GetAsync(serviceId);
+        var cachedServices = await cacheService
+            .GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.appointmentsKey);
 
-        if (service is null)
+        if (cachedServices is null)
         {
-            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
-        }
+            var service = await unitOfWork.ServiceRepository.GetAsync(serviceId) ?? 
+            throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
-        return mapper.Map<GetServiceDto>(service);
+            return mapper.Map<GetServiceDto>(service);
+        }        
+
+        var cachService = cachedServices.Where(d => d.Id == serviceId).FirstOrDefault() ??
+            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+
+        return cachService;
     }
 }

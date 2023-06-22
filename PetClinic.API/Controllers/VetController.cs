@@ -19,25 +19,25 @@ public class VetController
 
 
     [HttpPost("review")]
-    public async Task Add([FromBody] AddReviewDto review)
+    public async Task AddAsync([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
     }
 
     [HttpGet("{id}")]
-    public async Task<GetVetDto> GetById([FromRoute] Guid id)
+    public async Task<GetVetDto> GetByIdAsync([FromRoute] Guid id)
     {
         return await vetService.GetVetByIdAsync(id);
     }
 
     [HttpGet]
-    public async Task<IEnumerable<GetVetDto>> GetAll()
+    public async Task<IEnumerable<GetVetDto>> GetAllAsync()
     {
         return await vetService.GetVetsAsync();
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
-    public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
+    public async Task<IEnumerable<GetAppointmentDto>> GetScheduleAsync(DateTime appointmentDate, Guid vetId)
     {
         var getScheduleDto = new GetScheduleDto
         {

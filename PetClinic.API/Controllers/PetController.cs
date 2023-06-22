@@ -19,25 +19,25 @@ public class PetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task Add(AddPetDto pet)
+    public async Task AddAsync(AddPetDto pet)
     {
         await petService.AddPetAsync(pet);
     }
 
     [HttpGet("{id}")]
-    public async Task<GetPetDto> GetById([FromRoute] Guid id)
+    public async Task<GetPetDto> GetByIdAsync([FromRoute] Guid id)
     {
         return await petService.GetPetByIdAsync(id);
     }
 
     [HttpGet]
-    public async Task<IEnumerable<GetPetDto>> GetAll()
+    public async Task<IEnumerable<GetPetDto>> GetAllAsync()
     {
         return await petService.GetPetsAsync();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await petService.DeletePetAsync(id);
 
@@ -45,7 +45,7 @@ public class PetController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdatePetDto appointment)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdatePetDto appointment)
     {
         await petService.UpdatePetAsync(appointment);
 

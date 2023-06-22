@@ -20,13 +20,13 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task Add(AddAppointmentDto appointment)
+    public async Task AddAsync(AddAppointmentDto appointment)
     {
         await appointmentService.AddAppointmentAsync(appointment);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await appointmentService.DeleteAppointmentAsync(id);
 
@@ -34,21 +34,21 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var appointment = await appointmentService.GetAppointmentByIdAsync(id);
         return Ok(appointment);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
         var appointments = await appointmentService.GetAppointmentsAsync();
         return Ok(appointments);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateAppointmentDto appointment)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateAppointmentDto appointment)
     {
         await appointmentService.UpdateAppointmentAsync(appointment);
 

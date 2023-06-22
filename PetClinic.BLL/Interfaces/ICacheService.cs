@@ -2,7 +2,7 @@ namespace PetClinic.BLL.Interfaces;
 
 public interface ICacheService
 {
-    Task<T?> GetData<T>(string key);
-    Task<bool> SetData<T>(string key, T value, DateTimeOffset expirationTime);
-    Task<object> RemoveData(string key);
+    Task<T?> GetDataAsync<T>(string key);
+    Task<bool> SetDataAsync<T>(string key, T value, DateTimeOffset expirationTime);
+    Task<object> RemoveDataAsync(string key);
 }

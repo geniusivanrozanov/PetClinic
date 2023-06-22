@@ -15,9 +15,9 @@ namespace PetClinic.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPetTypes()
+        public async Task<IActionResult> GetPetTypesAsync()
         {
-            var petTypes = await petTypeService.GetPetTypes();
+            var petTypes = await petTypeService.GetPetTypesAsync();
 
             return Ok(petTypes);
         }
