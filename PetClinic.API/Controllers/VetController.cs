@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Extensions;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
@@ -19,24 +21,28 @@ public class VetController
 
 
     [HttpPost("review")]
+    [Authorize(Policy = PolicyNames.VetPolicy)]
     public async Task Add([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<GetVetDto> GetById([FromRoute] Guid id)
     {
         return await vetService.GetVetByIdAsync(id);
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IEnumerable<GetVetDto>> GetAll()
     {
         return await vetService.GetVetsAsync();
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
+    
     public async Task<IEnumerable<GetAppointmentDto>> GetSchedule(DateOnly appointmentDate, Guid vetId) // (GetScheduleDto getScheduleDto)
     {
         var getScheduleDto = new GetScheduleDto

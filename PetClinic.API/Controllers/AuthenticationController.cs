@@ -36,11 +36,4 @@ public class AuthenticationController : ControllerBase
     {
         return await clientAccountService.LoginUserAsync(userData);
     }
-
-    [HttpGet]
-    [Authorize(Policy="Client")]
-    public IActionResult TestMethod()
-    {
-        return Ok("Hello");
-    }
 }

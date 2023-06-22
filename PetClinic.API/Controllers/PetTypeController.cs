@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.Interfaces;
 
@@ -15,6 +16,7 @@ namespace PetClinic.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPetTypes()
         {
             var petTypes = await petTypeService.GetPetTypes();

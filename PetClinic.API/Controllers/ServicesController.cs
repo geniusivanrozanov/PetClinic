@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.Interfaces;
 
@@ -15,6 +16,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetServicesAsync()
     {
         var services = await _servicesService.GetServicesAsync();
@@ -23,6 +25,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetServiceByIdAsync([FromRoute] Guid id)
     {
         var service = await _servicesService.GetServiceByIdAsync(id);
