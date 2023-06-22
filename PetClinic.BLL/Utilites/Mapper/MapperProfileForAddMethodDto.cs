@@ -8,11 +8,11 @@ public class MapperProfileForAddMethodDto : Profile
 {
     public MapperProfileForAddMethodDto()
     {
-        CreateMap<AddAppointmentDto, AppointmentEntity>()
-        .ForMember(a => a.DateTime, 
-            d => d
-                .MapFrom(aa => DateTime.Parse(aa.AppointmentDateAndTime)
-                    .ToUniversalTime()));
+        CreateMap<AddAppointmentDto, AppointmentEntity>();
+        // .ForMember(a => a.DateTime, 
+        //     d => d
+        //         .MapFrom(aa => DateTime.Parse(aa.AppointmentDateAndTime)
+        //             .ToUniversalTime()));
 
         CreateMap<AddPetDto, PetEntity>();
         CreateMap<AddReviewDto, ReviewEntity>();
