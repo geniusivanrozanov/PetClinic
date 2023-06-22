@@ -85,8 +85,6 @@ public class UserAccountService : IUserAccountService
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
         }
         
-        var tr = _userManager.IsInRoleAsync(existingUser, "Client");
-
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
         if (!passwordIsCorrect)
