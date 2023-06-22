@@ -22,23 +22,23 @@ public class AppointmentController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy=PolicyNames.AdminClientPolicy)]
-    public async Task Add(AddAppointmentDto appointment)
+    public async Task<IActionResult> AddAsync(AddAppointmentDto appointment)
     {
         await appointmentService.AddAppointmentAsync(appointment);
+        return Created("", appointment);
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy=PolicyNames.AdminPolicy)]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await appointmentService.DeleteAppointmentAsync(id);
-
         return Ok(id);
     }
 
     [HttpGet("{id}")]
     [Authorize(Policy=PolicyNames.AdminClientPolicy)]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var appointment = await appointmentService.GetAppointmentByIdAsync(id);
         return Ok(appointment);
@@ -46,7 +46,7 @@ public class AppointmentController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy=PolicyNames.AdminClientPolicy)]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
         var appointments = await appointmentService.GetAppointmentsAsync();
         return Ok(appointments);
@@ -54,10 +54,9 @@ public class AppointmentController : ControllerBase
 
     [HttpPut]
     [Authorize(Policy=PolicyNames.AdminPolicy)]
-    public async Task<IActionResult> Update([FromBody] UpdateAppointmentDto appointment)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateAppointmentDto appointment)
     {
         await appointmentService.UpdateAppointmentAsync(appointment);
-
         return Ok(appointment);
     }
 }

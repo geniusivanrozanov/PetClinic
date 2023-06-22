@@ -21,7 +21,7 @@ public class VetController : ControllerBase
 
     [HttpPost("review")]
     [Authorize(Policy = PolicyNames.VetPolicy)]
-    public async Task<IActionResult> Add([FromBody] AddReviewDto review)
+    public async Task<IActionResult> AddAsync([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
 
@@ -30,20 +30,20 @@ public class VetController : ControllerBase
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         return Ok(await vetService.GetVetByIdAsync(id));
     }
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
         return Ok(await vetService.GetVetsAsync());
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
-    public async Task<IActionResult> GetSchedule(DateOnly appointmentDate, Guid vetId)
+    public async Task<IActionResult> GetScheduleAsync(DateTime appointmentDate, Guid vetId)
     {
         var getScheduleDto = new GetScheduleDto
         {

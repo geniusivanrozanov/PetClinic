@@ -16,11 +16,13 @@ public class PetService : IPetService
 {
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
+    private readonly ICacheService cachedService;
 
-    public PetService(IUnitOfWork unitOfWork, IMapper mapper)
+    public PetService(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cachedService)
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.cachedService = cachedService;
     }
     
     public async Task AddPetAsync(AddPetDto pet)
@@ -28,42 +30,45 @@ public class PetService : IPetService
         var result = mapper.Map<PetEntity>(pet);
         await unitOfWork.PetRepository.AddAsync(result);
         await unitOfWork.CompleteAsync();
+
+        await UpdateCacheAsync(CacheKeys.petsKey, DateTimeOffset.Now.AddMinutes(1));
     }
 
     public async Task DeletePetAsync(Guid id)
     {
-        var pet = await unitOfWork.PetRepository.GetAsync(id);
-
-        if (pet is null)
-        {
+        var pet = await unitOfWork.PetRepository.GetAsync(id) ?? 
             throw new NotFoundException();
-        }
 
         unitOfWork.PetRepository.Remove(pet);
         await unitOfWork.CompleteAsync();
+
+        await UpdateCacheAsync(CacheKeys.petsKey, DateTimeOffset.Now.AddMinutes(1));
     }
 
     public async Task<GetPetDto> GetPetByIdAsync(Guid id)
     {
-        var pet = await unitOfWork.PetRepository.GetAsync(id);
-       
-        if (pet is null)
+        var cachedPets = await cachedService
+            .GetDataAsync<IEnumerable<GetPetDto>>(CacheKeys.petsKey);
+
+        if (cachedPets is null)
         {
-            throw new NotFoundException(ExceptionMessages.PetNotFound);
+            var pet = await unitOfWork.PetRepository.GetAsync(id) ??
+                throw new NotFoundException(ExceptionMessages.PetNotFound);
+            
+            return mapper.Map<GetPetDto>(pet);
         }
 
-        return mapper.Map<GetPetDto>(pet);
+        var cachPet = cachedPets.Where(d => d.Id == id).FirstOrDefault() ??
+            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+
+        return cachPet;
     }
 
     public async Task<IEnumerable<GetPetDto>> GetPetsAsync()
     {
-        var pets = await unitOfWork.PetRepository.GetAllAsync();
-
-        if (pets is null)
-        {
+        var pets = await unitOfWork.PetRepository.GetAllAsync() ??
             throw new NotFoundException(ExceptionMessages.PetNotFound);
-        }
-
+        
         return mapper.Map<IEnumerable<GetPetDto>>(pets);
     }
 
@@ -74,6 +79,16 @@ public class PetService : IPetService
 
         await unitOfWork.CompleteAsync();
 
+        await UpdateCacheAsync(CacheKeys.petsKey, DateTimeOffset.Now.AddMinutes(1));
+
         return mapper.Map<GetPetDto>(result);
+    }
+
+    private async Task UpdateCacheAsync(string key, DateTimeOffset expiryTime)
+    {
+        var pets = await unitOfWork.PetRepository.GetAllAsync();
+        var petsDto = mapper.Map<IEnumerable<GetPetDto>>(pets);
+
+        await cachedService.SetDataAsync(key, petsDto, expiryTime);
     }
 }

@@ -40,10 +40,9 @@ public class UserAccountService : IUserAccountService
     public async Task<IEnumerable<GetUserDto>> GetAllAccounts()
     {
         var accounts = await _userManager.Users.ToListAsync();
-
         var accountsDto = _mapper.Map<IEnumerable<GetUserDto>>(accounts);
 
-        return  accountsDto;
+        return accountsDto;
     }
 
     public async Task<string> RegisterClientAsync(UserRegistrationRequestDto userData)

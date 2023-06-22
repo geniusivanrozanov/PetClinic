@@ -22,28 +22,28 @@ public class PetController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = PolicyNames.ClientPolicy)]
-    public async Task Add(AddPetDto pet)
+    public async Task AddAsync(AddPetDto pet)
     {
         await petService.AddPetAsync(pet);
     }
 
     [HttpGet("{id}")]
     [Authorize(Policy = PolicyNames.AdminClientPolicy)]
-    public async Task<GetPetDto> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        return await petService.GetPetByIdAsync(id);
+        return Ok(await petService.GetPetByIdAsync(id));
     }
 
     [HttpGet]
     [Authorize(Policy = PolicyNames.AdminPolicy)]
-    public async Task<IEnumerable<GetPetDto>> GetAll()
+    public async Task<IActionResult> GetAllAsync()
     {
-        return await petService.GetPetsAsync();
+        return Ok(await petService.GetPetsAsync());
     }
 
     [HttpDelete("{id}")]
     [Authorize(Policy = PolicyNames.ClientPolicy)]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await petService.DeletePetAsync(id);
 
@@ -52,7 +52,7 @@ public class PetController : ControllerBase
 
     [HttpPut]
     [Authorize(Policy = PolicyNames.ClientPolicy)]
-    public async Task<IActionResult> Update([FromBody] UpdatePetDto appointment)
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdatePetDto appointment)
     {
         await petService.UpdatePetAsync(appointment);
 
