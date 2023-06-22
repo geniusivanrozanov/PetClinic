@@ -78,14 +78,30 @@ public static class ServiceCollectionExtensions
     {
         services.AddSwaggerGen(options => 
         {
-            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "Standart Authorization header using the Bearer scheme(\"bearer {token}\")",
                 In = ParameterLocation.Header,
+                Description = "Please enter token",
                 Name = "Authorization",
-                Type = SecuritySchemeType.ApiKey,
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
             });
-            options.OperationFilter<SecurityRequirementsOperationFilter>();
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
         });
     }
 }
