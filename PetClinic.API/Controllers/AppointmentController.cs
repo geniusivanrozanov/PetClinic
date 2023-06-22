@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Extensions;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
@@ -20,12 +21,14 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task Add(AddAppointmentDto appointment)
     {
         await appointmentService.AddAppointmentAsync(appointment);
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Policy=PolicyNames.AdminPolicy)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         await appointmentService.DeleteAppointmentAsync(id);
@@ -34,6 +37,7 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var appointment = await appointmentService.GetAppointmentByIdAsync(id);
@@ -41,6 +45,7 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task<IActionResult> GetAll()
     {
         var appointments = await appointmentService.GetAppointmentsAsync();
@@ -48,6 +53,7 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPut]
+    [Authorize(Policy=PolicyNames.AdminPolicy)]
     public async Task<IActionResult> Update([FromBody] UpdateAppointmentDto appointment)
     {
         await appointmentService.UpdateAppointmentAsync(appointment);

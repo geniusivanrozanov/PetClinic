@@ -19,6 +19,7 @@ namespace PetClinic.BLL.Services;
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
+    private readonly RoleManager<RoleEntity> _roleManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
@@ -85,8 +86,6 @@ public class UserAccountService : IUserAccountService
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
         }
         
-        var tr = _userManager.IsInRoleAsync(existingUser, "Client");
-
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
         if (!passwordIsCorrect)

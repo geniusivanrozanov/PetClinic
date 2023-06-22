@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.Interfaces;
 
@@ -15,6 +16,7 @@ namespace PetClinic.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetDepartmentsAsync()
         {
             var departments = await _departmentService.GetDepartmentsAsync();
@@ -23,6 +25,7 @@ namespace PetClinic.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetDepartmentByIdAsync([FromRoute] Guid id)
         {
             var department = await _departmentService.GetDepatmentByIdAsync(id);

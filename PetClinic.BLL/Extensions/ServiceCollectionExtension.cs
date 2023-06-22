@@ -34,6 +34,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IVetService, VetService>();
         services.AddScoped<IPetService, PetService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPetTypeService, PetTypeService>();
         
         services.AddSingleton<IExceptionsService, ExceptionsService>();
     }

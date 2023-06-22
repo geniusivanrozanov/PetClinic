@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
-using PetClinic.DAL.Entities;
 
 namespace PetClinic.API.Controllers;
 
@@ -36,12 +35,5 @@ public class AuthenticationController : ControllerBase
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDto userData)
     {
         return Ok(await clientAccountService.LoginUserAsync(userData));
-    }
-
-    [HttpGet]
-    [Authorize(Roles = Roles.ClientRole)]
-    public IActionResult TestMethod()
-    {
-        return Ok("Hello");
     }
 }
