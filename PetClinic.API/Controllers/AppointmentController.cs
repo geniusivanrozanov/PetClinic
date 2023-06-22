@@ -20,16 +20,16 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task AddAsync(AddAppointmentDto appointment)
+    public async Task<IActionResult> AddAsync(AddAppointmentDto appointment)
     {
         await appointmentService.AddAppointmentAsync(appointment);
+        return Created("", appointment);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await appointmentService.DeleteAppointmentAsync(id);
-
         return Ok(id);
     }
 
@@ -51,7 +51,6 @@ public class AppointmentController : ControllerBase
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateAppointmentDto appointment)
     {
         await appointmentService.UpdateAppointmentAsync(appointment);
-
         return Ok(appointment);
     }
 }
