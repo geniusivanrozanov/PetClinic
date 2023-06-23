@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 using PetClinic.BLL.Interfaces;
 
@@ -23,10 +24,9 @@ public class ExceptionHandlerMiddleware
         catch (Exception ex)
         {
             ErrorDetails? errorDetails = null;
-
-            // var statusCodeAndMessage = // _exceptionsService.GetStatusCodeAndMessageOnException(ex);
-            var statusCode = 500; // statusCodeAndMessage.statusCode;
-            var message = ex.Message; // statusCodeAndMessage.message;
+            
+            var statusCode = _exceptionsService.GetStatusCodeAndMessageOnException(ex);
+            var message = ex.Message;
 
             errorDetails = SetStatusCodeAndMessage(statusCode, message);
 
@@ -42,11 +42,11 @@ public class ExceptionHandlerMiddleware
         return context.Response.WriteAsync(JsonSerializer.Serialize(errorDetails));
     }
 
-    private ErrorDetails SetStatusCodeAndMessage(int statusCode, string message)
+    private ErrorDetails SetStatusCodeAndMessage(HttpStatusCode statusCode, string message)
     {
         return new ErrorDetails
         {
-            StatusCode = statusCode,
+            StatusCode = (int)statusCode,
             Message = message,
         };
     }
