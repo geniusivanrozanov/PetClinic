@@ -43,6 +43,7 @@ public class VetController : ControllerBase
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
+    [Authorize(Policy = PolicyNames.AdminVetPolicy)]
     public async Task<IActionResult> GetScheduleAsync(DateTime appointmentDate, Guid vetId)
     {
         var getScheduleDto = new GetScheduleDto

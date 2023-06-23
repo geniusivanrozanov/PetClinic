@@ -26,13 +26,9 @@ public class VetService : IVetService
     {
         var result =  mapper.Map<ReviewEntity>(review);
 
-        var appointment = await unitOfWork.AppointmentRepository.FindAsync(a => a.Id == review.AppointmentId);
-        
-        if (appointment is null)
-        {
+        var appointment = await unitOfWork.AppointmentRepository.FindAsync(a => a.Id == review.AppointmentId) ?? 
             throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
-        }
-
+            
         var createdReview = await unitOfWork.ReviewRepository.AddAsync(result);
         
         appointment.FirstOrDefault()!.ReviewId = createdReview.Id;
@@ -40,13 +36,9 @@ public class VetService : IVetService
 
     public async Task<IEnumerable<GetVetDto>> GetVetsAsync()
     {
-        var vets = await unitOfWork.VetRepository.GetAllAsync();
-
-        if (vets is null)
-        {
+        var vets = await unitOfWork.VetRepository.GetAllAsync() ?? 
             throw new NotFoundException(ExceptionMessages.VetsNotFound);
-        }
-     
+
         return mapper.Map<IEnumerable<GetVetDto>>(vets);
     }
     

@@ -10,7 +10,6 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/appointments")]
-[AllowAnonymous]
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService appointmentService;

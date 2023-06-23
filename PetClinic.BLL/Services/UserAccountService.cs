@@ -19,7 +19,6 @@ namespace PetClinic.BLL.Services;
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
-    private readonly RoleManager<RoleEntity> _roleManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
@@ -27,7 +26,6 @@ public class UserAccountService : IUserAccountService
     public UserAccountService(
         UserManager<UserEntity> userManager, 
         IMapper mapper, 
-        IConfiguration config, 
         IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
@@ -78,13 +76,9 @@ public class UserAccountService : IUserAccountService
     
     public async Task<string> LoginUserAsync(LoginUserDto userData)
     {
-        var existingUser = await _userManager.FindByEmailAsync(userData.Email);
-
-        if (existingUser is null)
-        {
+        var existingUser = await _userManager.FindByEmailAsync(userData.Email) ??
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
-        }
-        
+
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
         if (!passwordIsCorrect)

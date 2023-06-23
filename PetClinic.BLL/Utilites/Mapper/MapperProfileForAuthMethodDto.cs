@@ -1,6 +1,8 @@
 using AutoMapper;
+using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.DAL.Entities;
+
 
 namespace PetClinic.BLL.Utilites.Mapper;
 
@@ -10,5 +12,9 @@ public class MapperProfileForAuthMethodDto : Profile
     {
         CreateMap<UserRegistrationRequestDto, UserEntity>();
         CreateMap<UpdateUserAccountDto, UserEntity>();
+        CreateMap<VetInfoDto, AddVetDto>()
+            .ForMember(vi => vi.DepartmentId,
+                av => av
+                    .MapFrom(av => new Guid(av.DepatmentId)));
     }
 }
