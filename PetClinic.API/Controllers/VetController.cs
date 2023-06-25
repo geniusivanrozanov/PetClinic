@@ -10,6 +10,7 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/vets")]
+[AllowAnonymous]
 public class VetController : ControllerBase
 {
     private readonly IVetService vetService;

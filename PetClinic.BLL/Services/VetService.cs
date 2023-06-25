@@ -32,6 +32,8 @@ public class VetService : IVetService
         var createdReview = await unitOfWork.ReviewRepository.AddAsync(result);
         
         appointment.FirstOrDefault()!.ReviewId = createdReview.Id;
+
+        await unitOfWork.CompleteAsync();
     }
 
     public async Task<IEnumerable<GetVetDto>> GetVetsAsync()

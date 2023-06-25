@@ -11,6 +11,7 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/pets")]
+[AllowAnonymous]
 public class PetController : ControllerBase
 {
     private readonly IPetService petService;

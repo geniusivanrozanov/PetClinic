@@ -29,6 +29,7 @@ public class AppointmentService : IAppointmentService
     {
         var result = mapper.Map<AppointmentEntity>(appointment);
         await unitOfWork.AppointmentRepository.AddAsync(result);
+        await unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.appointmentsKey, DateTimeOffset.Now.AddMinutes(1));
     }
@@ -53,13 +54,13 @@ public class AppointmentService : IAppointmentService
         if (cachedAppointments is null)
         {
             var appointment = await unitOfWork.AppointmentRepository.GetAsync(id) ?? 
-            throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
+                throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
             return mapper.Map<GetAppointmentDto>(appointment);
         }        
 
         var cachAppointment = cachedAppointments.Where(d => d.Id == id).FirstOrDefault() ??
-            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+            throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
         return cachAppointment;
     }
@@ -67,14 +68,17 @@ public class AppointmentService : IAppointmentService
     public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()
     {
         var cachedAppointments = await cachedService.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey);
-    
+        
         if (cachedAppointments is null)
         {
             var appointments = await unitOfWork.AppointmentRepository.GetAllAsync() ??
                 throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
+            
+            var appointmentsDto = mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
+            
+            await cachedService.SetDataAsync(CacheKeys.appointmentsKey, appointmentsDto, DateTimeOffset.Now.AddMinutes(1));
 
-            await cachedService.SetDataAsync(CacheKeys.appointmentsKey, appointments, DateTimeOffset.Now.AddMinutes(1));
-            return mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
+            return appointmentsDto;
         }
 
         return cachedAppointments;

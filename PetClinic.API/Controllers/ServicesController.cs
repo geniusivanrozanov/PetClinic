@@ -6,6 +6,7 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/services")]
+[AllowAnonymous]
 public class ServicesController : ControllerBase
 {
     private readonly IServicesService _servicesService;
@@ -16,7 +17,6 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> GetServicesAsync()
     {
         var services = await _servicesService.GetServicesAsync();
@@ -25,7 +25,6 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
     public async Task<IActionResult> GetServiceByIdAsync([FromRoute] Guid id)
     {
         var service = await _servicesService.GetServiceByIdAsync(id);

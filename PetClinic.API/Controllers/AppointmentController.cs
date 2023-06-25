@@ -5,11 +5,11 @@ using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
 
-
 namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/appointments")]
+[AllowAnonymous]
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService appointmentService;

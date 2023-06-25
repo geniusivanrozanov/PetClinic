@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using PetClinic.BLL.DTOs.DeleteMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
+using PetClinic.BLL.Utilites;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
@@ -126,8 +128,9 @@ public class UserAccountService : IUserAccountService
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
+        await _userManager.AddClaimAsync(newUser, new Claim(AuthClaims.RoleClaim, role));
 
-        var tr = _userManager.IsInRoleAsync(newUser, role);
+        var tr = await _userManager.GetClaimsAsync(newUser);
 
         await _unitOfWork.CompleteAsync();
 

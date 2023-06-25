@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PetClinic.BLL.Utilites;
 using PetClinic.DAL;
 using PetClinic.DAL.Entities;
 using Serilog;
@@ -35,6 +36,7 @@ public static class ServiceCollectionExtensions
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 RequireExpirationTime = true,
+                RoleClaimType = AuthClaims.RoleClaim,
             };
         });
 
@@ -78,29 +80,20 @@ public static class ServiceCollectionExtensions
     {
         services.AddSwaggerGen(options => 
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
+                Description = "Standart Authorization header using the Bearer scheme(\"bearer {token}\")",
                 In = ParameterLocation.Header,
-                Description = "Please enter token",
                 Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                BearerFormat = "JWT",
-                Scheme = "bearer"
+                Type = SecuritySchemeType.ApiKey,
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
-                        }
-                    },
-                    new string[]{}
-                }
+                Version = "v1",
+                Title = "Pet Clinic API",
+                Description = "API."
             });
         });
     }

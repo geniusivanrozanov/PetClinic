@@ -3,7 +3,6 @@ using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 using Serilog;
 using PetClinic.API.Extensions;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +13,6 @@ var configuration = builder.Configuration;
 builder.Logging.AddSerilog();
 
 builder.Services.AddControllers()
-                .AddNewtonsoftJson(x => 
-                    x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddFluentValidation();
                 
 builder.Services.AddDataAccessLayer(configuration);
