@@ -21,17 +21,20 @@ namespace PetClinic.BLL.Services;
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
+    private readonly SignInManager<UserEntity> _signInManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
 
     public UserAccountService(
-        UserManager<UserEntity> userManager, 
+        UserManager<UserEntity> userManager,
+        SignInManager<UserEntity> signInManager, 
         IMapper mapper, 
         IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
         _userManager = userManager;
+        _signInManager = signInManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
@@ -131,6 +134,9 @@ public class UserAccountService : IUserAccountService
         await _userManager.AddClaimAsync(newUser, new Claim(AuthClaims.RoleClaim, role));
 
         var tr = await _userManager.GetClaimsAsync(newUser);
+
+        var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(newUser);
+        var claims = claimsPrincipal.Claims.ToList();
 
         await _unitOfWork.CompleteAsync();
 

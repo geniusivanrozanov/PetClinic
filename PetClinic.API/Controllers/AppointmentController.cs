@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PetClinic.API.Extensions;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
@@ -9,26 +7,27 @@ namespace PetClinic.API.Controllers;
 
 [ApiController]
 [Route("api/appointments")]
-[AllowAnonymous]
+// [AllowAnonymous]
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService appointmentService;
+    private readonly IHttpContextAccessor httpContextAccessor;
 
-    public AppointmentController(IAppointmentService appointmentService)
+    public AppointmentController(IAppointmentService appointmentService, IHttpContextAccessor httpContextAccessor)
     {
         this.appointmentService = appointmentService;
+        this.httpContextAccessor = httpContextAccessor;
     }
 
     [HttpPost]
-    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task<IActionResult> AddAsync(AddAppointmentDto appointment)
     {
+        var http = httpContextAccessor.HttpContext;
         await appointmentService.AddAppointmentAsync(appointment);
         return Created("", appointment);
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Policy=PolicyNames.AdminPolicy)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
         await appointmentService.DeleteAppointmentAsync(id);
@@ -36,7 +35,6 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
         var appointment = await appointmentService.GetAppointmentByIdAsync(id);
@@ -44,7 +42,6 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy=PolicyNames.AdminClientPolicy)]
     public async Task<IActionResult> GetAllAsync()
     {
         var appointments = await appointmentService.GetAppointmentsAsync();
@@ -52,7 +49,6 @@ public class AppointmentController : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Policy=PolicyNames.AdminPolicy)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdateAppointmentDto appointment)
     {
         await appointmentService.UpdateAppointmentAsync(appointment);

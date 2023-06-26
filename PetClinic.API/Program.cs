@@ -18,12 +18,13 @@ builder.Services.AddControllers()
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
 
-builder.Services.AddAuth(configuration);
-builder.Services.AddIdentity();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuth(configuration);
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 

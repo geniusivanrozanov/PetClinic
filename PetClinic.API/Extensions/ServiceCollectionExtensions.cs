@@ -1,8 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PetClinic.BLL.Utilites;
 using PetClinic.DAL;
 using PetClinic.DAL.Entities;
 using Serilog;
@@ -15,55 +16,22 @@ public static class ServiceCollectionExtensions
 {
     public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(options => 
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(jwt => 
-        {
-            var key = Encoding.ASCII.GetBytes(configuration.GetSection("JwtConfig:Secret").Value!);
-
-            jwt.SaveToken = true;
-            jwt.TokenValidationParameters = new TokenValidationParameters
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                ValidateIssuer = true,
-                ValidIssuer = configuration.GetSection("JwtConfig:Issuer").Value,
-                ValidateAudience = true,
-                ValidAudience = configuration.GetSection("JwtConfig:Audience").Value,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                RequireExpirationTime = true,
-                RoleClaimType = AuthClaims.RoleClaim,
-            };
-        });
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                        .GetBytes(configuration.GetSection("AppSettings:Token").Value!)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
 
-        services.AddAuthorization(opts => {
-            opts.AddPolicy(PolicyNames.ClientPolicy, policy =>
-                policy.RequireClaim(AuthClaims.RoleClaim, Roles.ClientRole)
-            );
-            opts.AddPolicy(PolicyNames.AdminPolicy, policy =>
-                policy.RequireClaim(AuthClaims.RoleClaim, Roles.AdminRole)
-            );
-            opts.AddPolicy(PolicyNames.VetPolicy, policy =>
-                policy.RequireClaim(AuthClaims.RoleClaim, Roles.VetRole)
-            );
-            opts.AddPolicy(PolicyNames.AdminClientPolicy, policy =>
-                policy.RequireClaim(AuthClaims.RoleClaim, Roles.AdminRole, Roles.ClientRole)
-            );
-            opts.AddPolicy(PolicyNames.AdminVetPolicy, policy =>
-                policy.RequireClaim(AuthClaims.RoleClaim, Roles.AdminRole, Roles.VetRole)
-            );
-        });
-    }
-
-    public static void AddIdentity(this IServiceCollection services)
-    {
-        services.AddIdentity<UserEntity, RoleEntity>(options => 
-            options.SignIn.RequireConfirmedEmail = false)
-            .AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentity<UserEntity, RoleEntity>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
     }
 
     public static void AddSerilog(this ILoggingBuilder loggingBuilder)
@@ -78,7 +46,7 @@ public static class ServiceCollectionExtensions
 
     public static void AddSwaggerGen(this IServiceCollection services)
     {
-        services.AddSwaggerGen(options => 
+        services.AddSwaggerGen(options =>
         {
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {
@@ -88,13 +56,6 @@ public static class ServiceCollectionExtensions
                 Type = SecuritySchemeType.ApiKey,
             });
             options.OperationFilter<SecurityRequirementsOperationFilter>();
-
-            options.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Version = "v1",
-                Title = "Pet Clinic API",
-                Description = "API."
-            });
         });
     }
 }

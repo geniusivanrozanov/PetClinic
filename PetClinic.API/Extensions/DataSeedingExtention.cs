@@ -19,7 +19,7 @@ public static class DataSeedingExtention
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+             
         }
 
         return app;
