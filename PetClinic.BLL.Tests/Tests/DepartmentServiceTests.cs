@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Services;
@@ -87,7 +88,7 @@ public class DepartmentServiceTests
 
         // Assert
 
-        Assert.Equal(departments, new List<GetDepartmentDto>(){});
+        departments.Should().BeEmpty();
     }
 
     [Fact]
@@ -124,7 +125,9 @@ public class DepartmentServiceTests
 
         // Assert
 
-        Assert.Equal(departmentId, department.Id);
+        department.Should().BeOfType<GetDepartmentDto>();
+        department.Id.Should().Be(departmentId);
+        department.Should().BeSameAs(expectedResult);
     }
 
     [Fact]
@@ -149,6 +152,6 @@ public class DepartmentServiceTests
 
         // Assert
 
-        Assert.NotNull(department);
+        department.Should().NotBeNull();
     }
 }

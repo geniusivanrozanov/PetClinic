@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Moq;
-using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Services;
@@ -123,7 +122,7 @@ public class AppointmentServiceTests
     }
 
     [Fact]
-    public async Task GetAppointmentByIdAsync_AppointmentWithIdNothFound_ShouldReturnEmpty()
+    public async Task GetAppointmentByIdAsync_AppointmentWithIdNotFound_ShouldReturnEmpty()
     {
         // Arrange
 
@@ -136,6 +135,7 @@ public class AppointmentServiceTests
         // Act
 
         // Assert
+
         await Assert.ThrowsAsync<NotFoundException>(async () => await _appointmentService.GetAppointmentByIdAsync(appointmentId));
     }
 }
