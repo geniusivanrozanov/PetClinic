@@ -26,51 +26,28 @@ public class TokenService : ITokenService
 
     public async Task<string> GenerateJwtTokenAsync(UserEntity user)
     {
-        var userId = user.Id;
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+        var key = Encoding.UTF8.GetBytes(_secretCode);
+        
         var roles = await _userManager.GetRolesAsync(user);
-        var claims = new[]
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            new Claim("UserId", userId.ToString()),
-            new Claim(ClaimTypes.Role, roles[0]),
+            Subject = new ClaimsIdentity(new []
+            {
+                new Claim(AuthClaims.IdClaim, $"{user.Id}"),
+                new Claim(ClaimTypes.Role, $"{roles[0]}"),
+            }),
+            Expires = DateTime.Now.AddMinutes(5),
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key), 
+                SecurityAlgorithms.HmacSha256
+            ),
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretCode));
+        var token = jwtTokenHandler.CreateToken(tokenDescriptor);
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-        var token = new JwtSecurityToken(
-            claims: claims,
-            expires: DateTime.Now.AddHours(2),
-            signingCredentials: creds);
-
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return jwt;
-    }
-
-    // {
-    //     var jwtTokenHandler = new JwtSecurityTokenHandler();
-
-    //     var key = Encoding.UTF8.GetBytes(_secretCode);
-        
-    //     var roles = await _userManager.GetRolesAsync(user);
-
-    //     var tokenDescriptor = new SecurityTokenDescriptor
-    //     {
-    //         Subject = new ClaimsIdentity(new []
-    //         {
-    //             new Claim(AuthClaims.IdClaim, $"{user.Id}"),
-    //             new Claim(ClaimTypes.Role, $"{roles[0]}"),
-    //         }),
-    //         Expires = DateTime.Now.AddMinutes(5),
-    //         SigningCredentials = new SigningCredentials(
-    //             new SymmetricSecurityKey(key), 
-    //             SecurityAlgorithms.HmacSha256
-    //         ),
-    //     };
-
-    //     var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-
-    //     return jwtTokenHandler.WriteToken(token);
-    // }    
+        return jwtTokenHandler.WriteToken(token);
+    }    
 }
