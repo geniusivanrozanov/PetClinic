@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
@@ -29,44 +30,67 @@ public class PetServiceTests
     {
         // Arrange
 
-        var expectedData = new List<PetEntity>
+        var expectedRepositoryData = new List<PetEntity>
         {
-                new PetEntity
-                {
-                    Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
-                    Name = "Coppy",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new PetEntity
-                {
-                    Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
-                    Name = "Poppy",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new PetEntity
-                {
-                    Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
-                    Name = "Moppy",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                }
+            new PetEntity
+            {
+                Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                Name = "Coppy",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new PetEntity
+            {
+                Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                Name = "Poppy",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new PetEntity
+            {
+                Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                Name = "Moppy",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            }
+        };
+
+        var expectedMapperData = new List<GetPetDto>
+        {
+            new GetPetDto
+            {
+                Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                Name = "Coppy",
+            },
+            new GetPetDto
+            {
+                Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                Name = "Poppy",
+            },
+            new GetPetDto
+            {
+                Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                Name = "Moppy",
+            }
         };
 
         _unitOfWorkMock.Setup(x => x.PetRepository.GetAllAsync())
-            .ReturnsAsync(expectedData);
+            .ReturnsAsync(expectedRepositoryData);
+        _mapperMock.Setup(x => x.Map<IEnumerable<GetPetDto>>(expectedRepositoryData))
+            .Returns(expectedMapperData);
 
         // Act
 
         var pets = await _petService.GetPetsAsync();
 
         // Assert
-
-        Assert.Equal(expectedData.Count, pets.ToList().Count);
+        pets.Should().NotBeNull();
+        pets.Should().NotBeEmpty();
+        pets.Count().Should().Be(expectedRepositoryData.Count);
+        pets.Should().BeEquivalentTo(expectedMapperData);
     }
 
     [Fact]
@@ -118,7 +142,8 @@ public class PetServiceTests
 
         // Assert
 
-        Assert.Equal(petId, pet.Id);
+        pet.Should().NotBeNull();
+        pet.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]

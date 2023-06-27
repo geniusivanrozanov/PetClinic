@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
@@ -29,7 +30,7 @@ public class VetServiceTests
     {
         // Arrange
 
-        var expectedData = new List<VetEntity>
+        var expectedRepositoryData = new List<VetEntity>
         {
                 new VetEntity
                 {
@@ -57,16 +58,40 @@ public class VetServiceTests
                 }
         };
 
+        var expectedMapperData = new List<GetVetDto>
+        {
+                new GetVetDto
+                {
+                    Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                    FirstName = "Alex",
+                },
+                new GetVetDto
+                {
+                    Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                    FirstName = "David",
+                },
+                new GetVetDto
+                {
+                    Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                    FirstName = "John",
+                }
+        };
+
         _unitOfWorkMock.Setup(x => x.VetRepository.GetAllAsync())
-            .ReturnsAsync(expectedData);
+            .ReturnsAsync(expectedRepositoryData);
+        _mapperMock.Setup(x => x.Map<IEnumerable<GetVetDto>>(expectedRepositoryData))
+            .Returns(expectedMapperData);
 
         // Act
 
-        var pets = await _vetService.GetVetsAsync();
+        var vets = await _vetService.GetVetsAsync();
 
         // Assert
 
-        Assert.Equal(expectedData.Count, pets.ToList().Count);
+        vets.Should().NotBeNull();
+        vets.Should().NotBeEmpty();
+        vets.Count().Should().Be(expectedRepositoryData.Count);
+        vets.Should().BeEquivalentTo(expectedMapperData);
     }
 
     [Fact]
@@ -85,7 +110,8 @@ public class VetServiceTests
 
         // Assert
 
-        Assert.Equal(vets, new List<GetVetDto>() { });
+        vets.Should().BeNullOrEmpty();
+        vets.Should().BeEquivalentTo(new List<GetVetDto>() { });
     }
 
     [Fact]
@@ -118,7 +144,8 @@ public class VetServiceTests
 
         // Assert
 
-        Assert.Equal(vetId, vet.Id);
+        vet.Should().NotBeNull();
+        vet.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
@@ -135,6 +162,7 @@ public class VetServiceTests
         // Act
 
         // Assert
+
         await Assert.ThrowsAsync<NotFoundException>(async () => await _vetService.GetVetByIdAsync(vetId));
     }
 }

@@ -131,7 +131,7 @@ public class DepartmentServiceTests
     }
 
     [Fact]
-    public async Task GetDepartmentByIdAsync_DepartmentWithIdNothFound_ShouldReturnEmpty()
+    public async Task GetDepartmentByIdAsync_DepartmentWithIdNotFound_ShouldReturnEmpty()
     {
         // Arrange
 
@@ -153,5 +153,6 @@ public class DepartmentServiceTests
         // Assert
 
         department.Should().NotBeNull();
+        department.Should().BeOfType<GetDepartmentDto>();
     }
 }

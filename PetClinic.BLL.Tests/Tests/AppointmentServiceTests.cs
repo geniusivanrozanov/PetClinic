@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
@@ -29,36 +30,57 @@ public class AppointmentServiceTests
     {
         // Arrange
 
-        var expectedData = new List<AppointmentEntity>
+        var expectedRepositoryData = new List<AppointmentEntity>
         {
-                new AppointmentEntity
-                {
-                    Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
-                    DateTime = DateTime.Today,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new AppointmentEntity
-                {
-                    Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
-                    DateTime = DateTime.Today,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new AppointmentEntity
-                {
-                    Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
-                    DateTime = DateTime.Today,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                }
+            new AppointmentEntity
+            {
+                Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                DateTime = DateTime.Today,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new AppointmentEntity
+            {
+                Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                DateTime = DateTime.Today,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new AppointmentEntity
+            {
+                Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                DateTime = DateTime.Today,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            }
+        };
+
+        var expectedMapperData = new List<GetAppointmentDto>
+        {
+            new GetAppointmentDto
+            {
+                Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                AppointmentDate = DateTime.Today,
+            },
+            new GetAppointmentDto
+            {
+                Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                AppointmentDate = DateTime.Today,
+            },
+            new GetAppointmentDto
+            {
+                Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                AppointmentDate = DateTime.Today,
+            }
         };
 
         _unitOfWorkMock.Setup(x => x.AppointmentRepository.GetAllAsync())
-            .ReturnsAsync(expectedData);
+            .ReturnsAsync(expectedRepositoryData);
+        _mapperMock.Setup(x => x.Map<IEnumerable<GetAppointmentDto>>(expectedRepositoryData))
+            .Returns(expectedMapperData);
 
         // Act
 
@@ -66,7 +88,8 @@ public class AppointmentServiceTests
 
         // Assert
 
-        Assert.Equal(expectedData.Count, appointments.ToList().Count);
+        appointments.Should().NotBeNullOrEmpty();
+        appointments.Should().BeEquivalentTo(expectedMapperData);
     }
 
     [Fact]
@@ -104,7 +127,7 @@ public class AppointmentServiceTests
         var expectedResult = new GetAppointmentDto
         {
             Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
-            AppointmentDate = DateTime.Today.ToString()
+            AppointmentDate = DateTime.Today
         };
 
         _unitOfWorkMock.Setup(x => x.AppointmentRepository.GetAsync(appointmentId))
@@ -118,7 +141,8 @@ public class AppointmentServiceTests
 
         // Assert
 
-        Assert.Equal(appointmentId, appointment.Id);
+        appointment.Should().NotBeNull();
+        appointment.Should().BeEquivalentTo(expectedResult);
     }
 
     [Fact]
