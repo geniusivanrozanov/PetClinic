@@ -109,7 +109,8 @@ public class PetServiceTests
 
         // Assert
 
-        Assert.Equal(pets, new List<GetPetDto>() { });
+        pets.Should().NotBeNull();
+        pets.Should().BeEquivalentTo(expectedData);
     }
 
     [Fact]

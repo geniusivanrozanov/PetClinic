@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Services;
@@ -64,9 +65,8 @@ public class ServicesServiceTests
 
         // Assert
 
-        Assert.NotNull(services);
-        Assert.True(services.Any());
-        Assert.Equal(expectedMapperResult, services);
+        services.Should().NotBeNullOrEmpty();
+        services.Should().BeEquivalentTo(expectedMapperResult);
     }
     
     [Fact]
@@ -89,9 +89,7 @@ public class ServicesServiceTests
 
         // Assert
 
-        Assert.NotNull(services);
-        Assert.True(!services.Any());
-        Assert.Equal(expectedMapperResult, services);
+        services.Should().BeEmpty();
     }
     
     [Fact]
@@ -131,9 +129,7 @@ public class ServicesServiceTests
 
         // Assert
 
-        Assert.NotNull(service);
-        Assert.Equal(serviceId, service.Id);
-        Assert.Equal(expectedMapperResult, service);
+        service.Should().BeEquivalentTo(expectedMapperResult);        
     }
 
     [Fact]
@@ -157,6 +153,6 @@ public class ServicesServiceTests
 
         // Assert
 
-        Assert.NotNull(service);
+        service.Should().NotBeNull();
     }
 }

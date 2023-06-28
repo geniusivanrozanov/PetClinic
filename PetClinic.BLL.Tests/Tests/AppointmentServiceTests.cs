@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
@@ -108,7 +107,8 @@ public class AppointmentServiceTests
 
         // Assert
 
-        Assert.Equal(appointments, new List<GetAppointmentDto>() { });
+        appointments.Should().NotBeNull();
+        appointments.Should().BeEquivalentTo(expectedData);
     }
 
     [Fact]

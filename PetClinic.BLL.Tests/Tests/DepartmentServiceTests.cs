@@ -32,32 +32,32 @@ public class DepartmentServiceTests
         var expectedData = new List<DepartmentEntity>
         {
             new DepartmentEntity
-                {
-                    Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
-                    Address = "пр. Независимости, 177",
-                    Name = "Вет-клиника филиал 1",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new DepartmentEntity
-                {
-                    Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
-                    Address = "ул. Академическая, 26",
-                    Name = "Вет-клиника филиал 2",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                },
-                new DepartmentEntity
-                {
-                    Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
-                    Address = "ул. Карастояновой, 2",
-                    Name = "Вет-клиника филиал 3",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    IsDeleted = false,
-                }
+            {
+                Id = new Guid("ddc19540-04df-4697-8237-3c74ff4e38cd"),
+                Address = "пр. Независимости, 177",
+                Name = "Вет-клиника филиал 1",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new DepartmentEntity
+            {
+                Id = new Guid("328b1872-1141-47f5-8f67-62c50562ad39"),
+                Address = "ул. Академическая, 26",
+                Name = "Вет-клиника филиал 2",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            },
+            new DepartmentEntity
+            {
+                Id = new Guid("de1e6cc5-3e62-4459-9496-8a5fc0b2593f"),
+                Address = "ул. Карастояновой, 2",
+                Name = "Вет-клиника филиал 3",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                IsDeleted = false,
+            }
         };
 
         _unitOfWorkMock.Setup(x => x.DepartmentRepository.GetAllAsync())
@@ -69,7 +69,9 @@ public class DepartmentServiceTests
 
         // Assert
 
-        Assert.Equal(expectedData.Count, departments.ToList().Count);
+        departments.Should().NotBeNull();
+        departments.Should().NotBeEmpty();
+        departments.Count().Should().Be(expectedData.Count);
     }
 
     [Fact]
