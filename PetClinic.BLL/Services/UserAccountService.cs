@@ -131,12 +131,7 @@ public class UserAccountService : IUserAccountService
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
-        await _userManager.AddClaimAsync(newUser, new Claim(AuthClaims.RoleClaim, role));
-
-        var tr = await _userManager.GetClaimsAsync(newUser);
-
-        var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(newUser);
-        var claims = claimsPrincipal.Claims.ToList();
+        await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, role));
 
         await _unitOfWork.CompleteAsync();
 

@@ -26,7 +26,7 @@ public class AuthMiddleware
             
                 var handler = new JwtSecurityTokenHandler();
                 var jwtSecurityToken = handler.ReadJwtToken(token);
-                var userRole = jwtSecurityToken.Claims.First(claim => claim.Type == AuthClaims.RoleClaim).Value;
+                var userRole = jwtSecurityToken.Claims.First(claim => claim.Type == "role").Value;
 
                 var claim = new Claim(ClaimTypes.Role, userRole);
                 var claimsIdentity = new ClaimsIdentity(new[] { claim }, "BasicAuthentication");

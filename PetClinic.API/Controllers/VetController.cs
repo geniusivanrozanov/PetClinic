@@ -19,7 +19,7 @@ public class VetController : ControllerBase
     }
 
     [HttpPost("review")]
-    [Authorize(Roles = $"{Roles.VetRole}, {Roles.AdminRole}")]
+    [Authorize(Roles = $"{Roles.VetRole}")]
     public async Task<IActionResult> AddAsync([FromBody] AddReviewDto review)
     {
         await vetService.AddReviewAsync(review);
