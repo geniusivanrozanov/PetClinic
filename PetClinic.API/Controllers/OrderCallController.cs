@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.Interfaces;
+using PetClinic.DAL.Entities;
 
 namespace PetClinic.API.Controllers;
 
@@ -16,6 +18,7 @@ public class OrderCallController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = Roles.AdminRole)]
     public async Task<IActionResult> GetOrderCallsAsync()
     {
         var orderCalls = await _orderCallService.GetOrderCallsAsync();
@@ -24,6 +27,7 @@ public class OrderCallController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = Roles.ClientRole)]
     public async Task<IActionResult> CreateOrderCallAsync([FromBody] AddOrderCallDto orderCallDto)
     {
         await _orderCallService.CreateOrderAsync(orderCallDto);
