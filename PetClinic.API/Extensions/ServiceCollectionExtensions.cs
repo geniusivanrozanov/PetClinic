@@ -1,7 +1,5 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PetClinic.DAL;
@@ -17,21 +15,24 @@ public static class ServiceCollectionExtensions
     public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                        .GetBytes(configuration.GetSection("AppSettings:Token").Value!)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                    .GetBytes(configuration.GetSection("JwtConfig:Secret").Value!)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+            };
+        });
+    }
 
-        services.AddIdentity<UserEntity, RoleEntity>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+    public static void AddIdentity(this IServiceCollection services)
+    {
+        services.AddIdentity<UserEntity, RoleEntity>(options => 
+            options.SignIn.RequireConfirmedEmail = false)
+            .AddEntityFrameworkStores<AppDbContext>();
     }
 
     public static void AddSerilog(this ILoggingBuilder loggingBuilder)

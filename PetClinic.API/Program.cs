@@ -3,6 +3,7 @@ using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 using Serilog;
 using PetClinic.API.Extensions;
+using PetClinic.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuth(configuration);
+builder.Services.AddIdentity();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -42,6 +44,8 @@ app.ConfigureCustomExceptionMiddleware();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.ConfigurePreauthorizationMiddleware();
 
 app.UseAuthorization();
 
