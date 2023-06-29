@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/pet-types")]
 public class PetTypeController : ControllerBase
 {

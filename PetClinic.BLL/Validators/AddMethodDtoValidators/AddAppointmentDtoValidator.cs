@@ -15,11 +15,11 @@ public class AddAppointmentDtoValidator : AbstractValidator<AddAppointmentDto>
         RuleFor(a => a.PetId)
             .NotNull()
             .NotEmpty()
-            .WithMessage("Pet is requered.");
+            .WithMessage("Pet is required.");
 
         RuleFor(a => a.ServiceId)
             .NotNull()
             .NotEmpty()
-            .WithMessage("Service is requered.");
+            .WithMessage("Service is required.");
     }
 }

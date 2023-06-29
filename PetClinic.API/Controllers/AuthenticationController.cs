@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/accounts")]
 public class AuthenticationController : ControllerBase
 {

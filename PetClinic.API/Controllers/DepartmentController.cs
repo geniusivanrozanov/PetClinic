@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/departments")]
 public class DepartmentController : ControllerBase
 {

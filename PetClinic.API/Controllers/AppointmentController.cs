@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
@@ -8,6 +9,7 @@ using PetClinic.DAL.Entities;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/appointments")]
 public class AppointmentController : ControllerBase
 {

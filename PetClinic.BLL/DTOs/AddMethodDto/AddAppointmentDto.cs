@@ -1,3 +1,5 @@
+using FluentValidation;
+
 namespace PetClinic.BLL.DTOs.AddMethodDto;
 
 public class AddAppointmentDto
@@ -6,3 +8,4 @@ public class AddAppointmentDto
     public string PetId { get; set; } = default!;
     public string ServiceId { get; set; } = default!;
 }
+    

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
@@ -7,6 +8,7 @@ using PetClinic.DAL.Entities;
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/order-call")]
 public class OrderCallController : ControllerBase
 {
