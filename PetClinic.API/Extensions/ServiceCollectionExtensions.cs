@@ -1,4 +1,5 @@
 using System.Text;
+using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -25,6 +26,11 @@ public static class ServiceCollectionExtensions
                 ValidateIssuer = false,
                 ValidateAudience = false,
             };
+        })
+        .AddGoogle(options =>
+        {
+            options.ClientId = "867055353627-vsg9n4r105df7ifv4dr2mqk4nhrortjn.apps.googleusercontent.com";
+            options.ClientSecret = "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";
         });
     }
 
@@ -44,7 +50,7 @@ public static class ServiceCollectionExtensions
 
         loggingBuilder.AddSerilog(logger);
     }
-
+    
     public static void AddSwaggerGen(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>

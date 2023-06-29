@@ -16,6 +16,13 @@ public class AuthenticationController : ControllerBase
         this.clientAccountService = clientAccountService;
     }
 
+    [HttpPost("google")]
+    public async Task<IActionResult> RegisterUserGoogleAsync()
+    {
+        var request_url = "https://accounts.google.com/o/oauth2/token";
+        return Ok();
+    }
+
     [HttpPost("client/sign-up")]
     [AllowAnonymous]
     public async Task<IActionResult> RegisterUserAsync([FromBody] UserRegistrationRequestDto userData)
