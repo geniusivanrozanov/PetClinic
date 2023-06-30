@@ -6,7 +6,6 @@ using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
-
 namespace PetClinic.BLL.Services;
 
 public class PetTypeService : IPetTypeService
@@ -15,12 +14,11 @@ public class PetTypeService : IPetTypeService
     private readonly IMapper _mapper;
     private readonly ICacheService _cachedService;
 
-
     public PetTypeService(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cachedService)
     {
-        this._unitOfWork = unitOfWork;
-        this._mapper = mapper;
-        this._cachedService = cachedService;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _cachedService = cachedService;
     }
 
     public async Task<IEnumerable<GetPetTypeDto>> GetPetTypesAsync()

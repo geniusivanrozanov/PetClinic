@@ -13,39 +13,39 @@ namespace PetClinic.API.Controllers;
 [Route("api/pets")]
 public class PetController : ControllerBase
 {
-    private readonly IPetService petService;
+    private readonly IPetService _petService;
 
     public PetController(IPetService petService)
     {
-        this.petService = petService;
+        _petService = petService;
     }
 
     [HttpPost]
     [Authorize(Roles = Roles.ClientRole)]
     public async Task AddAsync(AddPetDto pet)
     {
-        await petService.AddPetAsync(pet);
+        await _petService.AddPetAsync(pet);
     }
 
     [HttpGet("{id}")]
     [Authorize(Roles = $"{Roles.ClientRole}, {Roles.AdminRole}")]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        return Ok(await petService.GetPetByIdAsync(id));
+        return Ok(await _petService.GetPetByIdAsync(id));
     }
 
     [HttpGet]
     [Authorize(Roles = $"{Roles.ClientRole}, {Roles.AdminRole}")]
     public async Task<IActionResult> GetAllAsync()
     {
-        return Ok(await petService.GetPetsAsync());
+        return Ok(await _petService.GetPetsAsync());
     }
 
     [HttpDelete("{id}")]
     [Authorize(Roles = Roles.ClientRole)]
     public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        await petService.DeletePetAsync(id);
+        await _petService.DeletePetAsync(id);
 
         return Ok(id);
     }
@@ -54,7 +54,7 @@ public class PetController : ControllerBase
     [Authorize(Roles = Roles.ClientRole)]
     public async Task<IActionResult> UpdateAsync([FromBody] UpdatePetDto appointment)
     {
-        await petService.UpdatePetAsync(appointment);
+        await _petService.UpdatePetAsync(appointment);
 
         return Ok(appointment);
     }

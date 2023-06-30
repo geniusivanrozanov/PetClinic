@@ -2,39 +2,33 @@ using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.DTOs.DeleteMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
-using PetClinic.BLL.Utilites;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
-
 
 namespace PetClinic.BLL.Services;
 
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
-    private readonly SignInManager<UserEntity> _signInManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
 
     public UserAccountService(
         UserManager<UserEntity> userManager,
-        SignInManager<UserEntity> signInManager, 
         IMapper mapper, 
         IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;

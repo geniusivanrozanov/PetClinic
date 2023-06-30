@@ -1,5 +1,4 @@
 using System.Net;
-using System.Xml;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
 using InvalidDataException = System.IO.InvalidDataException;

@@ -17,7 +17,7 @@ public class VetController : ControllerBase
 
     public VetController(IVetService vetService)
     {
-        this.vetService = vetService;
+        vetService = vetService;
     }
 
     [HttpPost("review")]

@@ -10,18 +10,18 @@ namespace PetClinic.API.Controllers;
 [Route("api/pet-types")]
 public class PetTypeController : ControllerBase
 {
-    private readonly IPetTypeService petTypeService;
+    private readonly IPetTypeService _petTypeService;
 
     public PetTypeController(IPetTypeService petTypeService)
     {
-        this.petTypeService = petTypeService;
+        _petTypeService = petTypeService;
     }
 
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetPetTypesAsync()
     {
-        var petTypes = await petTypeService.GetPetTypesAsync();
+        var petTypes = await _petTypeService.GetPetTypesAsync();
 
         return Ok(petTypes);
     }
