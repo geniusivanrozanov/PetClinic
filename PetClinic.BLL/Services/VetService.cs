@@ -45,12 +45,8 @@ public class VetService : IVetService
     
     public async Task<GetVetDto> GetVetByIdAsync(Guid id)
     {
-        var vet = await _unitOfWork.VetRepository.GetAsync(id);
-
-        if (vet is null)
-        {
+        var vet = await _unitOfWork.VetRepository.GetAsync(id) ??
             throw new NotFoundException(ExceptionMessages.VetsNotFound);
-        }
 
         return _mapper.Map<GetVetDto>(vet);
     }

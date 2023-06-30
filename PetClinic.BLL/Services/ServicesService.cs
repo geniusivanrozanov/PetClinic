@@ -31,6 +31,7 @@ public class ServicesService : IServicesService
                 throw new NotFoundException(ExceptionMessages.ServicesNotFound);
             
             await _cacheService.SetDataAsync(CacheKeys.servicesKey, services, DateTimeOffset.Now.AddMinutes(1));
+
             return _mapper.Map<IEnumerable<GetServiceDto>>(services);
         }
 
@@ -45,7 +46,7 @@ public class ServicesService : IServicesService
         if (cachedServices is null)
         {
             var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId) ?? 
-            throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
+                throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
             return _mapper.Map<GetServiceDto>(service);
         }        
