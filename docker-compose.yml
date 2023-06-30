@@ -8,7 +8,8 @@ services:
     ports:
       - "5000:80"
     build:
-      context: ./PetClinic.API/
+      context: .
+      dockerfile: ./PetClinic.API/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings:PostgresPetClinic=User ID=admin;Password=admin;Host=postgres;Port=5432;Database=petClinic;Integrated Security=true;Pooling=true;
