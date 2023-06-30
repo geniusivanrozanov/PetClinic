@@ -3,7 +3,7 @@ using PetClinic.DAL;
 using PetClinic.DAL.Extensions;
 using Serilog;
 using PetClinic.API.Extensions;
-
+using PetClinic.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,17 +15,18 @@ builder.Logging.AddSerilog();
 
 builder.Services.AddControllers()
                 .AddFluentValidation();
-
+                
 builder.Services.AddDataAccessLayer(configuration);
 builder.Services.AddBusinessLogicLayer();
-
-builder.Services.AddAuthentication();
-
-builder.Services.AddIdentity();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuth(configuration);
+builder.Services.AddIdentity();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -43,6 +44,8 @@ app.ConfigureCustomExceptionMiddleware();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.ConfigurePreauthorizationMiddleware();
 
 app.UseAuthorization();
 

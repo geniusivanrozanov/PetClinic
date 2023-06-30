@@ -1,40 +1,41 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
-
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
-[Route("api/Identity/Account")]
+[ValidationFilter]
+[Route("api/accounts")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IUserAccountService clientAccountService;
-
+    private readonly IUserAccountService _clientAccountService;
+    
     public AuthenticationController(IUserAccountService clientAccountService)
     {
-        this.clientAccountService = clientAccountService;
+        _clientAccountService = clientAccountService;
     }
 
-    [HttpPost("sign-up")]
+    [HttpPost("client/sign-up")]
     [AllowAnonymous]
-    public async Task<string> RegisterUser([FromBody] UserRegistrationRequestDto userData)
+    public async Task<IActionResult> RegisterUserAsync([FromBody] UserRegistrationRequestDto userData)
     {
-        return await clientAccountService.RegisterClientAsync(userData);
+        return Ok(await _clientAccountService.RegisterClientAsync(userData));
     }
 
-    [HttpPost("Login")]
-    [AllowAnonymous] // string123SDFG!
-    public async Task<string> LoginUser([FromBody] LoginUserDto userData)
-    {
-        return await clientAccountService.LoginUserAsync(userData);
+    [HttpPost("vet/sign-up")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RegisterVetAsync([FromBody] VetRegistrationRequestDto userData)
+    {        
+        return Ok(await _clientAccountService.RegisterVetAccount(userData));
     }
 
-    [HttpGet]
-    [Authorize]
-    public IActionResult TestMethod()
+    [HttpPost("sign-in")]
+    [AllowAnonymous]
+    public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserDto userData)
     {
-        return Ok("Hello");
+        return Ok(await _clientAccountService.LoginUserAsync(userData));
     }
 }

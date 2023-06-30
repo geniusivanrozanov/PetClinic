@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL.Entities
@@ -11,6 +12,7 @@ namespace PetClinic.DAL.Entities
         public Guid VetId { get; set; }
         public virtual VetEntity Vet { get; set; } = default!;
 
+        [JsonIgnore]
         public virtual List<AppointmentEntity> Appointments { get; set; } = default!;
         
         public DateTime CreatedAt { get; set; }

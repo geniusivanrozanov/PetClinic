@@ -12,29 +12,18 @@ namespace PetClinic.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthentication(options => 
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(jwt => 
-        {
-            var key = Encoding.ASCII.GetBytes(configuration.GetSection("JwtConfig:Secret").Value!);
-
-            jwt.SaveToken = true;
-            jwt.TokenValidationParameters = new TokenValidationParameters
+            options.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = true,
-                ValidIssuer = configuration.GetSection("JwtConfig:Issuer").Value,
-                ValidateAudience = true,
-                ValidAudience = configuration.GetSection("JwtConfig:Audience").Value,
-                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                RequireExpirationTime = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                    .GetBytes(configuration.GetSection("JwtConfig:Secret").Value!)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
             };
         });
     }
@@ -58,7 +47,7 @@ public static class ServiceCollectionExtensions
 
     public static void AddSwaggerGen(this IServiceCollection services)
     {
-        services.AddSwaggerGen(options => 
+        services.AddSwaggerGen(options =>
         {
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {

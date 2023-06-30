@@ -1,7 +1,6 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PetClinic.DAL.Configuration;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Extensions;
 
@@ -20,7 +19,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
     public DbSet<DepartmentEntity> Departments { get; set; } = default!;
     public DbSet<PetTypeEntity> PetTypes { get; set; } = default!;
     public DbSet<ReviewEntity> Reviews { get; set; } = default!;
-    public DbSet<StatusEntity> Statuses { get; set; } = default!;
     public DbSet<OrderCallEntity> OrderCalls { get; set; } = default!;
     public DbSet<ServiceVetEntity> ServiceVets { get; set; } = default!;
 
@@ -43,5 +41,6 @@ public class AppDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ApplySoftDeletingGlobalFilter();
     }
 }

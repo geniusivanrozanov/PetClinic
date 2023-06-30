@@ -1,7 +1,7 @@
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.DTOs.DeleteMethodDto;
@@ -13,7 +13,6 @@ using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
-
 namespace PetClinic.BLL.Services;
 
 public class UserAccountService : IUserAccountService
@@ -24,9 +23,8 @@ public class UserAccountService : IUserAccountService
     private readonly ITokenService _tokenService;
 
     public UserAccountService(
-        UserManager<UserEntity> userManager, 
+        UserManager<UserEntity> userManager,
         IMapper mapper, 
-        IConfiguration config, 
         IUnitOfWork unitOfWork,
         ITokenService tokenService)
     {
@@ -39,10 +37,9 @@ public class UserAccountService : IUserAccountService
     public async Task<IEnumerable<GetUserDto>> GetAllAccounts()
     {
         var accounts = await _userManager.Users.ToListAsync();
-
         var accountsDto = _mapper.Map<IEnumerable<GetUserDto>>(accounts);
 
-        return  accountsDto;
+        return accountsDto;
     }
 
     public async Task<string> RegisterClientAsync(UserRegistrationRequestDto userData)
@@ -56,8 +53,13 @@ public class UserAccountService : IUserAccountService
         return token;
     }
 
-    public async Task<string> RegisterVetAccount(UserRegistrationRequestDto userData, AddVetDto vetData)
+    public async Task<string> RegisterVetAccount(VetRegistrationRequestDto vetRegisterData)
     {
+        var userData = _mapper.Map<UserRegistrationRequestDto>(vetRegisterData.AccountData);
+        var vetData = _mapper.Map<AddVetDto>(vetRegisterData.VetInfo);
+        vetData.FirstName = vetRegisterData.AccountData.FirstName;
+        vetData.LastName = vetRegisterData.AccountData.LastName;
+
         var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.VetRole);
         
         var newVet = _mapper.Map<VetEntity>(vetData);
@@ -73,12 +75,8 @@ public class UserAccountService : IUserAccountService
     
     public async Task<string> LoginUserAsync(LoginUserDto userData)
     {
-        var existingUser = await _userManager.FindByEmailAsync(userData.Email);
-
-        if (existingUser is null)
-        {
+        var existingUser = await _userManager.FindByEmailAsync(userData.Email) ??
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
-        }
 
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
@@ -111,7 +109,7 @@ public class UserAccountService : IUserAccountService
     private async Task<UserEntity> RegisterUserAccount(UserRegistrationRequestDto userData, string role)
     {
         var userIsExist = await _userManager.FindByEmailAsync(userData.Email);
-
+    
         if (userIsExist is not null)
         {
             throw new UserAlreadyExistsException(ExceptionMessages.UserAlreadyExists);
@@ -127,6 +125,8 @@ public class UserAccountService : IUserAccountService
         }
 
         await _userManager.AddToRoleAsync(newUser, role);
+        await _userManager.AddClaimAsync(newUser, new Claim(ClaimTypes.Role, role));
+
         await _unitOfWork.CompleteAsync();
 
         return newUser;

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using PetClinic.DAL.Interfaces.Entities;
 
 namespace PetClinic.DAL.Entities;
@@ -9,6 +10,7 @@ public class ServiceEntity : IEntity<Guid>
     public decimal Price { get; set; }
     public string Duration { get; set; } = default!;
 
+    [JsonIgnore]
     public virtual List<ServiceVetEntity>? ServiceVets { get; set; }
     
     public DateTime CreatedAt { get; set; }

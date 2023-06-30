@@ -33,7 +33,7 @@ public class UpdateUserAccountDtoValidator : AbstractValidator<UpdateUserAccount
         RuleFor(u => u.Email)
             .NotNull()
             .NotEmpty()
-            .Must(EmailValidator.IsValidEmail)
+            .EmailAddress()
             .WithMessage("Invalid email.");
     }
 }

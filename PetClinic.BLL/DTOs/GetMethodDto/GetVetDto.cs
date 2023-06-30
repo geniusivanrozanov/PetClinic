@@ -1,13 +1,12 @@
-﻿namespace PetClinic.BLL.DTOs.GetMethodDto
+﻿namespace PetClinic.BLL.DTOs.GetMethodDto;
+
+public class GetVetDto
 {
-    public class GetVetDto
-    {
-        public Guid Id { get; set; }
-        public string FirstName { get; set; } = default!;
-        public string LastName { get; set; } = default!;
-        public int Experience { get; set; }
-        public string Bio { get; set; } = default!;
-        public Guid DepartmentId { get; set; }
-        public Guid? ClientId { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string FirstName { get; set; } = default!;
+    public string LastName { get; set; } = default!;
+    public string Experience { get; set; } = default!;
+    public string Bio { get; set; } = default!;
+    public Guid DepartmentId { get; set; }
+    public Guid? ClientId { get; set; }
 }

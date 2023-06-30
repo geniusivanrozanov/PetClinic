@@ -2,7 +2,7 @@ namespace PetClinic.DAL.Entities;
 
 public static class Roles
 {
-    public static string ClientRole = "Client";
-    public static string VetRole = "Vet";
-    public static string AdminRole = "Admin";
+    public const string ClientRole = "Client";
+    public const string VetRole = "Vet";
+    public const string AdminRole = "Admin";
 }

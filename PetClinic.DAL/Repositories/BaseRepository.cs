@@ -21,12 +21,20 @@ public abstract class BaseRepository<TEntity, TId> : IRepository<TEntity, TId> w
     }
 
     public async Task AddRangeAsync(IEnumerable<TEntity> entities) => await _context.Set<TEntity>().AddRangeAsync(entities);
-
+    
     public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().Where(predicate).ToListAsync();
 
     public async Task<TEntity?> GetAsync(TId id) => await _context.Set<TEntity>().FindAsync(id);
 
     public async Task<IEnumerable<TEntity>> GetAllAsync() => await _context.Set<TEntity>().ToListAsync();
+
+    public async Task<IEnumerable<TEntity>> GetAllDeletedAsync()
+    {
+        return await _context.Set<TEntity>()
+            .IgnoreQueryFilters()
+            .Where(e => e.IsDeleted)
+            .ToListAsync();
+    }
 
     public void Remove(TEntity entity) =>  _context.Set<TEntity>().Remove(entity);
 
