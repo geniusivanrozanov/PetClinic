@@ -11,6 +11,7 @@ public class UserEntity : IdentityUser<Guid>, IEntity<Guid>
     public bool IsDeleted { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public override string? PasswordHash { get; set; }
     
     public virtual VetEntity Vet { get; set; } = default!;
     
