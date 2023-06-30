@@ -12,6 +12,7 @@ public class MapperProfileForAuthMethodDto : Profile
     {
         CreateMap<UserRegistrationRequestDto, UserEntity>();
         CreateMap<UpdateUserAccountDto, UserEntity>();
+        CreateMap<UserGoogleRegistrationDto, UserEntity>();
         CreateMap<VetInfoDto, AddVetDto>()
             .ForMember(vi => vi.DepartmentId,
                 av => av
