@@ -14,7 +14,7 @@ namespace PetClinic.API.Controllers;
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService _appointmentService;
-
+    
     public AppointmentController(IAppointmentService appointmentService)
     {
         _appointmentService = appointmentService;
