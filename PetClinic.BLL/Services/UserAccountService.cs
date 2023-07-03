@@ -14,12 +14,10 @@ using PetClinic.BLL.DTOs.DeleteMethodDto;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
-using PetClinic.BLL.Utilites;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
-
 
 namespace PetClinic.BLL.Services;
 
@@ -30,19 +28,28 @@ public class UserAccountService : IUserAccountService
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
+    private readonly IConfiguration _config;
+    private readonly string _clientSecret;
+    private readonly string _clientId;
+    private readonly string _redirectUrl;
 
     public UserAccountService(
         UserManager<UserEntity> userManager,
         SignInManager<UserEntity> signInManager, 
         IMapper mapper, 
         IUnitOfWork unitOfWork,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IConfiguration config)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
+        _config = config;
+        _clientId = config["GoogleCredentials:ClientId"];
+        _clientSecret = config["GoogleCredentials:ClientSecret"];
+        _redirectUrl = config["GoogleCredentials:RedirectUrl"];
     }
 
     public async Task<IEnumerable<GetUserDto>> GetAllAccounts()
@@ -55,8 +62,7 @@ public class UserAccountService : IUserAccountService
 
     public string GetAuthString()
     {
-        var clientId = "867055353627-vsg9n4r105df7ifv4dr2mqk4nhrortjn.apps.googleusercontent.com";
-        var redirectUri = "https://localhost:7124/accounts/google/sign-up";
+        var redirectUri = _redirectUrl;
 
         var scopes = new StringBuilder();
         
@@ -64,7 +70,7 @@ public class UserAccountService : IUserAccountService
         scopes.Append("https://www.googleapis.com/auth/userinfo.profile ");
         scopes.Append("https://www.googleapis.com/auth/calendar");
         
-        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={clientId}&redirect_uri={redirectUri}&access_type=offline&response_type=code&scope={scopes}";
+        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={_clientId}&redirect_uri={redirectUri}&access_type=offline&response_type=code&scope={scopes}";
         
         return authString;
     }
@@ -73,18 +79,28 @@ public class UserAccountService : IUserAccountService
     {
         var googleToken = await GetGoogleAccessTokenAsync(code);
         var userGoogleRegistrationDto = await GetUserInfoByToken(googleToken);
-        var userData = _mapper.Map<UserRegistrationRequestDto>(userGoogleRegistrationDto);
-        userData.UserName = "Veronika";
-        userData.Password = "String123456!789#";
+        userGoogleRegistrationDto.UserName = $"GoogleUser{Guid.NewGuid()}";
+        userGoogleRegistrationDto.Password = "String123456!789#";
         
-        var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.ClientRole);
+        var userExists = await _userManager.FindByEmailAsync(userGoogleRegistrationDto.Email);
+        string jwtToken;
 
-        await _unitOfWork.CompleteAsync();
+        if (userExists is null)
+        {
+            var userData = _mapper.Map<UserRegistrationRequestDto>(userGoogleRegistrationDto);
+            
+            var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.ClientRole);
+            await _userManager.AddLoginAsync(newUser, new UserLoginInfo("Google", googleToken, newUser.FirstName));
         
-        await _userManager.AddLoginAsync(newUser, new UserLoginInfo("Google", googleToken, newUser.FirstName));
-
-        var jwtToken = await _tokenService.GenerateJwtTokenAsync(newUser);
-
+            jwtToken = await _tokenService.GenerateJwtTokenAsync(newUser);
+            await _unitOfWork.CompleteAsync();
+        }
+        else
+        {
+            var loginUserDto = _mapper.Map<LoginUserDto>(userGoogleRegistrationDto);
+            jwtToken = await LoginUserAsync(loginUserDto);
+        }
+  
         return jwtToken;
     }
 
@@ -156,8 +172,8 @@ public class UserAccountService : IUserAccountService
     {
         var clientSecrets = new ClientSecrets
         {
-            ClientId = "867055353627-vsg9n4r105df7ifv4dr2mqk4nhrortjn.apps.googleusercontent.com",
-            ClientSecret = "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"
+            ClientId = _clientId,
+            ClientSecret = _clientSecret,
         };
 
         var credential = new GoogleAuthorizationCodeFlow(
@@ -169,7 +185,7 @@ public class UserAccountService : IUserAccountService
         TokenResponse token = await credential.ExchangeCodeForTokenAsync(
             "",
             code,
-            "https://localhost:7124/accounts/google/sign-up",
+            _redirectUrl,
             CancellationToken.None
         );
 

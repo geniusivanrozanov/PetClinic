@@ -9,7 +9,6 @@ using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
-
 namespace PetClinic.BLL.Services;
 
 public class AppointmentService : IAppointmentService

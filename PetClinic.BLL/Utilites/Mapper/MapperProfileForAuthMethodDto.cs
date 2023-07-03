@@ -12,6 +12,7 @@ public class MapperProfileForAuthMethodDto : Profile
     {
         CreateMap<UserRegistrationRequestDto, UserEntity>();
         CreateMap<UserGoogleRegistrationDto, UserRegistrationRequestDto>();
+        CreateMap<UserGoogleRegistrationDto, LoginUserDto>(); 
         CreateMap<GoogleDataResponse, UserGoogleRegistrationDto>()
             .ForMember(g => g.FirstName, gd => gd
                 .MapFrom(gd => gd.GivenName))
