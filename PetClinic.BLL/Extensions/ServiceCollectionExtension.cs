@@ -1,6 +1,5 @@
 using System.Reflection;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetClinic.BLL.Interfaces;
 using PetClinic.BLL.Services;
@@ -12,6 +11,7 @@ public static class ServiceCollectionExtension
     public static void AddBusinessLogicLayer(this IServiceCollection services)
     {
         services.AddServices();
+        services.AddHttpClient();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 
@@ -37,6 +37,7 @@ public static class ServiceCollectionExtension
                 .AddScoped<IPetTypeService, PetTypeService>()
                 .AddScoped<ICacheService, CacheService>()
                 .AddScoped<ITokenService, TokenService>()
+                .AddScoped<IHttpClientService, HttpClientFactoryService>()
                 .AddSingleton<IExceptionsService, ExceptionsService>();
     }
 }

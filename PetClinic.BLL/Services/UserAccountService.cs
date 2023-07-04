@@ -24,7 +24,7 @@ namespace PetClinic.BLL.Services;
 public class UserAccountService : IUserAccountService
 {
     private readonly UserManager<UserEntity> _userManager;
-    private readonly SignInManager<UserEntity> _signInManager;
+    private readonly IHttpClientService _httpClientService;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITokenService _tokenService;
@@ -35,14 +35,14 @@ public class UserAccountService : IUserAccountService
 
     public UserAccountService(
         UserManager<UserEntity> userManager,
-        SignInManager<UserEntity> signInManager, 
+        IHttpClientService httpClientService,
         IMapper mapper, 
         IUnitOfWork unitOfWork,
         ITokenService tokenService,
         IConfiguration config)
     {
         _userManager = userManager;
-        _signInManager = signInManager;
+        _httpClientService = httpClientService;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
         _tokenService = tokenService;
@@ -194,15 +194,7 @@ public class UserAccountService : IUserAccountService
 
     private async Task<UserGoogleRegistrationDto> GetUserInfoByToken(string token)
     {
-        HttpClient client = new HttpClient();
-
-        string cliUrl = $"https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token={token}";
-
-        using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, cliUrl);
-        using HttpResponseMessage response = await client.SendAsync(request);
-
-        var jsonUserData = await response.Content.ReadAsStringAsync();
-        
+        var jsonUserData = await _httpClientService.Execute(token);
         var user = JsonConvert.DeserializeObject<GoogleDataResponse>(jsonUserData);
 
         var userGoogleRegistrationDto = _mapper.Map<UserGoogleRegistrationDto>(user);

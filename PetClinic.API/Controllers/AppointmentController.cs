@@ -24,56 +24,6 @@ public class AppointmentController : ControllerBase
         this.config = config;
     }
 
-    [HttpPost("calander")]
-    [AllowAnonymous]
-    public async Task<IActionResult> AddEventToGoogleAsync()
-    {
-        dsAuthorizationBroker.RedirectUri = "https://localhost:7124/accounts/google/sign-up";
-        UserCredential credential = await dsAuthorizationBroker.AuthorizeAsync
-        (
-            new ClientSecrets
-            {
-                ClientId = "867055353627-vsg9n4r105df7ifv4dr2mqk4nhrortjn.apps.googleusercontent.com",
-                ClientSecret = "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",
-            },
-            new[] { CalendarService.Scope.Calendar, "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" },
-            "veronikayatskova03@gmail.com",
-            CancellationToken.None
-        );
-
-        // Create the service.
-        var service = new CalendarService(new BaseClientService.Initializer
-        {
-            HttpClientInitializer = credential,
-            ApplicationName = "Calendar API Sample",
-        });  
-        
-        var myEvent = new Event
-        {
-            Summary = "Google Calendar Api Sample Code by Mukesh Salaria",
-            Location = "Gurdaspur, Punjab, India",
-            Start = new EventDateTime
-            {
-                DateTime = new DateTime(2015, 3, 2, 6, 0, 0),
-            },
-            End = new EventDateTime
-            {
-                DateTime = new DateTime(2015, 3, 2, 7, 30, 0),
-            },
-            Recurrence = new String[] { "RRULE:FREQ=WEEKLY;BYDAY=MO" },
-            Attendees = new List<EventAttendee>
-            {
-                new EventAttendee { Email = "programmer.mukesh01@gmail.com"}
-            },
-        };
-
-        var recurringEvent = service.Events.Insert(myEvent, "primary");
-        recurringEvent.SendNotifications = true;
-        recurringEvent.Execute();  
-
-        return Created("", "Event was created"); 
-    }
-
     [HttpPost]
     [Authorize(Roles = Roles.ClientRole)]
     public async Task<IActionResult> AddAsync(AddAppointmentDto appointment)
