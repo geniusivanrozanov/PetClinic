@@ -62,15 +62,13 @@ public class UserAccountService : IUserAccountService
 
     public string GetAuthString()
     {
-        var redirectUri = _redirectUrl;
-
         var scopes = new StringBuilder();
         
         scopes.Append("https://www.googleapis.com/auth/userinfo.email ");
         scopes.Append("https://www.googleapis.com/auth/userinfo.profile ");
         scopes.Append("https://www.googleapis.com/auth/calendar");
         
-        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={_clientId}&redirect_uri={redirectUri}&access_type=offline&response_type=code&scope={scopes}";
+        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={_clientId}&redirect_uri={_redirectUri}&access_type=offline&response_type=code&scope={scopes}";
         
         return authString;
     }
