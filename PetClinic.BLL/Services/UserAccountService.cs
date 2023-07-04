@@ -78,7 +78,8 @@ public class UserAccountService : IUserAccountService
     public async Task<string> RegisterUserWithGoogle(string code)
     {
         var googleToken = await GetGoogleAccessTokenAsync(code);
-        var userGoogleRegistrationDto = await GetUserInfoByToken(googleToken);
+        var userGoogleRegistrationDto = await GetUserInfoByToken(googleToken.AccessToken);
+
         userGoogleRegistrationDto.UserName = $"GoogleUser{Guid.NewGuid()}";
         userGoogleRegistrationDto.Password = "String123456!789#";
         
@@ -90,7 +91,7 @@ public class UserAccountService : IUserAccountService
             var userData = _mapper.Map<UserRegistrationRequestDto>(userGoogleRegistrationDto);
             
             var newUser = await RegisterUserAccount(userData, DAL.Entities.Roles.ClientRole);
-            await _userManager.AddLoginAsync(newUser, new UserLoginInfo("Google", googleToken, newUser.FirstName));
+            await _userManager.AddLoginAsync(newUser, new UserLoginInfo("Google", googleToken.AccessToken, newUser.FirstName));
         
             jwtToken = await _tokenService.GenerateJwtTokenAsync(newUser);
             await _unitOfWork.CompleteAsync();
@@ -168,7 +169,7 @@ public class UserAccountService : IUserAccountService
         await _unitOfWork.CompleteAsync();
     }
 
-    private async Task<string> GetGoogleAccessTokenAsync(string code)
+    private async Task<TokenResponse> GetGoogleAccessTokenAsync(string code)
     {
         var clientSecrets = new ClientSecrets
         {
@@ -189,7 +190,7 @@ public class UserAccountService : IUserAccountService
             CancellationToken.None
         );
 
-        return token.AccessToken;
+        return token;
     }
 
     private async Task<UserGoogleRegistrationDto> GetUserInfoByToken(string token)

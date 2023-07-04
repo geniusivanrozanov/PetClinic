@@ -1,4 +1,7 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using System.Text;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
@@ -24,22 +27,33 @@ public class AppointmentController : ControllerBase
         this.config = config;
     }
 
-    [HttpPost("calander")]
+    [HttpPost("calander/{accessToken}")]
     [AllowAnonymous]
-    public async Task<IActionResult> AddEventToGoogleAsync()
+    public async Task<IActionResult> AddEventToGoogleAsync(string accessToken, string refreshToken)
     {
-        dsAuthorizationBroker.RedirectUri = "https://localhost:7124/accounts/google/sign-up";
-        UserCredential credential = await dsAuthorizationBroker.AuthorizeAsync
-        (
-            new ClientSecrets
+        var scopes = new StringBuilder();
+        
+        scopes.Append("https://www.googleapis.com/auth/userinfo.email ");
+        scopes.Append("https://www.googleapis.com/auth/userinfo.profile ");
+        scopes.Append("https://www.googleapis.com/auth/calendar");
+        
+        var flow = new GoogleAuthorizationCodeFlow(new GoogleAuthorizationCodeFlow.Initializer
+        {
+            ClientSecrets = new ClientSecrets
             {
                 ClientId = "867055353627-vsg9n4r105df7ifv4dr2mqk4nhrortjn.apps.googleusercontent.com",
                 ClientSecret = "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",
             },
-            new[] { CalendarService.Scope.Calendar, "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" },
-            "veronikayatskova03@gmail.com",
-            CancellationToken.None
-        );
+            Scopes = scopes.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries),
+        });
+
+        var token = new TokenResponse
+        {
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+        };
+        
+        var credential = new UserCredential(flow, Environment.UserName, token);
 
         // Create the service.
         var service = new CalendarService(new BaseClientService.Initializer
@@ -54,11 +68,12 @@ public class AppointmentController : ControllerBase
             Location = "Gurdaspur, Punjab, India",
             Start = new EventDateTime
             {
-                DateTime = new DateTime(2015, 3, 2, 6, 0, 0),
+                // DateTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2023, 7, 6, 6, 0, 0), TimeZoneInfo.Local),
+                DateTime = DateTime.Parse(new DateTime(2023, 7, 6, 6, 0, 0).ToString("yyyy-MM-dd'T'HH:mm:ssZ")),
             },
             End = new EventDateTime
             {
-                DateTime = new DateTime(2015, 3, 2, 7, 30, 0),
+                DateTime = new DateTime(2023, 7, 6, 7, 30, 0),
             },
             Recurrence = new String[] { "RRULE:FREQ=WEEKLY;BYDAY=MO" },
             Attendees = new List<EventAttendee>
@@ -73,55 +88,6 @@ public class AppointmentController : ControllerBase
 
         return Created("", "Event was created"); 
     }
-
-    [HttpPost("calander")]
-    public async Task<IActionResult> AddEventToGoogleAsync()
-    {
-        var credential = await GoogleWebAuthorizationBroker.AuthorizeAsync
-        (
-            new ClientSecrets
-            {
-                ClientId = config["GoogleCredentials:ClientId"],
-                ClientSecret = config["GoogleCredentials:ClientSecret"],
-            },
-            new[] { CalendarService.Scope.Calendar },
-            "user",
-            CancellationToken.None
-        );
-
-        // Create the service.
-        var service = new CalendarService(new BaseClientService.Initializer
-        {
-            HttpClientInitializer = credential,
-            ApplicationName = "Calendar API Sample",
-        });  
-        
-        var myEvent = new Event
-        {
-            Summary = "Google Calendar Api Sample Code by Mukesh Salaria",
-            Location = "Gurdaspur, Punjab, India",
-            Start = new EventDateTime
-            {
-                DateTime = new DateTime(2015, 3, 2, 6, 0, 0),
-            },
-            End = new EventDateTime
-            {
-                DateTime = new DateTime(2015, 3, 2, 7, 30, 0),
-            },
-            Recurrence = new String[] { "RRULE:FREQ=WEEKLY;BYDAY=MO" },
-            Attendees = new List<EventAttendee>
-            {
-                new EventAttendee { Email = "programmer.mukesh01@gmail.com"}
-            },
-        };
-
-        var recurringEvent = service.Events.Insert(myEvent, "primary");
-        recurringEvent.SendNotifications = true;
-        recurringEvent.Execute();  
-
-        return Created("", "Event was created"); 
-    }
-
 
     [HttpPost]
     [Authorize(Roles = Roles.ClientRole)]
