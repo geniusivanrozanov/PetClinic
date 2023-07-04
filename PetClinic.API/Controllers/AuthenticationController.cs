@@ -1,7 +1,16 @@
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Requests;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Util.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
+using System.Text;
+using System.Text.Json;
 
 namespace PetClinic.API.Controllers;
 
@@ -16,11 +25,22 @@ public class AuthenticationController : ControllerBase
         this.clientAccountService = clientAccountService;
     }
 
-    [HttpPost("google")]
-    public async Task<IActionResult> RegisterUserGoogleAsync()
+    [HttpGet("google/sign-up")]
+    [AllowAnonymous]
+    public IActionResult GetGoogleAuthUrl()
     {
-        var request_url = "https://accounts.google.com/o/oauth2/token";
-        return Ok();
+        var authString = clientAccountService.GetAuthString();
+        Response.Redirect(authString);
+
+        return Ok(authString);
+    }
+
+    [HttpPost("google/sign-up")]
+    public async Task<IActionResult> GetTokenFromGoogleCodeAsync([FromQuery] string code)
+    {
+        var token = await clientAccountService.RegisterUserWithGoogle(code);
+
+        return Ok(token);
     }
 
     [HttpPost("client/sign-up")]
@@ -44,3 +64,51 @@ public class AuthenticationController : ControllerBase
         return Ok(await clientAccountService.LoginUserAsync(userData));
     }
 }
+
+public class dsAuthorizationBroker : GoogleWebAuthorizationBroker
+    {
+        public static string RedirectUri;
+
+        public new static async Task<UserCredential> AuthorizeAsync(
+            ClientSecrets clientSecrets,
+            IEnumerable<string> scopes,
+            string user,
+            CancellationToken taskCancellationToken,
+            IDataStore dataStore = null)
+        {
+            var initializer = new GoogleAuthorizationCodeFlow.Initializer
+            {
+                ClientSecrets = clientSecrets,
+            };
+            return await AuthorizeAsyncCore(initializer, scopes, user,
+                taskCancellationToken, dataStore).ConfigureAwait(false);
+        }
+
+        private static async Task<UserCredential> AuthorizeAsyncCore(
+            GoogleAuthorizationCodeFlow.Initializer initializer,
+            IEnumerable<string> scopes,
+            string user,
+            CancellationToken taskCancellationToken,
+            IDataStore dataStore)
+        {
+            initializer.Scopes = scopes;
+            initializer.DataStore = dataStore ?? new FileDataStore(Folder);
+            var flow = new dsAuthorizationCodeFlow(initializer);
+            
+            return await new AuthorizationCodeInstalledApp(flow, 
+                new LocalServerCodeReceiver())
+                .AuthorizeAsync(user, taskCancellationToken).ConfigureAwait(false);
+        }
+    }
+
+
+    public class dsAuthorizationCodeFlow : GoogleAuthorizationCodeFlow
+    {
+        public dsAuthorizationCodeFlow(Initializer initializer)
+            : base(initializer) { }
+
+        public override AuthorizationCodeRequestUrl CreateAuthorizationCodeRequest(string redirectUri)
+        {
+            return base.CreateAuthorizationCodeRequest(dsAuthorizationBroker.RedirectUri);
+        }
+    }    

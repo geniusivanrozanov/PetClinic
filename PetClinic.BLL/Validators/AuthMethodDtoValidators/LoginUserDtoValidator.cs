@@ -16,7 +16,7 @@ public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
         RuleFor(u => u.Password)
             .NotNull()
             .NotEmpty()
-            .Must(PasswordValidator.IsValidPassword)
+            // .Must(PasswordValidator.IsValidPassword)
             .WithMessage("Invalid password");
     }
 }
