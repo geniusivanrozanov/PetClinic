@@ -68,7 +68,7 @@ public class UserAccountService : IUserAccountService
         scopes.Append("https://www.googleapis.com/auth/userinfo.profile ");
         scopes.Append("https://www.googleapis.com/auth/calendar");
         
-        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={_clientId}&redirect_uri={_redirectUrl}&access_type=offline&response_type=code&scope={scopes}";
+        var authString = $"https://accounts.google.com/o/oauth2/auth?client_id={_clientId}&redirect_uri={_redirectUrl }&access_type=offline&response_type=code&scope={scopes}";
         
         return authString;
     }
