@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PetClinic.BLL.Interfaces;
+using PetClinic.BLL.Utilites;
 using PetClinic.DAL.Entities;
 
 namespace PetClinic.BLL.Services;
@@ -35,8 +36,8 @@ public class TokenService : ITokenService
         {
             Subject = new ClaimsIdentity(new []
             {
-                new Claim("Id", $"{user.Id}"),
-                new Claim("Role", $"{roles[0]}"),
+                new Claim(AuthClaims.IdClaim, $"{user.Id}"),
+                new Claim(ClaimTypes.Role, $"{roles[0]}"),
             }),
             Expires = DateTime.Now.AddMinutes(5),
             SigningCredentials = new SigningCredentials(

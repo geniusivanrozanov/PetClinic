@@ -6,41 +6,54 @@ using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
-
 namespace PetClinic.BLL.Services;
 
 public class ServicesService : IServicesService
 {
-    private readonly IUnitOfWork unitOfWork;
-    private readonly IMapper mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly ICacheService _cacheService;
 
-    public ServicesService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ServicesService(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
     {
-        this.unitOfWork = unitOfWork;
-        this.mapper = mapper;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _cacheService = cacheService;
     }
 
     public async Task<IEnumerable<GetServiceDto>> GetServicesAsync()
     {
-        var services = await unitOfWork.ServiceRepository.GetAllAsync();
-
-        if (services is null)
+        var cachedServices = await _cacheService.GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.servicesKey);
+    
+        if (cachedServices is null)
         {
-            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
+            var services = await _unitOfWork.ServiceRepository.GetAllAsync() ??
+                throw new NotFoundException(ExceptionMessages.ServicesNotFound);
+            
+            await _cacheService.SetDataAsync(CacheKeys.servicesKey, services, DateTimeOffset.Now.AddMinutes(1));
+
+            return _mapper.Map<IEnumerable<GetServiceDto>>(services);
         }
 
-        return mapper.Map<IEnumerable<GetServiceDto>>(services); 
+        return cachedServices;
     }
 
     public async Task<GetServiceDto> GetServiceByIdAsync(Guid serviceId)
     {
-        var service = await unitOfWork.ServiceRepository.GetAsync(serviceId);
+        var cachedServices = await _cacheService
+            .GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.servicesKey);
 
-        if (service is null)
+        if (cachedServices is null)
         {
-            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
-        }
+            var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId) ?? 
+                throw new NotFoundException(ExceptionMessages.ServicesNotFound);
 
-        return mapper.Map<GetServiceDto>(service);
+            return _mapper.Map<GetServiceDto>(service);
+        }        
+
+        var cachService = cachedServices.Where(d => d.Id == serviceId).FirstOrDefault() ??
+            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
+
+        return cachService;
     }
 }

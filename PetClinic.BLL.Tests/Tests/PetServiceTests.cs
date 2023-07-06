@@ -3,6 +3,7 @@ using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
+using PetClinic.BLL.Interfaces;
 using PetClinic.BLL.Services;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -19,10 +20,14 @@ public class PetServiceTests
     private readonly PetService _petService;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<ICacheService> _cacheServiceMock;
 
     public PetServiceTests()
     {
-        _petService = new PetService(_unitOfWorkMock.Object, _mapperMock.Object);
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _mapperMock = new Mock<IMapper>();
+        _cacheServiceMock = new Mock<ICacheService>();
+        _petService = new PetService(_unitOfWorkMock.Object, _mapperMock.Object, _cacheServiceMock.Object);
     }
 
     [Fact]
@@ -132,6 +137,10 @@ public class PetServiceTests
             Name = "Poppy"
         };
 
+        IEnumerable<GetPetDto>? expectedCacheResult = null;
+
+        _cacheServiceMock.Setup(x => x.GetDataAsync<IEnumerable<GetPetDto>>(CacheKeys.petsKey))
+            .ReturnsAsync(expectedCacheResult);
         _unitOfWorkMock.Setup(x => x.PetRepository.GetAsync(petId))
             .ReturnsAsync(expectedRepositoryResult);
         _mapperMock.Setup(x => x.Map<GetPetDto>(expectedRepositoryResult))
@@ -160,7 +169,10 @@ public class PetServiceTests
 
         // Act
 
+        Func<Task> act = async () => await _petService.GetPetByIdAsync(petId);
+
         // Assert
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _petService.GetPetByIdAsync(petId));
+
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

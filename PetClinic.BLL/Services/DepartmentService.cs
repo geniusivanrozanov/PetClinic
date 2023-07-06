@@ -4,54 +4,68 @@ using PetClinic.BLL.Interfaces;
 using PetClinic.BLL.Exceptions;
 using PetClinic.DAL.Interfaces.Repositories;
 
-
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
 
 namespace PetClinic.BLL.Services;
 
 public class DepartmentService : IDepartmentService
 {
-    private readonly IUnitOfWork unitOfWork;
-    private readonly IMapper mapper;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly ICacheService _cacheService;
 
-    public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper)
+    public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper, ICacheService cacheService)
     {
-        this.unitOfWork = unitOfWork;
-        this.mapper = mapper;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _cacheService = cacheService;
     }
 
     public async Task<IEnumerable<GetDepartmentDto>> GetDepartmentsAsync()
     {
-        var departments = await unitOfWork.DepartmentRepository.GetAllAsync();
-        
-        if (departments is null)
+        var cachedDepartments = await _cacheService.GetDataAsync<IEnumerable<GetDepartmentDto>>(CacheKeys.departmentsKey);
+    
+        if (cachedDepartments is null)
         {
-            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync() ?? 
+                throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+
+            var departmentsDto = departments!.Select(department => new GetDepartmentDto
+            {
+                Id = department.Id,
+                Address = department.Address,
+                Name = department.Name,
+                Vets = _mapper.Map<List<GetVetDto>>(department.Vets),
+            });
+
+            var expiryTime = DateTimeOffset.Now.AddMinutes(1);
+
+            await _cacheService.SetDataAsync(CacheKeys.departmentsKey, departments, expiryTime);
+
+            return departmentsDto;
         }
-
-        var departmentsDto = departments.Select(department => new GetDepartmentDto
-        {
-            Id = department.Id,
-            Address = department.Address,
-            Name = department.Name,
-            Vets = mapper.Map<List<GetVetDto>>(department.Vets),
-        });
-
-        return departmentsDto;
+        
+        return cachedDepartments;
     }
 
     public async Task<GetDepartmentDto> GetDepatmentByIdAsync(Guid departmentId)
     {
-        var department = await unitOfWork.DepartmentRepository.GetAsync(departmentId);
-
-        if (department is null)
+        var cachedDepartments = await _cacheService.GetDataAsync<IEnumerable<GetDepartmentDto>>(CacheKeys.departmentsKey);
+            
+        if (cachedDepartments is null)
         {
-            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+            var department = await _unitOfWork.DepartmentRepository.GetAsync(departmentId) ??
+                throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+        
+            var departmentDto = _mapper.Map<GetDepartmentDto>(department);
+            departmentDto.Vets = _mapper.Map<List<GetVetDto>>(department.Vets);
+
+            return departmentDto;
         }
 
-        var departmentDto = mapper.Map<GetDepartmentDto>(department);
-        departmentDto.Vets = mapper.Map<List<GetVetDto>>(department.Vets);
+        var cachDepartment = cachedDepartments.Where(d => d.Id == departmentId).FirstOrDefault() ??
+            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
 
-        return departmentDto;
+        return cachDepartment;
     }
 }

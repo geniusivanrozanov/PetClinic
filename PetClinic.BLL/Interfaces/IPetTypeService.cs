@@ -4,5 +4,5 @@ namespace PetClinic.BLL.Interfaces;
 
 public interface IPetTypeService
 {
-    Task<IEnumerable<GetPetTypeDto>> GetPetTypes();  
+    Task<IEnumerable<GetPetTypeDto>> GetPetTypesAsync();  
 }

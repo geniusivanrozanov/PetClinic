@@ -161,8 +161,9 @@ public class VetServiceTests
 
         // Act
 
+        Func<Task> act = async () => await _vetService.GetVetByIdAsync(vetId);
         // Assert
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _vetService.GetVetByIdAsync(vetId));
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

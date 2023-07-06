@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.Interfaces;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/services")]
+[AllowAnonymous]
 public class ServicesController : ControllerBase
 {
     private readonly IServicesService _servicesService;

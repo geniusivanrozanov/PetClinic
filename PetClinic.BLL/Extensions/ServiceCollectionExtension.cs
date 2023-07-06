@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetClinic.BLL.Interfaces;
 using PetClinic.BLL.Services;
@@ -26,15 +27,16 @@ public static class ServiceCollectionExtension
 
     private static void AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IServicesService, ServicesService>();
-        services.AddScoped<IDepartmentService, DepartmentService>();
-        services.AddScoped<IUserAccountService, UserAccountService>();
-        services.AddScoped<IOrderCallService, OrderCallService>();
-        services.AddScoped<IAppointmentService, AppointmentService>();
-        services.AddScoped<IVetService, VetService>();
-        services.AddScoped<IPetService, PetService>();
-        services.AddScoped<ITokenService, TokenService>();
-        
-        services.AddSingleton<IExceptionsService, ExceptionsService>();
+        services.AddScoped<IServicesService, ServicesService>()
+                .AddScoped<IDepartmentService, DepartmentService>()
+                .AddScoped<IUserAccountService, UserAccountService>()
+                .AddScoped<IOrderCallService, OrderCallService>()
+                .AddScoped<IAppointmentService, AppointmentService>()
+                .AddScoped<IVetService, VetService>()
+                .AddScoped<IPetService, PetService>()
+                .AddScoped<IPetTypeService, PetTypeService>()
+                .AddScoped<ICacheService, CacheService>()
+                .AddScoped<ITokenService, TokenService>()
+                .AddSingleton<IExceptionsService, ExceptionsService>();
     }
 }

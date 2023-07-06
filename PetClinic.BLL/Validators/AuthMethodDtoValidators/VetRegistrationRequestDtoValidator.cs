@@ -33,7 +33,7 @@ public class VetRegistrationRequestDtoValidator : AbstractValidator<VetRegistrat
         RuleFor(v => v.AccountData.Email)
             .NotNull()
             .NotEmpty()
-            .Must(EmailValidator.IsValidEmail)
+            .EmailAddress()
             .WithMessage("Invalid email.");
 
         RuleFor(v => v.AccountData.Password)

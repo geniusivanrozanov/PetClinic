@@ -5,7 +5,6 @@ using PetClinic.BLL.Interfaces;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
 
-
 namespace PetClinic.BLL.Services;
 
 public class OrderCallService : IOrderCallService

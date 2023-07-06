@@ -10,7 +10,7 @@ public class UpdateAppointmentDtoValidator : AbstractValidator<UpdateAppointment
         RuleFor(a => a.Id)
             .NotNull()
             .NotEmpty()
-            .WithMessage("Id is requered.");
+            .WithMessage("Id is required.");
 
         RuleFor(a => a.AppointmentDateAndTime)
             .NotNull()
@@ -20,11 +20,11 @@ public class UpdateAppointmentDtoValidator : AbstractValidator<UpdateAppointment
         RuleFor(a => a.PetId)
             .NotNull()
             .NotEmpty()
-            .WithMessage("Pet is requered.");
+            .WithMessage("Pet is required.");
 
         RuleFor(a => a.ServiceId)
             .NotNull()
             .NotEmpty()
-            .WithMessage("Service is requered.");
+            .WithMessage("Service is required.");
     }
 }

@@ -1,56 +1,66 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
-
+using PetClinic.DAL.Entities;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/appointments")]
-[AllowAnonymous]
 public class AppointmentController : ControllerBase
 {
-    private readonly IAppointmentService appointmentService;
+    private readonly IAppointmentService _appointmentService;
 
     public AppointmentController(IAppointmentService appointmentService)
     {
-        this.appointmentService = appointmentService;
+        _appointmentService = appointmentService;
     }
 
     [HttpPost]
-    public async Task Add(AddAppointmentDto appointment)
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task<IActionResult> AddAsync(AddAppointmentDto appointment)
     {
-        await appointmentService.AddAppointmentAsync(appointment);
+        await _appointmentService.AddAppointmentAsync(appointment);
+
+        return Created("", appointment);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [Authorize(Roles = Roles.AdminRole)]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        await appointmentService.DeleteAppointmentAsync(id);
+        await _appointmentService.DeleteAppointmentAsync(id);
 
         return Ok(id);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        var appointment = await appointmentService.GetAppointmentByIdAsync(id);
+        var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
+
         return Ok(appointment);
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task<IActionResult> GetAllAsync()
     {
-        var appointments = await appointmentService.GetAppointmentsAsync();
+        var appointments = await _appointmentService.GetAppointmentsAsync();
+
         return Ok(appointments);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateAppointmentDto appointment)
+    [Authorize(Roles = Roles.AdminRole)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdateAppointmentDto appointment)
     {
-        await appointmentService.UpdateAppointmentAsync(appointment);
+        await _appointmentService.UpdateAppointmentAsync(appointment);
 
         return Ok(appointment);
     }

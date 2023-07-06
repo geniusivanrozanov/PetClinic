@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using PetClinic.DAL.Interfaces.Entities;
 
@@ -12,6 +13,6 @@ public class UserEntity : IdentityUser<Guid>, IEntity<Guid>
     public DateTime UpdatedAt { get; set; }
     
     public virtual VetEntity Vet { get; set; } = default!;
-    // public virtual RoleEntity? RoleEntity { get; set; }
+    
     public virtual List<PetEntity>? Pets { get; set; }
 }

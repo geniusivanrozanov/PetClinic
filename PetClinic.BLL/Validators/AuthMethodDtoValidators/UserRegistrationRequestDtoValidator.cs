@@ -33,7 +33,7 @@ public class UserRegistrationRequestDtoValidator : AbstractValidator<UserRegistr
         RuleFor(u => u.Email)
             .NotNull()
             .NotEmpty()
-            .Must(EmailValidator.IsValidEmail)
+            .EmailAddress()
             .WithMessage("Invalid email.");
 
         RuleFor(u => u.Password)

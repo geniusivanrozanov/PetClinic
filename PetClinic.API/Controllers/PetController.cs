@@ -1,53 +1,60 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
-using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.DTOs.UpdateMethodDto;
 using PetClinic.BLL.Interfaces;
-
+using PetClinic.DAL.Entities;
 
 namespace PetClinic.API.Controllers;
 
 [ApiController]
+[ValidationFilter]
 [Route("api/pets")]
 public class PetController : ControllerBase
 {
-    private readonly IPetService petService;
+    private readonly IPetService _petService;
 
     public PetController(IPetService petService)
     {
-        this.petService = petService;
+        _petService = petService;
     }
 
     [HttpPost]
-    public async Task Add(AddPetDto pet)
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task AddAsync(AddPetDto pet)
     {
-        await petService.AddPetAsync(pet);
+        await _petService.AddPetAsync(pet);
     }
 
     [HttpGet("{id}")]
-    public async Task<GetPetDto> GetById([FromRoute] Guid id)
+    [Authorize(Roles = $"{Roles.ClientRole}, {Roles.AdminRole}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        return await petService.GetPetByIdAsync(id);
+        return Ok(await _petService.GetPetByIdAsync(id));
     }
 
     [HttpGet]
-    public async Task<IEnumerable<GetPetDto>> GetAll()
+    [Authorize(Roles = $"{Roles.ClientRole}, {Roles.AdminRole}")]
+    public async Task<IActionResult> GetAllAsync()
     {
-        return await petService.GetPetsAsync();
+        return Ok(await _petService.GetPetsAsync());
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
     {
-        await petService.DeletePetAsync(id);
+        await _petService.DeletePetAsync(id);
 
         return Ok(id);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdatePetDto appointment)
+    [Authorize(Roles = Roles.ClientRole)]
+    public async Task<IActionResult> UpdateAsync([FromBody] UpdatePetDto appointment)
     {
-        await petService.UpdatePetAsync(appointment);
+        await _petService.UpdatePetAsync(appointment);
 
         return Ok(appointment);
     }

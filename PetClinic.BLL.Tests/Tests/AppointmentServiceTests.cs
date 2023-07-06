@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using PetClinic.BLL.DTOs.GetMethodDto;
 using PetClinic.BLL.Exceptions;
+using PetClinic.BLL.Interfaces;
 using PetClinic.BLL.Services;
 using PetClinic.DAL.Entities;
 using PetClinic.DAL.Interfaces.Repositories;
@@ -16,12 +17,16 @@ namespace PetClinic.BLL.Tests.Tests;
 public class AppointmentServiceTests
 {
     private readonly AppointmentService _appointmentService;
-    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-    private readonly Mock<IMapper> _mapperMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<ICacheService> _cacheServiceMock;
 
     public AppointmentServiceTests()
     {
-        _appointmentService = new AppointmentService(_unitOfWorkMock.Object, _mapperMock.Object);
+        _unitOfWorkMock = new Mock<IUnitOfWork>();
+        _mapperMock = new Mock<IMapper>();
+        _cacheServiceMock = new Mock<ICacheService>();
+        _appointmentService = new AppointmentService(_unitOfWorkMock.Object, _mapperMock.Object, _cacheServiceMock.Object);
     }
 
     [Fact]
@@ -76,6 +81,8 @@ public class AppointmentServiceTests
             }
         };
 
+        _cacheServiceMock.Setup(x => x.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey))
+            .ReturnsAsync(expectedMapperData);
         _unitOfWorkMock.Setup(x => x.AppointmentRepository.GetAllAsync())
             .ReturnsAsync(expectedRepositoryData);
         _mapperMock.Setup(x => x.Map<IEnumerable<GetAppointmentDto>>(expectedRepositoryData))
@@ -97,7 +104,10 @@ public class AppointmentServiceTests
         // Arrange
 
         var expectedData = new List<AppointmentEntity>() { };
+        IEnumerable<GetAppointmentDto>? expectedCacheData = null;
 
+        _cacheServiceMock.Setup(x => x.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey))
+            .ReturnsAsync(expectedCacheData);
         _unitOfWorkMock.Setup(x => x.AppointmentRepository.GetAllAsync())
             .ReturnsAsync(expectedData);
 
@@ -130,6 +140,10 @@ public class AppointmentServiceTests
             AppointmentDate = DateTime.Today
         };
 
+        IEnumerable<GetAppointmentDto>? expectedCacheResult = null;
+
+        _cacheServiceMock.Setup(x => x.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey))
+            .ReturnsAsync(expectedCacheResult);
         _unitOfWorkMock.Setup(x => x.AppointmentRepository.GetAsync(appointmentId))
             .ReturnsAsync(expectedRepositoryResult);
         _mapperMock.Setup(x => x.Map<GetAppointmentDto>(expectedRepositoryResult))
@@ -146,7 +160,7 @@ public class AppointmentServiceTests
     }
 
     [Fact]
-    public async Task GetAppointmentByIdAsync_AppointmentWithIdNotFound_ShouldReturnEmpty()
+    public async Task GetAppointmentByIdAsync_AppointmentWithIdNotFound_ShouldThrowNotFoundException()
     {
         // Arrange
 
@@ -158,8 +172,10 @@ public class AppointmentServiceTests
 
         // Act
 
+        Func<Task> act = async () => await _appointmentService.GetAppointmentByIdAsync(appointmentId);
+
         // Assert
 
-        await Assert.ThrowsAsync<NotFoundException>(async () => await _appointmentService.GetAppointmentByIdAsync(appointmentId));
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }
