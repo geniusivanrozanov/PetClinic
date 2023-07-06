@@ -69,11 +69,15 @@ public class AppointmentController : ControllerBase
             Start = new EventDateTime
             {
                 // DateTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2023, 7, 6, 6, 0, 0), TimeZoneInfo.Local),
-                DateTime = DateTime.Parse(new DateTime(2023, 7, 6, 6, 0, 0).ToString("yyyy-MM-dd'T'HH:mm:ssZ")),
+                // DateTime = DateTime.Parse(new DateTime(2023, 7, 6, 6, 0, 0).ToString("yyyy-MM-dd'T'HH:mm:ssZ")),
+                // DateTime = DateTime.Parse("2023-07-14T13:15:03-08:00"),
+                DateTime = new DateTime(2023, 7, 6, 6, 0, 0),
+                TimeZone = TimeZoneInfo.Local.DisplayName,
             },
             End = new EventDateTime
             {
                 DateTime = new DateTime(2023, 7, 6, 7, 30, 0),
+                TimeZone = TimeZoneInfo.Local.DisplayName,
             },
             Recurrence = new String[] { "RRULE:FREQ=WEEKLY;BYDAY=MO" },
             Attendees = new List<EventAttendee>
