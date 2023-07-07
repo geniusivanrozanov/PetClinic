@@ -13,9 +13,11 @@ public class MapperProfileForGetMethodDto : Profile
         CreateMap<OrderCallEntity, GetOrderCallDto>();
         CreateMap<PetEntity, GetPetDto>();
         CreateMap<PetTypeEntity, GetPetTypeDto>();
-        CreateMap<ServiceEntity, GetServiceDto>();
         CreateMap<UserEntity, GetUserDto>();
         CreateMap<VetEntity, GetVetDto>();
+        
+        CreateMap<ServiceEntity, GetServiceDto>();
+        CreateMap<ServiceEntity, GetVetDto>();
 
         CreateMap<AppointmentEntity, GetAppointmentDto>()
             .ForMember(a => a.AppointmentDate, 

@@ -51,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// app.Services.MigrateDatabase<AppDbContext>();
+app.Services.MigrateDatabase<AppDbContext>();
 
 app.Run();

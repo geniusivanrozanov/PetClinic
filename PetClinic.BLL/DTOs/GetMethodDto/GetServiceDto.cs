@@ -1,3 +1,5 @@
+using PetClinic.DAL.Entities;
+
 namespace PetClinic.BLL.DTOs.GetMethodDto;
 
 public class GetServiceDto
@@ -6,5 +8,5 @@ public class GetServiceDto
     public string Name { get; set; } = default!;
     public decimal Price { get; set; }
     public string Duration { get; set; } = default!;
-    public Guid VetId { get; set; }
+    // public List<GetVetDto>? ServiceVets { get; set; }
 }

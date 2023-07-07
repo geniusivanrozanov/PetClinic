@@ -13,7 +13,7 @@ public class CacheService : ICacheService
     public CacheService(IConfiguration config)
     {
         _config = config;
-        var redis = ConnectionMultiplexer.Connect(_config["RedisConfig:ConnectionString"]);
+        var redis = ConnectionMultiplexer.Connect(_config["RedisConfig:ConnectionPort"]);
         _cacheDb = redis.GetDatabase();
     }
 

@@ -30,7 +30,7 @@ public class PetTypeController : ControllerBase
     [HttpGet("paging")]
     public async Task<IActionResult> GetPetTypesPagingAsync([FromQuery] PetTypeParametersDto petTypeParametersDto)
     {
-        var petTypes = await petTypeService.GetPetTypesPagedAsync(petTypeParametersDto);
+        var petTypes = await _petTypeService.GetPetTypesPagedAsync(petTypeParametersDto);
 
         return Ok(petTypes);
     }
