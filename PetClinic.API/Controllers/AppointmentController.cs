@@ -51,8 +51,7 @@ public class AppointmentController : ControllerBase
     [Authorize(Roles = Roles.ClientRole)]
     public async Task<IActionResult> GetAllAsync()
     {
-        var appointments = await _appointmentService.GetAppointmentsAsync();
-
+        var appointments = await _appointmentService.GetAppointmentsAsync(Guid.Parse(HttpContext.Request.Headers["Aut"]));
         return Ok(appointments);
     }
 

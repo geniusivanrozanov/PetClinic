@@ -27,7 +27,7 @@ public class PetTypeService : IPetTypeService
     
         if (cachedPetTypes is null)
         {
-            var petTypes = await _unitOfWork.PetTypeRepository.GetAllAsync() ??
+            var petTypes = await _unitOfWork.PetTypeRepository.GetAllPetTypesAsync() ??
                 throw new NotFoundException(ExceptionMessages.PetTypeNotFound);
         
         

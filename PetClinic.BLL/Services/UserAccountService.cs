@@ -65,7 +65,7 @@ public class UserAccountService : IUserAccountService
         var newVet = _mapper.Map<VetEntity>(vetData);
         newVet.ClientId = newUser.Id;
         
-        await _unitOfWork.VetRepository.AddAsync(newVet);
+        await _unitOfWork.VetRepository.AddVetAsync(newVet);
         await _unitOfWork.CompleteAsync();
 
         var token = await _tokenService.GenerateJwtTokenAsync(newUser);

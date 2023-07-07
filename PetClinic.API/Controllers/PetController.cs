@@ -38,7 +38,7 @@ public class PetController : ControllerBase
     [Authorize(Roles = $"{Roles.ClientRole}, {Roles.AdminRole}")]
     public async Task<IActionResult> GetAllAsync()
     {
-        return Ok(await _petService.GetPetsAsync());
+        return (IActionResult)await _petService.GetPetsAsync(Guid.Parse(HttpContext.Request.Headers["Aut"]));
     }
 
     [HttpDelete("{id}")]
