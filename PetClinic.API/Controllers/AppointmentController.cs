@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
+using Google.Apis.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
@@ -14,10 +18,12 @@ namespace PetClinic.API.Controllers;
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentService _appointmentService;
-    
-    public AppointmentController(IAppointmentService appointmentService)
+    private readonly IConfiguration config;
+
+    public AppointmentController(IAppointmentService appointmentService, IConfiguration config)
     {
-        _appointmentService = appointmentService;
+        this._appointmentService = appointmentService;
+        this.config = config;
     }
 
     [HttpPost]

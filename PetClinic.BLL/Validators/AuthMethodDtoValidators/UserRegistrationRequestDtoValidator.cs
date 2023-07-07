@@ -39,7 +39,7 @@ public class UserRegistrationRequestDtoValidator : AbstractValidator<UserRegistr
         RuleFor(u => u.Password)
             .NotNull()
             .NotEmpty()
-            .Must(PasswordValidator.IsValidPassword)
+            // .Must(PasswordValidator.IsValidPassword)
             .WithMessage("Invalid password");
     }
 }

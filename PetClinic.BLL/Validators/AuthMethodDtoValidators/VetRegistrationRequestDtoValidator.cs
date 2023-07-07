@@ -39,7 +39,7 @@ public class VetRegistrationRequestDtoValidator : AbstractValidator<VetRegistrat
         RuleFor(v => v.AccountData.Password)
             .NotNull()
             .NotEmpty()
-            .Must(PasswordValidator.IsValidPassword)
+            // .Must(PasswordValidator.IsValidPassword)
             .WithMessage("Invalid password");
 
         RuleFor(v => v.VetInfo.Experience)

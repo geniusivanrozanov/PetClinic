@@ -1,8 +1,17 @@
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2.Flows;
+using Google.Apis.Auth.OAuth2.Requests;
+using Google.Apis.Auth.OAuth2.Responses;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Util.Store;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.API.Middlewares.Filters;
+using Newtonsoft.Json;
 using PetClinic.BLL.DTOs.AuthDto;
 using PetClinic.BLL.Interfaces;
+using System.Text;
+using System.Text.Json;
 
 namespace PetClinic.API.Controllers;
 
@@ -16,6 +25,24 @@ public class AuthenticationController : ControllerBase
     public AuthenticationController(IUserAccountService clientAccountService)
     {
         _clientAccountService = clientAccountService;
+    }
+
+    [HttpGet("google/sign-up")]
+    [AllowAnonymous]
+    public IActionResult GetGoogleAuthUrl()
+    {
+        var authString = _clientAccountService.GetAuthString();
+        Response.Redirect(authString);
+
+        return Ok(authString);
+    }
+
+    [HttpPost("google/sign-up")]
+    public async Task<IActionResult> GetTokenFromGoogleCodeAsync([FromQuery] string code)
+    {
+        var token = await _clientAccountService.RegisterUserWithGoogle(code);
+
+        return Ok(token);
     }
 
     [HttpPost("client/sign-up")]
