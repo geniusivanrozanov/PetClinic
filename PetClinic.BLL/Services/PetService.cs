@@ -58,7 +58,7 @@ public class PetService : IPetService
         }
 
         var cachPet = cachedPets.Where(d => d.Id == id).FirstOrDefault() ??
-            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+            throw new NotFoundException(ExceptionMessages.PetNotFound);
 
         return cachPet;
     }

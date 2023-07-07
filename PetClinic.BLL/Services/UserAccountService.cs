@@ -137,7 +137,6 @@ public class UserAccountService : IUserAccountService
     {
         var existingUser = await _userManager.FindByEmailAsync(userData.Email) ??
             throw new UserDoesNotExistException(ExceptionMessages.UserDoesNotExist);
-
         var passwordIsCorrect = await _userManager.CheckPasswordAsync(existingUser, userData.Password);
 
         if (!passwordIsCorrect)

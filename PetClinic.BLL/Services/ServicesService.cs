@@ -41,18 +41,18 @@ public class ServicesService : IServicesService
     public async Task<GetServiceDto> GetServiceByIdAsync(Guid serviceId)
     {
         var cachedServices = await _cacheService
-            .GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.appointmentsKey);
+            .GetDataAsync<IEnumerable<GetServiceDto>>(CacheKeys.servicesKey);
 
         if (cachedServices is null)
         {
             var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId) ?? 
-                throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
+                throw new NotFoundException(ExceptionMessages.ServicesNotFound);
 
             return _mapper.Map<GetServiceDto>(service);
         }        
 
         var cachService = cachedServices.Where(d => d.Id == serviceId).FirstOrDefault() ??
-            throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
+            throw new NotFoundException(ExceptionMessages.ServicesNotFound);
 
         return cachService;
     }
