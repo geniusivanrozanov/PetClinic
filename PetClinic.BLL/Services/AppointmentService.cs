@@ -64,18 +64,18 @@ public class AppointmentService : IAppointmentService
         return cachAppointment;
     }
 
-    public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync(Guid userId)
+    public async Task<IEnumerable<GetAppointmentDto>> GetAppointmentsAsync()
     {
-        var cachedAppointments = await _cachedService.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey+userId.ToString());
+        var cachedAppointments = await _cachedService.GetDataAsync<IEnumerable<GetAppointmentDto>>(CacheKeys.appointmentsKey);
         
         if (cachedAppointments is null)
         {
-            var appointments = await _unitOfWork.AppointmentRepository.FindAppointmentAsync(x => x.Pet.ClientId == userId) ??
+            var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentsAsync() ??
                 throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
             
             var appointmentsDto = _mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
             
-            await _cachedService.SetDataAsync(CacheKeys.appointmentsKey + userId.ToString(), appointmentsDto, DateTimeOffset.Now.AddMinutes(1));
+            await _cachedService.SetDataAsync(CacheKeys.appointmentsKey, appointmentsDto, DateTimeOffset.Now.AddMinutes(1));
 
             return appointmentsDto;
         }

@@ -13,18 +13,18 @@ namespace PetClinic.API.Controllers;
 [Route("api/vets")]
 public class VetController : ControllerBase
 {
-    private readonly IVetService vetService;
+    private readonly IVetService _vetService;
 
     public VetController(IVetService vetService)
     {
-        vetService = vetService;
+        _vetService = vetService;
     }
 
     [HttpPost("review")]
     [Authorize(Roles = $"{Roles.VetRole}")]
     public async Task<IActionResult> AddAsync([FromBody] AddReviewDto review)
     {
-        await vetService.AddReviewAsync(review);
+        await _vetService.AddReviewAsync(review);
 
         return Created("", review);
     }
@@ -33,14 +33,14 @@ public class VetController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
     {
-        return Ok(await vetService.GetVetByIdAsync(id));
+        return Ok(await _vetService.GetVetByIdAsync(id));
     }
 
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAllAsync()
     {
-        return Ok(await vetService.GetVetsAsync());
+        return Ok(await _vetService.GetVetsAsync());
     }
 
     [HttpGet("{vetId}/shedule/{appointmentDate}")]
@@ -53,6 +53,6 @@ public class VetController : ControllerBase
             VetId = vetId,
         };
 
-        return Ok(await vetService.GetScheduleAsync(getScheduleDto));
+        return Ok(await _vetService.GetScheduleAsync(getScheduleDto));
     }
 }

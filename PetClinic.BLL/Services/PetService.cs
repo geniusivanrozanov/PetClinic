@@ -63,14 +63,11 @@ public class PetService : IPetService
         return cachPet;
     }
 
-    public async Task<IEnumerable<GetPetDto>> GetPetsAsync(Guid userId)
+    public async Task<IEnumerable<GetPetDto>> GetPetsAsync()
     {
-        var pets = await _unitOfWork.PetRepository.GetAllPetAsync();
-
-        if (pets is null)
-        {
-            throw new NotFoundException(ExceptionMessages.PetNotFound);     
-        }
+        var pets = await _unitOfWork.PetRepository.GetAllPetAsync() ??
+            throw new NotFoundException(ExceptionMessages.PetNotFound);
+ 
         return _mapper.Map<IEnumerable<GetPetDto>>(pets);
     }
 
@@ -87,15 +84,10 @@ public class PetService : IPetService
     }
 
     private async Task UpdateCacheAsync(string key, DateTimeOffset expiryTime)
-        {
-            var pets = await _unitOfWork.PetRepository.GetAllPetAsync();
-            var petsDto = _mapper.Map<IEnumerable<GetPetDto>>(pets);
+    {
+        var pets = await _unitOfWork.PetRepository.GetAllPetAsync();
+        var petsDto = _mapper.Map<IEnumerable<GetPetDto>>(pets);
 
-            await _cachedService.SetDataAsync(key, petsDto, expiryTime);
-        }
-
-  }
-
-  
-
-
+        await _cachedService.SetDataAsync(key, petsDto, expiryTime);
+    }
+}
