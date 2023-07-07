@@ -20,7 +20,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<DepartmentEntity, Guid> DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
     public IRepository<OrderCallEntity, Guid> OrderCallRepository => _orderCallRepository ??= new OrderCallRepository(_context);
     public IRepository<PetEntity, Guid> PetRepository => _petRepository ??= new PetRepository(_context);
-    public IRepository<PetTypeEntity, Guid> PetTypeRepository => _petTypeRepository ??= new PetTypeRepository(_context);
+    public IPetTypeRepository PetTypeRepository => _petTypeRepository ??= new PetTypeRepository(_context);
     public IRepository<ReviewEntity, Guid> ReviewRepository => _reviewRepository ??= new ReviewRepository(_context);
     public IRepository<ServiceEntity, Guid> ServiceRepository => _serviceRepository ??= new ServiceRepository(_context);
     public IRepository<ServiceVetEntity, Guid> ServiceVetRepository => _serviceVetRepository ??= new ServiceVetRepository(_context);

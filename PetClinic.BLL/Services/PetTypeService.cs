@@ -1,7 +1,10 @@
 using AutoMapper;
 using PetClinic.BLL.DTOs.GetMethodDto;
+using PetClinic.BLL.DTOs.PagingDto;
 using PetClinic.BLL.Exceptions;
 using PetClinic.BLL.Interfaces;
+using PetClinic.DAL.Features.Request.Paging;
+using PetClinic.DAL.Features.Request.Paging.Parameters;
 using PetClinic.DAL.Interfaces.Repositories;
 
 using ExceptionMessages = PetClinic.BLL.Exceptions.ExceptionConstants;
@@ -27,7 +30,7 @@ public class PetTypeService : IPetTypeService
     
         if (cachedPetTypes is null)
         {
-            var petTypes = await _unitOfWork.PetTypeRepository.GetAllAsync() ??
+            var petTypes = await _unitOfWork.PetTypeRepository.GetAllPetTypesAsync() ??
                 throw new NotFoundException(ExceptionMessages.PetTypeNotFound);
         
         
@@ -36,5 +39,14 @@ public class PetTypeService : IPetTypeService
         }
 
         return cachedPetTypes;
+    }
+
+    public async Task<PagedList<GetPetTypeDto>> GetPetTypesPagedAsync(PetTypeParametersDto petTypeParametersDto)
+    {
+        var petTypeParameters = _mapper.Map<PetTypeParameters>(petTypeParametersDto);
+        var petTypes = await _unitOfWork.PetTypeRepository.GetAllPetTypesAsync();
+        var petTypesDto = _mapper.Map<IEnumerable<GetPetTypeDto>>(petTypes);
+
+        return PagedList<GetPetTypeDto>.ToPagedList(petTypesDto, petTypeParameters.PageNumber, petTypeParameters.PageSize);
     }
 }

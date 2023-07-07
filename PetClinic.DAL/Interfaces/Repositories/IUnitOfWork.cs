@@ -8,7 +8,7 @@ public interface IUnitOfWork : IDisposable
     public IRepository<DepartmentEntity, Guid> DepartmentRepository { get; }
     public IRepository<OrderCallEntity, Guid> OrderCallRepository { get; }
     public IRepository<PetEntity, Guid> PetRepository { get; }
-    public IRepository<PetTypeEntity, Guid> PetTypeRepository { get; }
+    public IPetTypeRepository PetTypeRepository { get; }
     public IRepository<ReviewEntity, Guid> ReviewRepository { get; }
     public IRepository<ServiceEntity, Guid> ServiceRepository { get; }
     public IRepository<ServiceVetEntity, Guid> ServiceVetRepository { get; }
