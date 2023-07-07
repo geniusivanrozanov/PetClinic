@@ -27,7 +27,7 @@ public class ServicesService : IServicesService
     
         if (cachedServices is null)
         {
-            var services = await _unitOfWork.ServiceRepository.GetAllAsync() ??
+            var services = await _unitOfWork.ServiceRepository.GetAllServicesAsync() ??
                 throw new NotFoundException(ExceptionMessages.ServicesNotFound);
             
             await _cacheService.SetDataAsync(CacheKeys.servicesKey, services, DateTimeOffset.Now.AddMinutes(1));
@@ -45,7 +45,7 @@ public class ServicesService : IServicesService
 
         if (cachedServices is null)
         {
-            var service = await _unitOfWork.ServiceRepository.GetAsync(serviceId) ?? 
+            var service = await _unitOfWork.ServiceRepository.GetServiceAsync(serviceId) ?? 
                 throw new NotFoundException(ExceptionMessages.ServicesNotFound);
 
             return _mapper.Map<GetServiceDto>(service);

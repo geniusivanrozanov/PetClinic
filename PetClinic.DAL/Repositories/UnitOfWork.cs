@@ -16,15 +16,15 @@ public class UnitOfWork : IUnitOfWork
     private ServiceVetRepository _serviceVetRepository = null!;
     private VetRepository _vetRepository = null!;
 
-    public IRepository<AppointmentEntity, Guid> AppointmentRepository => _appointmentRepository ??= new AppointmentRepository(_context);
-    public IRepository<DepartmentEntity, Guid> DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
-    public IRepository<OrderCallEntity, Guid> OrderCallRepository => _orderCallRepository ??= new OrderCallRepository(_context);
-    public IRepository<PetEntity, Guid> PetRepository => _petRepository ??= new PetRepository(_context);
+    public IAppointmentRepository AppointmentRepository => _appointmentRepository ??= new AppointmentRepository(_context);
+    public IDepartmentRepository DepartmentRepository => _departmentRepository ??= new DepartmentRepository(_context);
+    public IOrderCallRepository OrderCallRepository => _orderCallRepository ??= new OrderCallRepository(_context);
+    public IPetRepository PetRepository => _petRepository ??= new PetRepository(_context);
     public IPetTypeRepository PetTypeRepository => _petTypeRepository ??= new PetTypeRepository(_context);
-    public IRepository<ReviewEntity, Guid> ReviewRepository => _reviewRepository ??= new ReviewRepository(_context);
-    public IRepository<ServiceEntity, Guid> ServiceRepository => _serviceRepository ??= new ServiceRepository(_context);
-    public IRepository<ServiceVetEntity, Guid> ServiceVetRepository => _serviceVetRepository ??= new ServiceVetRepository(_context);
-    public IRepository<VetEntity, Guid> VetRepository => _vetRepository ??= new VetRepository(_context);
+    public IReviewRepository ReviewRepository => _reviewRepository ??= new ReviewRepository(_context);
+    public IServiceRepository ServiceRepository => _serviceRepository ??= new ServiceRepository(_context);
+    public IServiceVetVetRepository ServiceVetRepository => _serviceVetRepository ??= new ServiceVetRepository(_context);
+    public IVetRepository VetRepository => _vetRepository ??= new VetRepository(_context);
 
     public UnitOfWork(AppDbContext context)
     {

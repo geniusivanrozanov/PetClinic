@@ -27,7 +27,7 @@ public class DepartmentService : IDepartmentService
     
         if (cachedDepartments is null)
         {
-            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync() ?? 
+            var departments = await _unitOfWork.DepartmentRepository.GetAllDepartmentsAsync() ?? 
                 throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
 
             var departmentsDto = departments!.Select(department => new GetDepartmentDto
@@ -54,7 +54,7 @@ public class DepartmentService : IDepartmentService
             
         if (cachedDepartments is null)
         {
-            var department = await _unitOfWork.DepartmentRepository.GetAsync(departmentId) ??
+            var department = await _unitOfWork.DepartmentRepository.GetDepartmentAsync(departmentId) ??
                 throw new NotFoundException(ExceptionMessages.DepartmentsNotFound);
         
             var departmentDto = _mapper.Map<GetDepartmentDto>(department);

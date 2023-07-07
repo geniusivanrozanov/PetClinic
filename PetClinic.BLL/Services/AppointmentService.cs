@@ -27,7 +27,7 @@ public class AppointmentService : IAppointmentService
     public async Task AddAppointmentAsync(AddAppointmentDto appointment)
     {
         var result = _mapper.Map<AppointmentEntity>(appointment);
-        await _unitOfWork.AppointmentRepository.AddAsync(result);
+        await _unitOfWork.AppointmentRepository.AddAppointmentAsync(result);
         await _unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.appointmentsKey, DateTimeOffset.Now.AddMinutes(1));
@@ -35,11 +35,11 @@ public class AppointmentService : IAppointmentService
 
     public async Task DeleteAppointmentAsync(Guid id)
     {
-        var appointment = await _unitOfWork.AppointmentRepository.GetAsync(id) ?? 
+        var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentAsync(id) ?? 
             throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
         var result = _mapper.Map<AppointmentEntity>(appointment);
-        _unitOfWork.AppointmentRepository.Remove(result);
+        _unitOfWork.AppointmentRepository.RemoveAppointment(result);
         await _unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.appointmentsKey, DateTimeOffset.Now.AddMinutes(1));
@@ -52,7 +52,7 @@ public class AppointmentService : IAppointmentService
 
         if (cachedAppointments is null)
         {
-            var appointment = await _unitOfWork.AppointmentRepository.GetAsync(id) ?? 
+            var appointment = await _unitOfWork.AppointmentRepository.GetAppointmentAsync(id) ?? 
                 throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
 
             return _mapper.Map<GetAppointmentDto>(appointment);
@@ -70,7 +70,7 @@ public class AppointmentService : IAppointmentService
         
         if (cachedAppointments is null)
         {
-            var appointments = await _unitOfWork.AppointmentRepository.GetAllAsync() ??
+            var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentsAsync() ??
                 throw new NotFoundException(ExceptionMessages.AppointmentsNotFound);
             
             var appointmentsDto = _mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
@@ -86,7 +86,7 @@ public class AppointmentService : IAppointmentService
     public async Task<GetAppointmentDto> UpdateAppointmentAsync(UpdateAppointmentDto appointment)
     {
         var mappedItem = _mapper.Map<AppointmentEntity>(appointment);
-        var result =  _unitOfWork.AppointmentRepository.Update(mappedItem);
+        var result =  _unitOfWork.AppointmentRepository.UpdateAppointment(mappedItem);
         await _unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.appointmentsKey, DateTimeOffset.Now.AddMinutes(1));
@@ -96,7 +96,7 @@ public class AppointmentService : IAppointmentService
 
     private async Task UpdateCacheAsync(string key, DateTimeOffset expiryTime)
     {
-        var appointments = await _unitOfWork.AppointmentRepository.GetAllAsync();
+        var appointments = await _unitOfWork.AppointmentRepository.GetAllAppointmentsAsync();
         var appointmentsDto = _mapper.Map<IEnumerable<GetAppointmentDto>>(appointments);
 
         await _cachedService.SetDataAsync(key, appointmentsDto, expiryTime);

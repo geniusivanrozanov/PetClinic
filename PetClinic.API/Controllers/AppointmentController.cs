@@ -1,8 +1,4 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Calendar.v3;
-using Google.Apis.Calendar.v3.Data;
-using Google.Apis.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetClinic.API.Middlewares.Filters;
 using PetClinic.BLL.DTOs.AddMethodDto;
@@ -58,7 +54,6 @@ public class AppointmentController : ControllerBase
     public async Task<IActionResult> GetAllAsync()
     {
         var appointments = await _appointmentService.GetAppointmentsAsync();
-
         return Ok(appointments);
     }
 

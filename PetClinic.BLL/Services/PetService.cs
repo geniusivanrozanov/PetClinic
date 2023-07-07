@@ -23,11 +23,11 @@ public class PetService : IPetService
         _mapper = mapper;
         _cachedService = cachedService;
     }
-    
+
     public async Task AddPetAsync(AddPetDto pet)
     {
         var result = _mapper.Map<PetEntity>(pet);
-        await _unitOfWork.PetRepository.AddAsync(result);
+        await _unitOfWork.PetRepository.AddPetAsync(result);
         await _unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.petsKey, DateTimeOffset.Now.AddMinutes(1));
@@ -35,10 +35,10 @@ public class PetService : IPetService
 
     public async Task DeletePetAsync(Guid id)
     {
-        var pet = await _unitOfWork.PetRepository.GetAsync(id) ?? 
+        var pet = await _unitOfWork.PetRepository.GetPetAsync(id) ??
             throw new NotFoundException();
 
-        _unitOfWork.PetRepository.Remove(pet);
+        _unitOfWork.PetRepository.RemovePet(pet);
         await _unitOfWork.CompleteAsync();
 
         await UpdateCacheAsync(CacheKeys.petsKey, DateTimeOffset.Now.AddMinutes(1));
@@ -51,9 +51,9 @@ public class PetService : IPetService
 
         if (cachedPets is null)
         {
-            var pet = await _unitOfWork.PetRepository.GetAsync(id) ??
+            var pet = await _unitOfWork.PetRepository.GetPetAsync(id) ??
                 throw new NotFoundException(ExceptionMessages.PetNotFound);
-            
+
             return _mapper.Map<GetPetDto>(pet);
         }
 
@@ -65,16 +65,16 @@ public class PetService : IPetService
 
     public async Task<IEnumerable<GetPetDto>> GetPetsAsync()
     {
-        var pets = await _unitOfWork.PetRepository.GetAllAsync() ??
+        var pets = await _unitOfWork.PetRepository.GetAllPetAsync() ??
             throw new NotFoundException(ExceptionMessages.PetNotFound);
-        
+ 
         return _mapper.Map<IEnumerable<GetPetDto>>(pets);
     }
 
     public async Task<GetPetDto> UpdatePetAsync(UpdatePetDto pet)
     {
         var mappedItem = _mapper.Map<PetEntity>(pet);
-        var result = _unitOfWork.PetRepository.Update(mappedItem);
+        var result = _unitOfWork.PetRepository.UpdatePet(mappedItem);
 
         await _unitOfWork.CompleteAsync();
 
@@ -85,7 +85,7 @@ public class PetService : IPetService
 
     private async Task UpdateCacheAsync(string key, DateTimeOffset expiryTime)
     {
-        var pets = await _unitOfWork.PetRepository.GetAllAsync();
+        var pets = await _unitOfWork.PetRepository.GetAllPetAsync();
         var petsDto = _mapper.Map<IEnumerable<GetPetDto>>(pets);
 
         await _cachedService.SetDataAsync(key, petsDto, expiryTime);
